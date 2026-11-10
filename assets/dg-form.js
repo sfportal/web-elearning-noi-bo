@@ -1,22 +1,28 @@
 /* Trang làm phiếu: nhập mã cá nhân, điền phiếu, tự lưu nháp, gửi. */
 "use strict";
-const F={code:localStorage.getItem("dg-code")||"",name:"",rec:null,sent:false,at:"",preview:/[?&]xem-thu/.test(location.search)};
+const F={pid:localStorage.getItem("dg-pid")||"",rec:null,sent:false,at:"",link:"",preview:/[?&]xem-thu/.test(location.search)};
+const draftKey=()=>"dg-draft-"+F.pid;
 function dgMissing(r){ const m=[]; if(!r.sat) m.push("mức hài lòng"); if(!r.load) m.push("khối lượng việc");
   const na=DG_AREAS.filter(([k])=>r.areas[k].s.some(x=>!x)||!r.areas[k].want).length; if(na) m.push(na+" đầu việc chưa chấm đủ");
   const nc=DG_COMMON.filter(([k])=>!r.common[k]).length; if(nc) m.push(nc+" tiêu chí chung"); if(!r.lead.length) m.push("đầu việc muốn phụ trách chính"); return m; }
 function dgTa(id,l,v,ph){ return '<div class="f"><label for="'+id+'">'+l+'</label><textarea id="'+id+'" data-dgt="'+id.slice(3)+'" rows="2" placeholder="'+esc(ph||"")+'">'+esc(v||"")+'</textarea></div>'; }
 
-function vLogin(err){
-  return '<div class="panel narrow"><h1>Phiếu tự đánh giá</h1><p class="sub">Nhập mã cá nhân anh Uy gửi riêng cho bạn qua Zalo.</p>'
-   +'<form id="lgf" class="f" style="margin-top:12px"><label for="lgc">Mã cá nhân</label><input id="lgc" autocomplete="off" autocapitalize="none" spellcheck="false" value="'+esc(F.code)+'" placeholder="Ví dụ: ab3k9x"><button class="btn pri" style="margin-top:10px">Vào làm phiếu</button></form>'
-   +(err?'<div class="alert bad" style="margin-top:10px">'+esc(err)+'</div>':'')
+function vLogin(){
+  return '<div class="panel narrow"><h1>Phiếu tự đánh giá</h1><p class="sub">Đợt tháng 11/2026. Chọn tên của bạn để bắt đầu. Phiếu tự lưu trên điện thoại của bạn, làm xong bấm Gửi để gửi cho anh Uy.</p>'
+   +'<div class="grid" style="grid-template-columns:1fr 1fr;margin-top:12px">'+DG_STAFF.map(p=>'<button class="btn" data-who="'+p+'">'+esc(DG_NAME[p])+'</button>').join("")+'</div>'
    +'<p class="sub" style="margin-top:12px"><a href="?xem-thu">Xem thử phiếu</a> (không lưu)</p></div>';
+}
+function vDone(){
+  return '<div class="panel narrow"><h1>Còn một bước: gửi cho anh Uy</h1><p class="sub">Phiếu của bạn đã nằm trong đường link dưới đây. Bấm nút để gửi qua Zalo (hoặc sao chép rồi dán vào tin nhắn Zalo cho anh Uy). Chưa gửi link thì anh Uy chưa nhận được phiếu.</p>'
+   +'<div class="row" style="margin-top:12px"><button class="btn pri" id="dnShare">Gửi qua Zalo, tin nhắn</button><button class="btn" id="dnCopy">Sao chép link</button></div>'
+   +'<textarea readonly id="dnLink" rows="3" style="width:100%;margin-top:10px;font-size:12px;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--surface)">'+esc(F.link)+'</textarea>'
+   +'<p class="sub" style="margin-top:10px">Muốn sửa phiếu: <button class="btn sm" id="dnEdit">Sửa phiếu</button> rồi gửi lại link mới. Anh Uy sẽ lấy bản mới nhất.</p></div>';
 }
 function vForm(){
   const r=F.rec, miss=dgMissing(r), pv=F.preview;
   let h=(pv?'<div class="alert" style="margin-bottom:10px">Bản xem thử. Không lưu. <a href="./danh-gia.html">Về trang nhập mã</a></div>':'')
    +'<div class="row between"><h1 style="margin:0">Phiếu tự đánh giá</h1>'+(pv?'':'<button class="btn sm" id="dgOut">Đổi người</button>')+'</div>'
-   +'<div class="sub">'+(F.name?'<b>'+esc(F.name)+'</b> · ':'')+'Đợt tháng 11/2026. Phiếu giúp công ty giao việc đúng thế mạnh và biết bạn cần hỗ trợ gì. Không dùng để chấm thưởng phạt. Chỉ giám đốc xem được phiếu của bạn.</div>'
+   +'<div class="sub">'+(F.pid?'<b>'+esc(DG_NAME[F.pid])+'</b> · ':'')+'Đợt tháng 11/2026. Phiếu giúp công ty giao việc đúng thế mạnh và biết bạn cần hỗ trợ gì. Không dùng để chấm thưởng phạt. Chỉ giám đốc xem phiếu của bạn.</div>'
    +(F.sent?'<div class="alert" style="margin-top:8px">Bạn đã gửi phiếu'+(F.at?' ngày '+esc(dmy(F.at.slice(0,10))):'')+'. Vẫn sửa và gửi lại được.</div>':'');
   h+='<div class="panel dgsec"><h2>1. Công việc hiện tại</h2>'+dgTa("dg_now","Việc bạn đang làm nhiều nhất là gì?",r.now,"Ví dụ: đi xã, xuất hồ sơ, tập huấn…")
    +'<div class="f"><label>Bạn hài lòng với công việc hiện tại ở mức nào? (1 = chưa hài lòng, 5 = rất hài lòng)</label>'+dgSeg('data-dgsat',r.sat,5)+'</div>'
@@ -35,20 +41,20 @@ function vForm(){
    +dgTa("dg_learn","Trong 3 tháng tới bạn muốn học thêm gì?",r.learn)
    +'<div class="f"><label>Nếu trình bày trước đội, bạn chọn chủ đề nào? (chọn được nhiều)</label>'+dgChips('data-dgtop',DG_TOP,r.topics,true)+'</div>'
    +dgTa("dg_other","Góp ý khác cho công ty, cho cách phân việc",r.other)+'</div>';
-  h+='<div class="dgfoot panel"><div class="sub" id="dgMiss">'+(miss.length?'Còn thiếu: '+esc(miss.join(", ")):'Đã điền đủ, có thể gửi.')+'</div><div class="row" style="gap:8px"><button class="btn" id="dgSave"'+(pv?" disabled":"")+'>Lưu nháp</button><button class="btn pri" id="dgSend"'+(pv?" disabled":"")+'>'+(F.sent?"Gửi lại":"Gửi phiếu")+'</button></div></div>';
+  h+='<div class="dgfoot panel"><div class="sub" id="dgMiss">'+(miss.length?'Còn thiếu: '+esc(miss.join(", ")):'Đã điền đủ, có thể gửi.')+'</div><div class="row" style="gap:8px"><button class="btn" id="dgSave"'+(pv?" disabled":"")+'>Lưu tạm</button><button class="btn pri" id="dgSend"'+(pv?" disabled":"")+'>'+(F.sent?"Gửi lại":"Gửi phiếu")+'</button></div></div>';
   return h;
 }
 let dgT=null;
-function dgDirty(){ if(F.preview) return; clearTimeout(dgT); dgT=setTimeout(()=>dgSave(false,true),2500); const m=dgMissing(F.rec), el=$("#dgMiss"); if(el) el.textContent=m.length?"Còn thiếu: "+m.join(", "):"Đã điền đủ, có thể gửi."; }
-async function dgSave(submit,quiet){ clearTimeout(dgT); dgT=null; if(F.preview) return;
+function dgStore(){ if(F.preview||!F.pid) return; localStorage.setItem(draftKey(),JSON.stringify({rec:F.rec,sent:F.sent,at:F.at})); }
+function dgDirty(){ if(F.preview) return; clearTimeout(dgT); dgT=setTimeout(dgStore,600); const m=dgMissing(F.rec), el=$("#dgMiss"); if(el) el.textContent=m.length?"Còn thiếu: "+m.join(", "):"Đã điền đủ, có thể gửi."; }
+async function dgSave(submit){ clearTimeout(dgT); if(F.preview) return;
   if(submit){ const m=dgMissing(F.rec); if(m.length){ toast("Còn thiếu: "+m[0]); return; } }
-  const b=$("#dgSend"); if(submit&&b) b.disabled=true;
-  const r=await api({action:"save",code:F.code,rec:F.rec,submit:!!submit}); if(b) b.disabled=false;
-  if(r.error){ toast("Chưa lưu được: "+r.error); return; }
-  F.at=r.rec.updatedAt; if(submit){ F.sent=true; toast("Đã gửi phiếu. Cảm ơn bạn!"); render(); window.scrollTo(0,0); } else if(!quiet) toast("Đã lưu nháp"); }
+  F.at=new Date().toISOString();
+  if(submit){ F.sent=true; const code=await dgEncode({v:1,round:"2026-11",p:F.pid,at:F.at,r:F.rec}); F.link=new URL("ket-qua.html",location.href).href.split("#")[0]+"#r="+code; }
+  dgStore(); if(submit){ render(); window.scrollTo(0,0); } else toast("Đã lưu trên máy này"); }
 function bindForm(A){
   const r=F.rec;
-  $("#dgOut")?.addEventListener("click",()=>{ localStorage.removeItem("dg-code"); F.code=""; F.rec=null; render(); });
+  $("#dgOut")?.addEventListener("click",()=>{ dgStore(); localStorage.removeItem("dg-pid"); F.pid=""; F.rec=null; F.link=""; render(); });
   const tog=(btn)=>{ btn.parentElement.querySelectorAll("button").forEach(b=>{ const on=b===btn; b.classList.toggle("on",on); b.setAttribute("aria-pressed",on); }); };
   const areaOk=k=>{ const x=r.areas[k]; A.querySelector('[data-area="'+k+'"]')?.classList.toggle("ok",!x.s.some(v=>!v)&&!!x.want); };
   A.querySelectorAll("[data-dgsat]").forEach(b=>b.addEventListener("click",()=>{ r.sat=+b.dataset.v; tog(b); dgDirty(); }));
@@ -66,16 +72,16 @@ function bindForm(A){
   $("#dgSave")?.addEventListener("click",()=>dgSave(false));
   $("#dgSend")?.addEventListener("click",()=>dgSave(true));
 }
-async function login(code){
-  const A=$("#app"); A.innerHTML='<div class="empty">Đang mở phiếu…</div>';
-  const r=await api({action:"get",code});
-  if(r.error){ A.innerHTML=vLogin(r.error); bindLogin(); return; }
-  F.code=code; localStorage.setItem("dg-code",code); F.name=r.name||""; F.rec=dgFill(r.rec); F.sent=r.rec?.status==="sent"; F.at=r.rec?.updatedAt||""; render();
-}
-function bindLogin(){ $("#lgf")?.addEventListener("submit",e=>{ e.preventDefault(); const c=$("#lgc").value.trim().toLowerCase(); if(c) login(c); }); }
+function pickWho(p){ F.pid=p; localStorage.setItem("dg-pid",p); let d=null; try{ d=JSON.parse(localStorage.getItem(draftKey())||"null"); }catch(_){}
+  F.rec=dgFill(d?.rec); F.sent=!!d?.sent; F.at=d?.at||""; F.link=""; render(); window.scrollTo(0,0); }
+function bindDone(){ const share=async()=>{ const text="Phiếu tự đánh giá của "+DG_NAME[F.pid]+": "+F.link;
+    if(navigator.share){ try{ await navigator.share({title:"Phiếu tự đánh giá",text:"Phiếu tự đánh giá của "+DG_NAME[F.pid],url:F.link}); return; }catch(e){ if(e.name==="AbortError") return; } }
+    copy(); };
+  const copy=async()=>{ try{ await navigator.clipboard.writeText(F.link); toast("Đã sao chép. Dán vào Zalo gửi anh Uy."); }catch(_){ const t=$("#dnLink"); t.select(); document.execCommand("copy"); toast("Đã sao chép"); } };
+  $("#dnShare").addEventListener("click",share); $("#dnCopy").addEventListener("click",copy); $("#dnEdit").addEventListener("click",()=>{ F.link=""; render(); }); }
 function render(){ const A=$("#app");
   if(F.preview){ if(!F.rec) F.rec=dgBlank(); A.innerHTML=vForm(); bindForm(A); return; }
-  if(!F.rec){ A.innerHTML=vLogin(); bindLogin(); return; }
+  if(!F.pid){ A.innerHTML=vLogin(); A.querySelectorAll("[data-who]").forEach(b=>b.addEventListener("click",()=>pickWho(b.dataset.who))); return; }
+  if(F.link){ A.innerHTML=vDone(); bindDone(); return; }
   A.innerHTML=vForm(); bindForm(A); }
-window.addEventListener("beforeunload",e=>{ if(dgT){ e.preventDefault(); e.returnValue=""; } });
-if(F.code&&!F.preview) login(F.code); else render();
+if(F.pid&&!F.preview&&DG_STAFF.includes(F.pid)) pickWho(F.pid); else { F.pid=""; render(); }

@@ -1,6 +1,15 @@
 /* Trang kết quả cho quản lý: ma trận, đánh giá sơ bộ, từng người, chấm và nhận xét. */
 "use strict";
-const DGA={data:null,open:"",tab:"tong",key:sessionStorage.getItem("dg-admin")||""};
+const PIN_SHA="b51d6983f5f71d2578ca5f5a522b65fcec63476ca75b69778345ca5746b24343";
+const DGA={data:null,open:"",tab:"tong",ok:sessionStorage.getItem("dg-ok")==="1"};
+// Dữ liệu chỉ nằm trong trình duyệt của máy này (localStorage). Sao lưu bằng nút Tải bản sao lưu.
+function loadStore(){ let r={},n={}; try{ r=JSON.parse(localStorage.getItem("dg-recs")||"{}"); n=JSON.parse(localStorage.getItem("dg-notes")||"{}"); }catch(_){} DGA.data={recs:r,notes:n}; }
+function saveStore(){ localStorage.setItem("dg-recs",JSON.stringify(DGA.data.recs)); localStorage.setItem("dg-notes",JSON.stringify(DGA.data.notes)); }
+async function addCodes(text){ const codes=[...String(text).matchAll(/[#&?]r=([jz][A-Za-z0-9_-]{10,})/g)].map(m=>m[1]); let added=[],bad=0;
+  for(const c of codes){ try{ const o=await dgDecode(c); if(!DG_STAFF.includes(o.p)||!o.r){ bad++; continue; } const old=DGA.data.recs[o.p];
+      if(old&&(old.updatedAt||"")>(o.at||"")){ added.push(DG_NAME[o.p]+" (bản cũ hơn, bỏ qua)"); continue; }
+      DGA.data.recs[o.p]={...dgFill(o.r),status:"sent",submittedAt:o.at,updatedAt:o.at}; added.push(DG_NAME[o.p]); }catch(_){ bad++; } }
+  saveStore(); return {added,bad,n:codes.length}; }
 const dm=s=>s?s.slice(8,10)+"/"+s.slice(5,7):"";
 /* Đánh giá sơ bộ: điểm phù hợp = 60% năng lực (tự chấm, có điểm của anh thì lấy trung bình hai bên) + 40% mức muốn làm, +0,3 nếu chọn phụ trách chính. */
 function dgSelf(rec,k){ return dgAvg(rec?.areas?.[k]?.s); }
@@ -22,8 +31,9 @@ function vDgAdmin(){
   if(DGA.data.err) return '<div class="panel alert bad">Không tải được kết quả: '+esc(DGA.data.err)+'</div>';
   const R=DGA.data.recs||{}, N=DGA.data.notes||{}, ppl=DG_STAFF;
   const sent=ppl.filter(p=>R[p]?.status==="sent").length, draft=ppl.filter(p=>R[p]&&R[p].status!=="sent").length;
-  let h='<div class="row between" style="gap:8px;align-items:flex-end;flex-wrap:wrap"><div><h1 style="margin:0">Tự đánh giá nhân sự</h1><div class="sub">Đợt 11/2026 · Chỉ người có mã quản lý xem được. Nhân sự làm phiếu tại trang Phiếu tự đánh giá bằng mã cá nhân.</div></div><div class="row" style="gap:6px"><a class="btn" href="./danh-gia.html?xem-thu" target="_blank">Xem phiếu mẫu</a><button class="btn" id="dgReload">Tải lại</button><button class="btn" id="dgOut">Thoát</button></div></div>';
-  h+='<div class="grid kpis" style="margin-top:12px"><div class="tile '+(sent===ppl.length?"good":"")+'"><span class="v">'+sent+'/'+ppl.length+'</span><span class="l">Đã gửi phiếu</span></div><div class="tile '+(draft?"warn":"")+'"><span class="v">'+draft+'</span><span class="l">Đang làm dở</span></div><div class="tile"><span class="v">'+(ppl.length-sent-draft)+'</span><span class="l">Chưa mở phiếu</span></div></div>';
+  let h='<div class="row between" style="gap:8px;align-items:flex-end;flex-wrap:wrap"><div><h1 style="margin:0">Tự đánh giá nhân sự</h1><div class="sub">Đợt 11/2026 · Nhân sự làm phiếu rồi gửi link qua Zalo. Anh mở link trên máy này (hoặc dán vào ô dưới) để thêm phiếu. Dữ liệu chỉ lưu trong trình duyệt máy này.</div></div><div class="row" style="gap:6px"><a class="btn" href="./danh-gia.html?xem-thu" target="_blank">Xem phiếu mẫu</a><button class="btn" id="dgBak">Tải bản sao lưu</button><label class="btn">Mở bản sao lưu<input type="file" id="dgImp" accept=".json,application/json" hidden></label><button class="btn" id="dgOut">Khóa</button></div></div>';
+  h+='<div class="grid kpis" style="margin-top:12px"><div class="tile '+(sent===ppl.length?"good":"")+'"><span class="v">'+sent+'/'+ppl.length+'</span><span class="l">Đã nhận phiếu</span></div><div class="tile"><span class="v">'+(ppl.length-sent)+'</span><span class="l">Chưa nhận: '+esc(ppl.filter(p=>!R[p]).map(p=>DG_NAME[p].replace(/^(Anh|Chị)\s+/,"")).join(", ")||"không còn ai")+'</span></div></div>';
+  h+='<div class="panel" style="margin-top:12px"><div class="f"><label for="dgPaste">Dán link phiếu nhân sự gửi qua Zalo (dán được nhiều link cùng lúc)</label><textarea id="dgPaste" rows="2" placeholder="https://…/ket-qua.html#r=…"></textarea></div><button class="btn pri" id="dgAdd" style="margin-top:8px">Thêm phiếu</button></div>';
   const tabs=[["tong","Ma trận"],["so-bo","Đánh giá sơ bộ"],["nguoi","Từng người"]];
   h+='<div class="dgchips" style="margin:12px 0">'+tabs.map(([k,l])=>'<button type="button" data-dgtab="'+k+'"'+(DGA.tab===k?' class="on"':'')+'>'+l+'</button>').join("")+'</div>';
   const short=p=>esc((DG_NAME[p]||p).replace(/^(Anh|Chị)\s+/,""));
@@ -32,7 +42,7 @@ function vDgAdmin(){
      +DG_AREAS.map(([k,,sh])=>'<tr><th>'+esc(sh)+'</th>'+ppl.map(p=>{ const rec=R[p], c=dgCap(rec,N[p],k), w=rec?.areas?.[k]?.want, role=dgRole(p,k);
        return '<td class="'+(role==="C"?"rc ":role==="P"?"rp ":"")+'" style="background:'+(c?'color-mix(in srgb,var(--brand) '+Math.round((c-1)/4*55+5)+'%,transparent)':'transparent')+'">'+(c?dgF(c):'<span class="sub">–</span>')+(w==="yes"?'<i>★</i>':w==="no"?'<i>✕</i>':'')+'</td>'; }).join("")+'</tr>').join("")
      +'<tr><th>Hài lòng</th>'+ppl.map(p=>'<td>'+(R[p]?.sat||'<span class="sub">–</span>')+'</td>').join("")+'</tr><tr><th>Khối lượng</th>'+ppl.map(p=>{ const l=R[p]?.load; return '<td style="font-size:11px'+(l==="over"?';color:var(--bad);font-weight:600':l==="high"?';color:var(--warn)':'')+'">'+(l?esc((DG_LOAD.find(x=>x[0]===l)||[,""])[1]):'–')+'</td>'; }).join("")+'</tr>'
-     +'<tr><th>Trạng thái</th>'+ppl.map(p=>'<td style="font-size:11px">'+(R[p]?.status==="sent"?'<span style="color:var(--good)">Đã gửi</span>':R[p]?'Nháp':'<span class="sub">Chưa</span>')+'</td>').join("")+'</tr></tbody></table></div>';
+     +'<tr><th>Trạng thái</th>'+ppl.map(p=>'<td style="font-size:11px">'+(R[p]?.status==="sent"?'<span style="color:var(--good)">Đã nhận</span>':'<span class="sub">Chưa</span>')+'</td>').join("")+'</tr></tbody></table></div>';
   } else if(DGA.tab==="so-bo"){
     const any=ppl.some(p=>R[p]);
     h+='<div class="panel"><div class="sub">Điểm phù hợp = 60% năng lực (tự chấm, gộp điểm của anh nếu có) + 40% mức muốn làm, cộng 0,3 nếu người đó chọn phụ trách chính. Đây là gợi ý để anh xem cùng buổi thuyết trình, không thay quyết định của anh.</div></div>';
@@ -48,13 +58,13 @@ function vDgAdmin(){
   } else {
     h+=ppl.map(p=>{ const rec=R[p], n=N[p]||{sco:{}}, op=DGA.open===p;
       const top=rec?DG_AREAS.map(([k,,sh])=>[sh,dgCap(rec,n,k)]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]):[];
-      let c='<div class="panel" style="margin-bottom:10px"><button class="dgph" data-dgopen="'+p+'"><b>'+esc(DG_NAME[p])+'</b><span class="sub">'+(rec?(rec.status==="sent"?"Đã gửi "+dm((rec.submittedAt||"").slice(0,10)):"Đang làm dở"):"Chưa mở phiếu")+(top.length?' · Mạnh: '+top.slice(0,2).map(x=>esc(x[0])).join(", "):'')+'</span><span>'+(op?"▲":"▼")+'</span></button>';
+      let c='<div class="panel" style="margin-bottom:10px"><button class="dgph" data-dgopen="'+p+'"><b>'+esc(DG_NAME[p])+'</b><span class="sub">'+(rec?(rec.status==="sent"?"Gửi ngày "+dm((rec.submittedAt||"").slice(0,10)):""):"Chưa nhận phiếu")+(top.length?' · Mạnh: '+top.slice(0,2).map(x=>esc(x[0])).join(", "):'')+'</span><span>'+(op?"▲":"▼")+'</span></button>';
       if(!op) return c+'</div>';
       if(rec){ const L=x=>(x||[]).map(k=>esc((DG_AREAS.find(a=>a[0]===k)||[,,k])[2])).join(", ")||"–";
         c+='<div class="dgkv"><span>Hài lòng</span><b>'+(rec.sat||"–")+'/5</b><span>Khối lượng</span><b>'+esc((DG_LOAD.find(x=>x[0]===rec.load)||[,"–"])[1])+'</b><span>Muốn phụ trách chính</span><b>'+L(rec.lead)+'</b><span>Muốn hỗ trợ</span><b>'+L(rec.support)+'</b><span>Chủ đề thuyết trình</span><b>'+((rec.topics||[]).map(t=>esc((DG_TOP.find(x=>x[0]===t)||[,t])[1])).join(", ")||"–")+'</b><span>Cách làm việc</span><b>'+DG_COMMON.map(([k,t])=>esc(t)+": "+(rec.common?.[k]||"–")).join(" · ")+'</b></div>'
          +[["now","Đang làm nhiều nhất"],["good","Làm tốt nhất"],["hard","Khó, đang vướng"],["help","Cần hỗ trợ"],["learn","Muốn học thêm"],["other","Góp ý"]].filter(([k])=>rec[k]).map(([k,l])=>'<div style="margin-top:8px"><div class="sub">'+l+'</div><div style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(rec[k])+'</div></div>').join("");
         const fl=dgFlags(p,rec,n); if(fl.length) c+='<ul style="margin:8px 0 0;padding-left:18px">'+fl.map(([cl,t])=>'<li'+(cl?' style="color:var(--'+cl+')"':'')+'>'+esc(t)+'</li>').join("")+'</ul>'; }
-      else c+='<div class="sub" style="margin-top:6px">Nhân sự chưa mở phiếu. Anh vẫn chấm trước được.</div>';
+      else c+='<div class="sub" style="margin-top:6px">Chưa nhận phiếu của người này. Anh vẫn chấm trước được.</div>';
       c+='<h3 style="margin:12px 0 4px">Chấm của anh và đối chiếu</h3><div class="sub">Tự chấm là trung bình 3 tiêu chí. Ô của anh để trống thì chỉ dùng điểm tự chấm.</div>'
        +DG_AREAS.map(([k,t,sh])=>{ const s=rec?dgSelf(rec,k):0, w=rec?.areas?.[k]?.want, role=dgRole(p,k);
          return '<div class="dgcr"><span><b>'+esc(sh)+'</b>'+(role?' <small class="sub">('+({C:"đề xuất chính",P:"đề xuất phụ",U:"ứng viên"})[role]+')</small>':'')+'<br><small class="sub">Tự chấm '+(rec?.areas?.[k]?.s||[]).map(x=>x||"–").join(" · ")+' → '+dgF(s)+(w?' · '+esc((DG_WANT.find(x=>x[0]===w)||[,""])[1]):'')+'</small>'+(rec?.areas?.[k]?.note?'<br><small style="overflow-wrap:anywhere">'+esc(rec.areas[k].note)+'</small>':'')+'</span>'+dgSeg('data-dgo="'+p+':'+k+'"',n.sco?.[k]||0,5,DG_SCALE)+'</div>'; }).join("")
@@ -63,19 +73,24 @@ function vDgAdmin(){
   }
   return h;
 }
-function vKey(err){ return '<div class="panel narrow"><h1>Kết quả tự đánh giá</h1><p class="sub">Trang dành cho giám đốc. Nhập mã quản lý.</p><form id="kf" class="f" style="margin-top:12px"><label for="kc">Mã quản lý</label><input id="kc" type="password" autocomplete="off"><button class="btn pri" style="margin-top:10px">Xem kết quả</button></form>'+(err?'<div class="alert bad" style="margin-top:10px">'+esc(err)+'</div>':'')+'</div>'; }
-async function load(){ const A=$("#app"); A.innerHTML='<div class="empty">Đang tải kết quả…</div>'; const r=await api({action:"list",adminKey:DGA.key});
-  if(r.error){ DGA.data=null; A.innerHTML=vKey(r.error); bindKey(); return; } sessionStorage.setItem("dg-admin",DGA.key); DGA.data=r; render(); }
-function bindKey(){ $("#kf")?.addEventListener("submit",e=>{ e.preventDefault(); DGA.key=$("#kc").value.trim(); if(DGA.key) load(); }); }
-function render(){ const A=$("#app"); if(!DGA.data){ A.innerHTML=vKey(); bindKey(); return; } A.innerHTML=vDgAdmin(); bindAdmin(A); }
+function vKey(err){ return '<div class="panel narrow"><h1>Kết quả tự đánh giá</h1><p class="sub">Trang dành cho giám đốc. Nhập mã PIN.</p><form id="kf" class="f" style="margin-top:12px"><label for="kc">Mã PIN</label><input id="kc" type="password" autocomplete="current-password"><button class="btn pri" style="margin-top:10px">Mở</button></form>'+(err?'<div class="alert bad" style="margin-top:10px">'+esc(err)+'</div>':'')+(location.hash.includes("r=")?'<p class="sub" style="margin-top:10px">Có một phiếu trong link này. Nhập PIN để thêm phiếu.</p>':'')+'</div>'; }
+async function sha(t){ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
+async function unlock(){ DGA.ok=true; sessionStorage.setItem("dg-ok","1"); loadStore();
+  if(location.hash.includes("r=")){ const r=await addCodes(location.hash); history.replaceState(null,"",location.pathname+location.search); if(r.added.length) toast("Đã thêm phiếu: "+r.added.join(", ")); else if(r.bad) toast("Link phiếu bị lỗi, nhờ nhân sự gửi lại"); }
+  render(); }
+function bindKey(){ $("#kf")?.addEventListener("submit",async e=>{ e.preventDefault(); const v=$("#kc").value.trim(); if(await sha(v)===PIN_SHA) unlock(); else { $("#app").innerHTML=vKey("Mã PIN không đúng"); bindKey(); } }); }
+function render(){ const A=$("#app"); if(!DGA.ok){ A.innerHTML=vKey(); bindKey(); return; } if(!DGA.data) loadStore(); A.innerHTML=vDgAdmin(); bindAdmin(A); }
 function bindAdmin(A){
   A.querySelectorAll("[data-dgtab]").forEach(b=>b.addEventListener("click",()=>{ DGA.tab=b.dataset.dgtab; render(); }));
-  $("#dgReload")?.addEventListener("click",load);
-  $("#dgOut")?.addEventListener("click",()=>{ sessionStorage.removeItem("dg-admin"); DGA.key=""; DGA.data=null; render(); });
+  $("#dgOut")?.addEventListener("click",()=>{ sessionStorage.removeItem("dg-ok"); DGA.ok=false; render(); });
+  $("#dgAdd")?.addEventListener("click",async()=>{ const r=await addCodes($("#dgPaste").value); if(!r.n){ toast("Không thấy link phiếu nào"); return; } toast((r.added.length?"Đã thêm: "+r.added.join(", "):"Không thêm được")+(r.bad?" · "+r.bad+" link lỗi":"")); render(); });
+  $("#dgBak")?.addEventListener("click",()=>{ const blob=new Blob([JSON.stringify({round:"2026-11",...DGA.data},null,1)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="danh-gia-nhan-su-"+new Date().toISOString().slice(0,10)+".json"; a.click(); });
+  $("#dgImp")?.addEventListener("change",async e=>{ const f=e.target.files[0]; if(!f) return; try{ const o=JSON.parse(await f.text()); Object.entries(o.recs||{}).forEach(([p,r])=>{ if(DG_STAFF.includes(p)&&(!DGA.data.recs[p]||(DGA.data.recs[p].updatedAt||"")<=(r.updatedAt||""))) DGA.data.recs[p]=r; }); Object.entries(o.notes||{}).forEach(([p,n])=>{ if(DG_STAFF.includes(p)) DGA.data.notes[p]=n; }); saveStore(); toast("Đã mở bản sao lưu"); render(); }catch(_){ toast("File không đúng"); } });
   A.querySelectorAll("[data-dgopen]").forEach(b=>b.addEventListener("click",()=>{ DGA.open=DGA.open===b.dataset.dgopen?"":b.dataset.dgopen; render(); }));
-  const N=DGA.data.notes||(DGA.data.notes={}), get=p=>N[p]||(N[p]={sco:{},text:""});
+  const N=DGA.data.notes, get=p=>N[p]||(N[p]={sco:{},text:""});
   A.querySelectorAll("[data-dgo]").forEach(b=>b.addEventListener("click",()=>{ const [p,k]=b.dataset.dgo.split(":"), n=get(p); n.sco=n.sco||{}; const v=+b.dataset.v; n.sco[k]=n.sco[k]===v?0:v; b.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",+x.dataset.v===n.sco[k])); }));
   A.querySelectorAll("[data-dgot]").forEach(t=>t.addEventListener("input",()=>{ get(t.dataset.dgot).text=t.value.slice(0,3000); }));
-  A.querySelectorAll("[data-dgosave]").forEach(b=>b.addEventListener("click",async()=>{ const p=b.dataset.dgosave; b.disabled=true; const r=await api({action:"note",adminKey:DGA.key,personId:p,note:get(p)}); b.disabled=false; if(r.error){ toast("Chưa lưu được: "+r.error); return; } N[p]=r.note; toast("Đã lưu"); render(); }));
+  A.querySelectorAll("[data-dgosave]").forEach(b=>b.addEventListener("click",()=>{ const p=b.dataset.dgosave; get(p).updatedAt=new Date().toISOString(); saveStore(); toast("Đã lưu trên máy này"); render(); }));
 }
-if(DGA.key) load(); else render();
+window.addEventListener("hashchange",()=>{ if(DGA.ok&&location.hash.includes("r=")) unlock(); });
+if(DGA.ok) unlock(); else render();

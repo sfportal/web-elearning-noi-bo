@@ -4,11 +4,15 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function toast(t){ const el=document.createElement("div"); el.className="toast"; el.textContent=t; document.body.appendChild(el); setTimeout(()=>el.remove(),2400); }
 const dmy=s=>s?s.slice(8,10)+"/"+s.slice(5,7)+"/"+s.slice(0,4):"";
-async function api(body){
-  if(!window.DG_API) return {error:"Web chưa nối máy chủ lưu phiếu. Báo anh Uy."};
-  try{ const r=await fetch(window.DG_API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}); return await r.json(); }
-  catch(e){ return {error:"Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại."}; }
-}
+// Không dùng máy chủ: phiếu được nén thành một đường link, nhân sự gửi link cho giám đốc qua Zalo.
+const b64u={ enc:u8=>{ let s=""; u8.forEach(c=>s+=String.fromCharCode(c)); return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); },
+  dec:t=>{ t=t.replace(/-/g,"+").replace(/_/g,"/"); const s=atob(t); return Uint8Array.from(s,c=>c.charCodeAt(0)); } };
+async function pipe(u8,stream){ return new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(stream)).arrayBuffer()); }
+async function dgEncode(obj){ const u8=new TextEncoder().encode(JSON.stringify(obj));
+  if(typeof CompressionStream==="function"){ try{ return "z"+b64u.enc(await pipe(u8,new CompressionStream("deflate-raw"))); }catch(_){} }
+  return "j"+b64u.enc(u8); }
+async function dgDecode(code){ code=String(code||"").trim(); const k=code[0], u8=b64u.dec(code.slice(1));
+  const raw=k==="z"?await pipe(u8,new DecompressionStream("deflate-raw")):u8; return JSON.parse(new TextDecoder().decode(raw)); }
 const DG_AREAS=[
  ["a1","Điều phối, giám sát tiến độ","Điều phối",["Lập kế hoạch tuần, chia việc có hạn rõ","Theo dõi số liệu, phát hiện việc trễ sớm","Ra quyết định, gỡ vướng giữa các bộ phận"]],
  ["a2","Triển khai dự án tại xã (hiện trường)","Hiện trường",["Làm việc với cán bộ xã, đại diện mã, bà con","Tổ chức buổi thực địa đủ việc trong 1 lần đi","Dùng thiết bị: flycam, app thu thập, định vị"]],
