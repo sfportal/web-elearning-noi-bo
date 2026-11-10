@@ -22,7 +22,21 @@ const DG_AREAS=[
  ["a6","Tư vấn bán hàng giải pháp (MVT, TXNG, dịch vụ mở rộng)","Tư vấn",["Nắm sản phẩm, bảng giá MVT, TXNG, dịch vụ mở rộng","Hỏi đúng nhu cầu, xử lý khi khách từ chối","Lập báo giá, đề xuất, theo đến khi ký"]],
  ["a7","Xây dựng đội cộng tác viên bán hàng","Đội CTV",["Có mạng lưới địa phương, HTX","Tuyển và đào tạo người khác","Theo dõi, tạo động lực cho CTV"]],
  ["a8","Quản lý nội bộ (thu chi, hóa đơn, chấm công, hồ sơ gốc)","Nội bộ",["Ghi chép thu chi, hóa đơn chính xác","Lưu trữ, scan, tìm lại hồ sơ nhanh","Đúng hạn với việc định kỳ"]]];
-const DG_COMMON=[["c1","Chủ động báo vướng sớm"],["c2","Cập nhật việc và báo cáo nhanh mỗi ngày"],["c3","Phối hợp, bàn giao đúng hạn"],["c4","Học công cụ mới"]];
+// Năng lực chung: thang hành vi 1–5 (kiểu BARS), tham khảo các khung năng lực phổ biến (SHL Great Eight, Lominger/Korn Ferry), rút gọn theo việc của BVI.
+// Mỗi năng lực: [mã, tên, mô tả ngắn, [mức 1, mức 3, mức 5]]
+const DG_COMP=[
+ ["k1","Giải quyết vấn đề","Tìm nguyên nhân, đưa phương án, xử lý dứt điểm",["Gặp vướng thì chờ người khác xử lý","Tự tìm nguyên nhân, đưa được 1–2 cách xử lý","Xử lý được việc khó, mới; ngăn lỗi lặp lại bằng cách sửa quy trình"]],
+ ["k2","Sắp xếp công việc, thời gian","Lên kế hoạch, ưu tiên, giữ hạn",["Hay quên việc, trễ hạn","Có danh sách việc, phần lớn đúng hạn","Lên kế hoạch tuần cho mình và người khác, cân việc khi có thay đổi"]],
+ ["k3","Giao tiếp, thuyết phục","Nói rõ, nghe hiểu, làm người khác đồng ý",["Khó diễn đạt, ngại nói trước đông người","Trình bày rõ với 1–2 người, trả lời được câu hỏi","Thuyết phục được khách, cán bộ, hội trường đông người"]],
+ ["k4","Phối hợp, làm việc nhóm","Chia sẻ thông tin, hỗ trợ, bàn giao đúng hẹn",["Làm riêng, ít báo cho người liên quan","Bàn giao đủ, báo đúng người, hỗ trợ khi được nhờ","Chủ động kết nối các bên, gỡ vướng giữa các bộ phận"]],
+ ["k5","Chủ động, trách nhiệm","Tự nhận việc, chịu kết quả, báo vướng sớm",["Chờ giao mới làm, báo vướng khi đã trễ","Tự làm trọn việc được giao, báo vướng sớm","Tự thấy việc cần làm, nhận và chịu kết quả đến cùng"]],
+ ["k6","Học hỏi, thích nghi","Học nhanh kiến thức, công cụ mới; thích nghi thay đổi",["Ngại thay đổi, cần chỉ nhiều lần","Học được công cụ mới sau 1–2 lần hướng dẫn","Tự học, áp dụng nhanh và hướng dẫn lại cho người khác"]],
+ ["k7","Cẩn thận, chính xác","Làm đúng ngay lần đầu, kiểm tra lại số liệu",["Hay sai sót, phải làm lại","Ít sai, tự kiểm tra trước khi giao","Gần như không sai, phát hiện được lỗi của người khác"]],
+ ["k8","Hướng khách hàng","Hiểu nhu cầu khách, nông dân, giữ quan hệ lâu dài",["Làm theo việc, ít hỏi nhu cầu khách","Hỏi đúng nhu cầu, phản hồi khách kịp thời","Được khách tin, giới thiệu thêm khách mới"]],
+ ["k9","Chịu áp lực","Giữ bình tĩnh, chất lượng khi việc dồn, đi xa",["Dễ căng thẳng, bỏ dở khi việc dồn","Vẫn làm ổn khi việc dồn trong thời gian ngắn","Giữ được nhịp và tinh thần cho cả nhóm lúc cao điểm"]],
+ ["k10","Dẫn dắt, kèm người khác","Hướng dẫn, giao việc, tạo động lực",["Chưa từng hướng dẫn ai","Kèm được 1 người làm một việc cụ thể","Dẫn một nhóm, đào tạo người mới thành thạo"]]];
+// Năng lực chung cần cho từng đầu việc (dùng để đánh giá phù hợp, chưa phù hợp).
+const DG_REQ={a1:["k2","k1","k4","k10","k9"],a2:["k3","k5","k9","k1","k8"],a3:["k7","k2","k6","k5"],a4:["k6","k3","k7","k8"],a5:["k2","k3","k10","k9","k4"],a6:["k3","k8","k1","k5"],a7:["k10","k3","k5","k4"],a8:["k7","k2","k5"]};
 const DG_SCALE=["","Chưa làm bao giờ","Làm được khi có người kèm","Tự làm trọn việc","Làm tốt, ổn định, kèm được người khác","Cải tiến quy trình, đào tạo lại cho đội"];
 const DG_WANT=[["yes","Rất muốn làm"],["maybe","Làm được"],["no","Không muốn"]], DG_WV={yes:5,maybe:3,no:1};
 const DG_LOAD=[["low","Còn ít việc"],["ok","Vừa sức"],["high","Hơi nhiều"],["over","Quá tải"]];
@@ -33,7 +47,8 @@ const DG_STAFF=["trinh","tuan","man","ngoc","huy","minh"];
 const DG_NAME={trinh:"Chị Trinh",tuan:"Anh Tuấn",man:"Chị Mẫn",ngoc:"Chị Ngọc",huy:"Anh Huy",minh:"Anh Minh"};
 const dgAvg=a=>{ const v=(a||[]).filter(x=>x>0); return v.length?v.reduce((s,x)=>s+x,0)/v.length:0; };
 const dgF=n=>n?(Math.round(n*10)/10).toLocaleString("vi-VN"):"–";
-function dgBlank(){ const areas={}; DG_AREAS.forEach(a=>areas[a[0]]={s:[0,0,0],want:"",note:""}); return {now:"",sat:0,load:"",good:"",hard:"",help:"",areas,common:{},lead:[],support:[],learn:"",topics:[],other:""}; }
-function dgFill(r){ const b=dgBlank(); if(!r) return b; const o={...b,...r}; o.areas={...b.areas}; DG_AREAS.forEach(([k])=>{ const x=r.areas?.[k]; if(x) o.areas[k]={s:[0,1,2].map(i=>x.s?.[i]||0),want:x.want||"",note:x.note||""}; }); o.common={...(r.common||{})}; o.lead=[...(r.lead||[])]; o.support=[...(r.support||[])]; o.topics=[...(r.topics||[])]; return o; }
+function dgBlank(){ const areas={}; DG_AREAS.forEach(a=>areas[a[0]]={s:[0,0,0],want:"",note:""}); return {now:"",sat:0,load:"",good:"",hard:"",help:"",areas,comp:{},ex:"",lead:[],support:[],learn:"",topics:[],other:""}; }
+function dgFill(r){ const b=dgBlank(); if(!r) return b; const o={...b,...r}; o.areas={...b.areas}; DG_AREAS.forEach(([k])=>{ const x=r.areas?.[k]; if(x) o.areas[k]={s:[0,1,2].map(i=>x.s?.[i]||0),want:x.want||"",note:x.note||""}; }); o.comp={...(r.comp||{})}; o.lead=[...(r.lead||[])]; o.support=[...(r.support||[])]; o.topics=[...(r.topics||[])]; return o; }
 function dgSeg(attr,val,n,labels){ let h='<div class="dgseg" role="group">'; for(let i=1;i<=n;i++) h+='<button type="button" '+attr+' data-v="'+i+'"'+(val===i?' class="on"':'')+' title="'+esc(labels?labels[i]:"")+'" aria-pressed="'+(val===i)+'">'+i+'</button>'; return h+'</div>'; }
 function dgChips(attr,opts,val,multi){ return '<div class="dgchips">'+opts.map(([k,l])=>'<button type="button" '+attr+' data-v="'+k+'"'+((multi?(val||[]).includes(k):val===k)?' class="on"':'')+'>'+esc(l)+'</button>').join("")+'</div>'; }
+const dgCompName=k=>(DG_COMP.find(c=>c[0]===k)||[,k])[1];

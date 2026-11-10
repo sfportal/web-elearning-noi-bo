@@ -19,7 +19,12 @@ Web tĩnh (GitHub Pages) cho đội BVI, FarmBase. Tách riêng khỏi BVI Đi�
 Settings › Pages › Deploy from branch `main`, thư mục `/`. Địa chỉ: https://sfportal.github.io/web-elearning-noi-bo/
 
 ## Đánh giá sơ bộ
-Điểm phù hợp mỗi đầu việc = 60% năng lực (trung bình 3 tiêu chí tự chấm; có điểm của giám đốc thì lấy trung bình hai bên) + 40% mức muốn làm (rất muốn 5, làm được 3, không muốn 1), cộng 0,3 nếu người đó chọn phụ trách chính. Đề xuất phân vai bước 1 nằm ở `DG_PLAN` trong `assets/dg-common.js`.
+Điểm phù hợp mỗi đầu việc = 45% kỹ năng đầu việc (trung bình 3 tiêu chí tự chấm; có điểm của giám đốc thì lấy trung bình hai bên) + 25% năng lực chung mà đầu việc đó cần + 30% mức muốn làm (rất muốn 5, làm được 3, không muốn 1), cộng 0,3 nếu người đó chọn phụ trách chính.
+
+- **Phù hợp**: điểm từ 3,6, có muốn làm, kỹ năng từ 3 (tối đa 3 đầu việc).
+- **Chưa phù hợp**: không muốn làm, hoặc kỹ năng dưới 2,5, hoặc từ 2 năng lực cần thiết chỉ đạt 1–2 điểm.
+
+Năng lực chung (10 mục, `DG_COMP`) chấm theo thang hành vi (BARS): mỗi mục có mô tả mức 1, 3, 5. Bộ năng lực tham khảo SHL Great Eight và Lominger, rút gọn cho việc thực tế ở BVI. Năng lực cần cho từng đầu việc nằm ở `DG_REQ`; đề xuất phân vai bước 1 ở `DG_PLAN`, cùng trong `assets/dg-common.js`.
 
 ## Quy tắc
 - Chữ tiếng Việt, ngắn gọn, dùng tốt ở rộng 390px, không cuộn ngang.

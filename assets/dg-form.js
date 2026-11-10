@@ -4,7 +4,7 @@ const F={pid:localStorage.getItem("dg-pid")||"",rec:null,sent:false,at:"",link:"
 const draftKey=()=>"dg-draft-"+F.pid;
 function dgMissing(r){ const m=[]; if(!r.sat) m.push("mức hài lòng"); if(!r.load) m.push("khối lượng việc");
   const na=DG_AREAS.filter(([k])=>r.areas[k].s.some(x=>!x)||!r.areas[k].want).length; if(na) m.push(na+" đầu việc chưa chấm đủ");
-  const nc=DG_COMMON.filter(([k])=>!r.common[k]).length; if(nc) m.push(nc+" tiêu chí chung"); if(!r.lead.length) m.push("đầu việc muốn phụ trách chính"); return m; }
+  const nc=DG_COMP.filter(([k])=>!r.comp[k]).length; if(nc) m.push(nc+" năng lực chung"); if(!r.lead.length) m.push("đầu việc muốn phụ trách chính"); return m; }
 function dgTa(id,l,v,ph){ return '<div class="f"><label for="'+id+'">'+l+'</label><textarea id="'+id+'" data-dgt="'+id.slice(3)+'" rows="2" placeholder="'+esc(ph||"")+'">'+esc(v||"")+'</textarea></div>'; }
 
 function vLogin(){
@@ -34,7 +34,8 @@ function vForm(){
       +cr.map((c,j)=>'<div class="dgcr"><span>'+esc(c)+'</span>'+dgSeg('data-dgs="'+k+':'+j+'"',x.s[j],5,DG_SCALE)+'</div>').join("")
       +'<div class="dgcr"><span>Bạn có muốn làm việc này?</span>'+dgChips('data-dgw="'+k+'"',DG_WANT,x.want)+'</div>'
       +'<input class="dgnote" data-dgn="'+k+'" placeholder="Ghi chú thêm (kinh nghiệm, ví dụ đã làm), không bắt buộc" value="'+esc(x.note)+'"></div>'; }).join("")+'</div>';
-  h+='<div class="panel dgsec"><h2>3. Cách làm việc</h2>'+DG_COMMON.map(([k,t])=>'<div class="dgcr"><span>'+esc(t)+'</span>'+dgSeg('data-dgc="'+k+'"',r.common[k]||0,5,DG_SCALE)+'</div>').join("")+'</div>';
+  h+='<div class="panel dgsec"><h2>3. Năng lực chung</h2><div class="sub">Chấm theo việc bạn thường làm trong 3 tháng gần đây. Mỗi mức có mô tả hành vi, chọn mức gần đúng nhất (2, 4 là ở giữa).</div>'+DG_COMP.map(([k,t,d,an])=>'<div class="dgarea'+(r.comp[k]?' ok':'')+'" data-comp="'+k+'"><div class="dgah"><b>'+esc(t)+'</b><span class="pill good">Xong</span></div><div class="sub">'+esc(d)+'</div><ul class="dganc"><li><b>1</b> '+esc(an[0])+'</li><li><b>3</b> '+esc(an[1])+'</li><li><b>5</b> '+esc(an[2])+'</li></ul>'+dgSeg('data-dgc="'+k+'"',r.comp[k]||0,5)+'</div>').join("")
+   +dgTa("dg_ex","Kể ngắn một việc khó gần đây bạn đã tự xử lý: vướng gì, bạn làm gì, kết quả ra sao (không bắt buộc)",r.ex)+'</div>';
   const opt=DG_AREAS.map(a=>[a[0],a[2]]);
   h+='<div class="panel dgsec"><h2>4. Định hướng</h2><div class="f"><label>Đầu việc bạn muốn phụ trách chính (chọn tối đa 2)</label>'+dgChips('data-dglead',opt,r.lead,true)+'</div>'
    +'<div class="f"><label>Đầu việc bạn muốn hỗ trợ (tối đa 2)</label>'+dgChips('data-dgsup',opt,r.support,true)+'</div>'
@@ -61,7 +62,7 @@ function bindForm(A){
   A.querySelectorAll("[data-dgload]").forEach(b=>b.addEventListener("click",()=>{ r.load=b.dataset.v; tog(b); dgDirty(); }));
   A.querySelectorAll("[data-dgs]").forEach(b=>b.addEventListener("click",()=>{ const [k,j]=b.dataset.dgs.split(":"); r.areas[k].s[+j]=+b.dataset.v; tog(b); areaOk(k); dgDirty(); }));
   A.querySelectorAll("[data-dgw]").forEach(b=>b.addEventListener("click",()=>{ r.areas[b.dataset.dgw].want=b.dataset.v; tog(b); areaOk(b.dataset.dgw); dgDirty(); }));
-  A.querySelectorAll("[data-dgc]").forEach(b=>b.addEventListener("click",()=>{ r.common[b.dataset.dgc]=+b.dataset.v; tog(b); dgDirty(); }));
+  A.querySelectorAll("[data-dgc]").forEach(b=>b.addEventListener("click",()=>{ r.comp[b.dataset.dgc]=+b.dataset.v; tog(b); A.querySelector('[data-comp="'+b.dataset.dgc+'"]')?.classList.add("ok"); dgDirty(); }));
   const sync=()=>{ A.querySelectorAll("[data-dglead]").forEach(x=>x.classList.toggle("on",r.lead.includes(x.dataset.v))); A.querySelectorAll("[data-dgsup]").forEach(x=>x.classList.toggle("on",r.support.includes(x.dataset.v))); A.querySelectorAll("[data-dgtop]").forEach(x=>x.classList.toggle("on",r.topics.includes(x.dataset.v))); };
   const multi=(attr,field,max)=>A.querySelectorAll("["+attr+"]").forEach(b=>b.addEventListener("click",()=>{ const v=b.dataset.v, L=r[field], i=L.indexOf(v);
     if(i>=0) L.splice(i,1); else { if(max&&L.length>=max){ toast("Chọn tối đa "+max); return; } L.push(v); }
