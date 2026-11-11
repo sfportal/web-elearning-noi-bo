@@ -4,7 +4,7 @@ const F={pid:localStorage.getItem("dg-pid")||"",rec:null,sent:false,at:"",link:"
 const draftKey=()=>"dg-draft-"+F.pid;
 function dgMissing(r){ const m=[]; if(!r.sat) m.push("mức hài lòng"); if(!r.load) m.push("khối lượng việc");
   const na=DG_AREAS.filter(([k])=>r.areas[k].s.some(x=>!x)||!r.areas[k].want).length; if(na) m.push(na+" đầu việc chưa chấm đủ");
-  const nc=DG_COMP.filter(([k])=>!r.comp[k]).length; if(nc) m.push(nc+" năng lực chung"); if(!r.lead.length) m.push("đầu việc muốn phụ trách chính"); return m; }
+  const nc=DG_COMP.filter(([k])=>!r.comp[k]).length; if(nc) m.push(nc+" năng lực chung"); const nb=dgBscK().filter(k=>!r.bsc[k]).length; if(nb) m.push(nb+" chỉ số BSC"); if(!r.lead.length) m.push("đầu việc muốn phụ trách chính"); return m; }
 function dgTa(id,l,v,ph){ return '<div class="f"><label for="'+id+'">'+l+'</label><textarea id="'+id+'" data-dgt="'+id.slice(3)+'" rows="2" placeholder="'+esc(ph||"")+'">'+esc(v||"")+'</textarea></div>'; }
 
 function vLogin(){
@@ -36,8 +36,12 @@ function vForm(){
       +'<input class="dgnote" data-dgn="'+k+'" placeholder="Ghi chú thêm (kinh nghiệm, ví dụ đã làm), không bắt buộc" value="'+esc(x.note)+'"></div>'; }).join("")+'</div>';
   h+='<div class="panel dgsec"><h2>3. Năng lực chung</h2><div class="sub">Chấm theo việc bạn thường làm trong 3 tháng gần đây. Mỗi mức có mô tả hành vi, chọn mức gần đúng nhất (2, 4 là ở giữa).</div>'+DG_COMP.map(([k,t,d,an])=>'<div class="dgarea'+(r.comp[k]?' ok':'')+'" data-comp="'+k+'"><div class="dgah"><b>'+esc(t)+'</b><span class="pill good">Xong</span></div><div class="sub">'+esc(d)+'</div><ul class="dganc"><li><b>1</b> '+esc(an[0])+'</li><li><b>3</b> '+esc(an[1])+'</li><li><b>5</b> '+esc(an[2])+'</li></ul>'+dgSeg('data-dgc="'+k+'"',r.comp[k]||0,5)+'</div>').join("")
    +dgTa("dg_ex","Kể ngắn một việc khó gần đây bạn đã tự xử lý: vướng gì, bạn làm gì, kết quả ra sao (không bắt buộc)",r.ex)+'</div>';
+  h+='<div class="panel dgsec"><h2>4. Kết quả công việc (thẻ điểm cân bằng)</h2><div class="sub">Chấm mức bạn đạt so với mục tiêu trong 3 tháng gần đây, theo 4 góc nhìn. Việc không thuộc phần bạn làm thì chọn "Không áp dụng". Không ghi số tiền, chỉ chấm mức đạt.</div><ol class="dgscale">'+DG_BSC_SCALE.slice(1).map((t,i)=>'<li><b>'+(i+1)+'</b> '+t+'</li>').join("")+'</ol>'
+   +DG_BSC.map(([g,t,w,it])=>'<div class="dgarea'+(it.every(([k])=>r.bsc[k])?' ok':'')+'" data-bscg="'+g+'"><div class="dgah"><b>'+esc(t)+' <small class="sub">('+w+'%)</small></b><span class="pill good">Xong</span></div>'
+     +it.map(([k,l])=>'<div class="dgcr"><span>'+esc(l)+'</span><div class="row" style="gap:4px">'+dgSeg('data-dgb="'+k+'"',r.bsc[k]||0,5,DG_BSC_SCALE)+'<button type="button" class="dgna'+(r.bsc[k]===-1?' on':'')+'" data-dgb="'+k+'" data-v="-1">Không áp dụng</button></div></div>').join("")
+     +'<input class="dgnote" data-dggoal="'+g+'" placeholder="Mục tiêu của bạn cho 3 tháng tới ở mặt này (không bắt buộc)" value="'+esc(r.goal[g]||"")+'"></div>').join("")+'</div>';
   const opt=DG_AREAS.map(a=>[a[0],a[2]]);
-  h+='<div class="panel dgsec"><h2>4. Định hướng</h2><div class="f"><label>Đầu việc bạn muốn phụ trách chính (chọn tối đa 2)</label>'+dgChips('data-dglead',opt,r.lead,true)+'</div>'
+  h+='<div class="panel dgsec"><h2>5. Định hướng</h2><div class="f"><label>Đầu việc bạn muốn phụ trách chính (chọn tối đa 2)</label>'+dgChips('data-dglead',opt,r.lead,true)+'</div>'
    +'<div class="f"><label>Đầu việc bạn muốn hỗ trợ (tối đa 2)</label>'+dgChips('data-dgsup',opt,r.support,true)+'</div>'
    +dgTa("dg_learn","Trong 3 tháng tới bạn muốn học thêm gì?",r.learn)
    +'<div class="f"><label>Nếu trình bày trước đội, bạn chọn chủ đề nào? (chọn được nhiều)</label>'+dgChips('data-dgtop',DG_TOP,r.topics,true)+'</div>'
@@ -63,6 +67,8 @@ function bindForm(A){
   A.querySelectorAll("[data-dgs]").forEach(b=>b.addEventListener("click",()=>{ const [k,j]=b.dataset.dgs.split(":"); r.areas[k].s[+j]=+b.dataset.v; tog(b); areaOk(k); dgDirty(); }));
   A.querySelectorAll("[data-dgw]").forEach(b=>b.addEventListener("click",()=>{ r.areas[b.dataset.dgw].want=b.dataset.v; tog(b); areaOk(b.dataset.dgw); dgDirty(); }));
   A.querySelectorAll("[data-dgc]").forEach(b=>b.addEventListener("click",()=>{ r.comp[b.dataset.dgc]=+b.dataset.v; tog(b); A.querySelector('[data-comp="'+b.dataset.dgc+'"]')?.classList.add("ok"); dgDirty(); }));
+  A.querySelectorAll("[data-dgb]").forEach(b=>b.addEventListener("click",()=>{ const k=b.dataset.dgb; r.bsc[k]=+b.dataset.v; b.closest(".dgcr").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b)); const g=DG_BSC.find(x=>x[3].some(i=>i[0]===k)); A.querySelector('[data-bscg="'+g[0]+'"]')?.classList.toggle("ok",g[3].every(([q])=>r.bsc[q])); dgDirty(); }));
+  A.querySelectorAll("[data-dggoal]").forEach(t=>t.addEventListener("input",()=>{ r.goal[t.dataset.dggoal]=t.value.slice(0,300); dgDirty(); }));
   const sync=()=>{ A.querySelectorAll("[data-dglead]").forEach(x=>x.classList.toggle("on",r.lead.includes(x.dataset.v))); A.querySelectorAll("[data-dgsup]").forEach(x=>x.classList.toggle("on",r.support.includes(x.dataset.v))); A.querySelectorAll("[data-dgtop]").forEach(x=>x.classList.toggle("on",r.topics.includes(x.dataset.v))); };
   const multi=(attr,field,max)=>A.querySelectorAll("["+attr+"]").forEach(b=>b.addEventListener("click",()=>{ const v=b.dataset.v, L=r[field], i=L.indexOf(v);
     if(i>=0) L.splice(i,1); else { if(max&&L.length>=max){ toast("Chọn tối đa "+max); return; } L.push(v); }

@@ -1,6 +1,6 @@
 /* Trang kết quả cho quản lý: ma trận, đánh giá sơ bộ, từng người, chấm và nhận xét. */
 "use strict";
-const PIN_SHA="b51d6983f5f71d2578ca5f5a522b65fcec63476ca75b69778345ca5746b24343";
+const PIN_SHA="e7a69a020ae54e6626844b7df08a858864d46dc33e83b11aa333e18ce26bfd18";
 const DGA={data:null,open:"",tab:"tong",ok:sessionStorage.getItem("dg-ok")==="1"};
 // Dữ liệu chỉ nằm trong trình duyệt của máy này (localStorage). Sao lưu bằng nút Tải bản sao lưu.
 function loadStore(){ let r={},n={}; try{ r=JSON.parse(localStorage.getItem("dg-recs")||"{}"); n=JSON.parse(localStorage.getItem("dg-notes")||"{}"); }catch(_){} DGA.data={recs:r,notes:n}; }
@@ -25,6 +25,9 @@ function dgSuit(rec,note){ if(!rec) return {fit:[],no:[]};
   const fit=rows.filter(r=>r.f>=3.6&&r.w!=="no"&&r.c>=3).sort((a,b)=>b.f-a.f).slice(0,3).map(r=>[r.sh,"Kỹ năng "+dgF(r.c)+(r.w==="yes"?", rất muốn làm":"")+(r.weak.length?"; cần bù: "+r.weak.map(dgCompName).join(", "):"")]);
   const no=rows.filter(r=>r.w==="no"||r.c<2.5||r.weak.length>=2).sort((a,b)=>a.f-b.f).slice(0,3).map(r=>[r.sh,[r.w==="no"?"không muốn làm":"",r.c<2.5?"kỹ năng "+dgF(r.c):"",r.weak.length?"thiếu "+r.weak.map(dgCompName).join(", "):""].filter(Boolean).join("; ")]);
   return {fit,no}; }
+// BSC: gộp điểm tự chấm và điểm của anh; -1 = không áp dụng.
+function dgBv(rec,n,k){ const a=rec?.bsc?.[k]||0, o=n?.bsc?.[k]||0; if(o===-1) return 0; if(o>0) return a>0?(a+o)/2:o; return a>0?a:0; }
+const dgBsc=(rec,n)=>dgBscScore(k=>dgBv(rec,n,k));
 function dgRole(pid,k){ const p=DG_PLAN[k]||{}; return p.c===pid?"C":p.p===pid?"P":(p.cand||[]).includes(pid)?"U":""; }
 function dgFlags(pid,rec,note){ const f=[]; if(!rec) return f;
   if(rec.load==="over") f.push(["bad","Thấy quá tải"]); else if(rec.load==="high") f.push(["warn","Thấy hơi nhiều việc"]); else if(rec.load==="low") f.push(["","Còn ít việc, nhận thêm được"]);
@@ -35,6 +38,7 @@ function dgFlags(pid,rec,note){ const f=[]; if(!rec) return f;
     if((rec.lead||[]).includes(k)&&!role) f.push(["","Muốn phụ trách "+sh+", chưa có trong đề xuất"]);
     if(!role&&cap>=4&&w==="yes"&&!(rec.lead||[]).includes(k)) f.push(["","Mạnh và muốn làm "+sh+", đang chưa được giao"]); });
   const lo=DG_COMP.filter(([k])=>{ const v=dgComp(rec,note,k); return v&&v<=2; }).map(c=>c[1]); if(lo.length) f.push(["warn","Năng lực chung cần phát triển: "+lo.join(", ")]);
+  const bt=dgBsc(rec,note).total; if(bt&&bt<2.5) f.push(["warn","Thẻ điểm BSC "+dgF(bt)+": kết quả 3 tháng qua dưới mục tiêu"]);
   const all=DG_AREAS.flatMap(([k])=>rec.areas?.[k]?.s||[]).filter(x=>x>0); if(all.length>=20&&dgAvg(all)>=4.5) f.push(["warn","Tự chấm gần như toàn 4–5: nên đối chiếu với kết quả thực tế"]);
   return f; }
 function vDgAdmin(){
@@ -45,7 +49,7 @@ function vDgAdmin(){
   let h='<div class="row between" style="gap:8px;align-items:flex-end;flex-wrap:wrap"><div><h1 style="margin:0">Tự đánh giá nhân sự</h1><div class="sub">Đợt 11/2026 · Nhân sự làm phiếu rồi gửi link qua Zalo. Anh mở link trên máy này (hoặc dán vào ô dưới) để thêm phiếu. Dữ liệu chỉ lưu trong trình duyệt máy này.</div></div><div class="row" style="gap:6px"><a class="btn" href="./danh-gia.html?xem-thu" target="_blank">Xem phiếu mẫu</a><button class="btn" id="dgBak">Tải bản sao lưu</button><label class="btn">Mở bản sao lưu<input type="file" id="dgImp" accept=".json,application/json" hidden></label><button class="btn" id="dgOut">Khóa</button></div></div>';
   h+='<div class="grid kpis" style="margin-top:12px"><div class="tile '+(sent===ppl.length?"good":"")+'"><span class="v">'+sent+'/'+ppl.length+'</span><span class="l">Đã nhận phiếu</span></div><div class="tile"><span class="v">'+(ppl.length-sent)+'</span><span class="l">Chưa nhận: '+esc(ppl.filter(p=>!R[p]).map(p=>DG_NAME[p].replace(/^(Anh|Chị)\s+/,"")).join(", ")||"không còn ai")+'</span></div></div>';
   h+='<div class="panel" style="margin-top:12px"><div class="f"><label for="dgPaste">Dán link phiếu nhân sự gửi qua Zalo (dán được nhiều link cùng lúc)</label><textarea id="dgPaste" rows="2" placeholder="https://…/ket-qua.html#r=…"></textarea></div><button class="btn pri" id="dgAdd" style="margin-top:8px">Thêm phiếu</button></div>';
-  const tabs=[["tong","Ma trận"],["nl","Năng lực chung"],["so-bo","Đánh giá sơ bộ"],["nguoi","Từng người"]];
+  const tabs=[["tong","Ma trận"],["nl","Năng lực chung"],["bsc","Thẻ điểm BSC"],["so-bo","Đánh giá sơ bộ"],["nguoi","Từng người"]];
   h+='<div class="dgchips" style="margin:12px 0">'+tabs.map(([k,l])=>'<button type="button" data-dgtab="'+k+'"'+(DGA.tab===k?' class="on"':'')+'>'+l+'</button>').join("")+'</div>';
   const short=p=>esc((DG_NAME[p]||p).replace(/^(Anh|Chị)\s+/,""));
   if(DGA.tab==="tong"){
@@ -58,6 +62,14 @@ function vDgAdmin(){
     h+='<div class="panel"><div class="sub" style="margin-bottom:6px">Điểm năng lực chung 1–5 (tự chấm, gộp điểm của anh nếu có). Thang theo hành vi: 1 chưa có, 3 làm được ổn định, 5 làm mẫu cho người khác.</div><table class="dgmx"><thead><tr><th></th>'+ppl.map(p=>'<th>'+short(p)+'</th>').join("")+'</tr></thead><tbody>'
      +DG_COMP.map(([k,t])=>'<tr><th>'+esc(t)+'</th>'+ppl.map(p=>{ const v=dgComp(R[p],N[p],k); return '<td style="background:'+(v?'color-mix(in srgb,var(--brand) '+Math.round((v-1)/4*55+5)+'%,transparent)':'transparent')+(v&&v<=2?';color:var(--bad);font-weight:600':'')+'">'+(v?dgF(v):'<span class="sub">–</span>')+'</td>'; }).join("")+'</tr>').join("")+'</tbody></table></div>'
      +'<div class="panel" style="margin-top:10px"><b>Năng lực chung mỗi đầu việc cần</b>'+DG_AREAS.map(([k,t])=>'<div class="sub" style="margin-top:4px"><b style="color:var(--ink)">'+esc(t)+':</b> '+(DG_REQ[k]||[]).map(dgCompName).join(", ")+'</div>').join("")+'</div>';
+  } else if(DGA.tab==="bsc"){
+    const sc=Object.fromEntries(ppl.map(p=>[p,dgBsc(R[p],N[p])]));
+    const cell=v=>'<td style="background:'+(v?'color-mix(in srgb,var(--brand) '+Math.round((v-1)/4*55+5)+'%,transparent)':'transparent')+(v&&v<2.5?';color:var(--bad);font-weight:600':'')+'">'+(v?dgF(v):'<span class="sub">–</span>')+'</td>';
+    h+='<div class="panel"><div class="sub" style="margin-bottom:6px">Thẻ điểm cân bằng rút gọn: mức đạt so với mục tiêu 3 tháng gần đây (1 dưới 50%, 3 gần đạt, 4 đạt, 5 vượt), gộp điểm của anh nếu có. Tổng = cộng theo trọng số, bỏ góc không áp dụng.</div><table class="dgmx"><thead><tr><th></th>'+ppl.map(p=>'<th>'+short(p)+'</th>').join("")+'</tr></thead><tbody>'
+     +DG_BSC.map(([g,t,w])=>'<tr><th>'+esc(t)+' <small class="sub">'+w+'%</small></th>'+ppl.map(p=>cell(sc[p].per[g])).join("")+'</tr>').join("")
+     +'<tr><th><b>Tổng</b></th>'+ppl.map(p=>cell(sc[p].total).replace('">',';font-weight:700">')).join("")+'</tr>'
+     +'<tr><th>Xếp loại</th>'+ppl.map(p=>'<td style="font-size:11px">'+(esc(dgBscRank(sc[p].total))||'<span class="sub">–</span>')+'</td>').join("")+'</tr></tbody></table></div>'
+     +'<div class="panel" style="margin-top:10px"><b>Chỉ số từng góc nhìn</b>'+DG_BSC.map(([g,t,w,it])=>'<div class="sub" style="margin-top:4px"><b style="color:var(--ink)">'+esc(t)+' ('+w+'%):</b> '+it.map(i=>esc(i[1])).join("; ")+'</div>').join("")+'<div class="sub" style="margin-top:6px">Xếp loại: từ 4,5 Xuất sắc, từ 3,5 Tốt, từ 2,5 Đạt, dưới 2,5 Cần cải thiện.</div></div>';
   } else if(DGA.tab==="so-bo"){
     const any=ppl.some(p=>R[p]);
     h+='<div class="panel"><div class="sub">Điểm phù hợp = 45% kỹ năng đầu việc (tự chấm, gộp điểm của anh nếu có) + 25% năng lực chung mà đầu việc cần + 30% mức muốn làm, cộng 0,3 nếu người đó chọn phụ trách chính. Đây là gợi ý để anh xem cùng buổi thuyết trình, không thay quyết định của anh.</div></div>';
@@ -81,12 +93,15 @@ function vDgAdmin(){
         const su=dgSuit(rec,n), hi=DG_COMP.filter(([k])=>dgComp(rec,n,k)>=4).map(c=>c[1]), lo=DG_COMP.filter(([k])=>{ const v=dgComp(rec,n,k); return v&&v<=2; }).map(c=>c[1]);
         c+='<div class="dgsuit"><div><b style="color:var(--good)">Phù hợp</b>'+(su.fit.length?'<ul>'+su.fit.map(([a,r])=>'<li><b>'+esc(a)+'</b>: '+esc(r)+'</li>').join("")+'</ul>':'<div class="sub">Chưa rõ, cần thêm dữ liệu</div>')+'</div><div><b style="color:var(--bad)">Chưa phù hợp</b>'+(su.no.length?'<ul>'+su.no.map(([a,r])=>'<li><b>'+esc(a)+'</b>: '+esc(r)+'</li>').join("")+'</ul>':'<div class="sub">Không có đầu việc nào rõ là chưa phù hợp</div>')+'</div></div>'
          +'<div class="dgkv"><span>Năng lực mạnh</span><b>'+(esc(hi.join(", "))||"–")+'</b><span>Cần phát triển</span><b>'+(esc(lo.join(", "))||"–")+'</b></div>';
+        const bs=dgBsc(rec,n); if(bs.total) c+='<div class="dgkv"><span>Thẻ điểm BSC</span><b>'+dgF(bs.total)+' · '+esc(dgBscRank(bs.total))+' ('+DG_BSC.map(([g,t])=>esc(t)+' '+dgF(bs.per[g])).join(", ")+')</b></div>';
+        const gl=DG_BSC.filter(([g])=>rec.goal?.[g]); if(gl.length) c+='<div style="margin-top:8px"><div class="sub">Mục tiêu 3 tháng tới</div>'+gl.map(([g,t])=>'<div style="overflow-wrap:anywhere"><b>'+esc(t)+':</b> '+esc(rec.goal[g])+'</div>').join("")+'</div>';
         const fl=dgFlags(p,rec,n); if(fl.length) c+='<ul style="margin:8px 0 0;padding-left:18px">'+fl.map(([cl,t])=>'<li'+(cl?' style="color:var(--'+cl+')"':'')+'>'+esc(t)+'</li>').join("")+'</ul>'; }
       else c+='<div class="sub" style="margin-top:6px">Chưa nhận phiếu của người này. Anh vẫn chấm trước được.</div>';
       c+='<h3 style="margin:12px 0 4px">Chấm của anh và đối chiếu</h3><div class="sub">Tự chấm là trung bình 3 tiêu chí. Ô của anh để trống thì chỉ dùng điểm tự chấm.</div>'
        +DG_AREAS.map(([k,t,sh])=>{ const s=rec?dgSelf(rec,k):0, w=rec?.areas?.[k]?.want, role=dgRole(p,k);
          return '<div class="dgcr"><span><b>'+esc(sh)+'</b>'+(role?' <small class="sub">('+({C:"đề xuất chính",P:"đề xuất phụ",U:"ứng viên"})[role]+')</small>':'')+'<br><small class="sub">Tự chấm '+(rec?.areas?.[k]?.s||[]).map(x=>x||"–").join(" · ")+' → '+dgF(s)+(w?' · '+esc((DG_WANT.find(x=>x[0]===w)||[,""])[1]):'')+'</small>'+(rec?.areas?.[k]?.note?'<br><small style="overflow-wrap:anywhere">'+esc(rec.areas[k].note)+'</small>':'')+'</span>'+dgSeg('data-dgo="'+p+':'+k+'"',n.sco?.[k]||0,5,DG_SCALE)+'</div>'; }).join("")
        +'<h3 style="margin:12px 0 4px">Năng lực chung</h3>'+DG_COMP.map(([k,t])=>'<div class="dgcr"><span><b>'+esc(t)+'</b><br><small class="sub">Tự chấm '+(rec?.comp?.[k]||"–")+'</small></span>'+dgSeg('data-dgo="'+p+':'+k+'"',n.sco?.[k]||0,5)+'</div>').join("")
+       +'<h3 style="margin:12px 0 4px">Thẻ điểm BSC</h3>'+DG_BSC.map(([g,t,w,it])=>'<div class="sub" style="margin-top:6px"><b style="color:var(--ink)">'+esc(t)+'</b> ('+w+'%)</div>'+it.map(([k,l])=>{ const a=rec?.bsc?.[k]; return '<div class="dgcr"><span>'+esc(l)+'<br><small class="sub">Tự chấm '+(a===-1?"không áp dụng":a||"–")+'</small></span>'+dgSeg('data-dgob="'+p+':'+k+'"',n.bsc?.[k]||0,5,DG_BSC_SCALE)+'</div>'; }).join("")).join("")
        +'<div class="f" style="margin-top:8px"><label for="dgon_'+p+'">Nhận xét của anh (chỉ anh thấy)</label><textarea id="dgon_'+p+'" data-dgot="'+p+'" rows="3">'+esc(n.text||"")+'</textarea></div><div style="margin-top:8px"><button class="btn pri" data-dgosave="'+p+'">Lưu chấm, nhận xét</button></div></div>';
       return c; }).join("");
   }
@@ -108,6 +123,7 @@ function bindAdmin(A){
   A.querySelectorAll("[data-dgopen]").forEach(b=>b.addEventListener("click",()=>{ DGA.open=DGA.open===b.dataset.dgopen?"":b.dataset.dgopen; render(); }));
   const N=DGA.data.notes, get=p=>N[p]||(N[p]={sco:{},text:""});
   A.querySelectorAll("[data-dgo]").forEach(b=>b.addEventListener("click",()=>{ const [p,k]=b.dataset.dgo.split(":"), n=get(p); n.sco=n.sco||{}; const v=+b.dataset.v; n.sco[k]=n.sco[k]===v?0:v; b.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",+x.dataset.v===n.sco[k])); }));
+  A.querySelectorAll("[data-dgob]").forEach(b=>b.addEventListener("click",()=>{ const [p,k]=b.dataset.dgob.split(":"), n=get(p); n.bsc=n.bsc||{}; const v=+b.dataset.v; n.bsc[k]=n.bsc[k]===v?0:v; b.parentElement.querySelectorAll("button").forEach(x=>x.classList.toggle("on",+x.dataset.v===n.bsc[k])); }));
   A.querySelectorAll("[data-dgot]").forEach(t=>t.addEventListener("input",()=>{ get(t.dataset.dgot).text=t.value.slice(0,3000); }));
   A.querySelectorAll("[data-dgosave]").forEach(b=>b.addEventListener("click",()=>{ const p=b.dataset.dgosave; get(p).updatedAt=new Date().toISOString(); saveStore(); toast("Đã lưu trên máy này"); render(); }));
 }

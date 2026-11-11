@@ -26,6 +26,9 @@ Settings › Pages › Deploy from branch `main`, thư mục `/`. Địa chỉ: 
 
 Năng lực chung (10 mục, `DG_COMP`) chấm theo thang hành vi (BARS): mỗi mục có mô tả mức 1, 3, 5. Bộ năng lực tham khảo SHL Great Eight và Lominger, rút gọn cho việc thực tế ở BVI. Năng lực cần cho từng đầu việc nằm ở `DG_REQ`; đề xuất phân vai bước 1 ở `DG_PLAN`, cùng trong `assets/dg-common.js`.
 
+## Thẻ điểm cân bằng (BSC)
+Mục riêng trong phiếu và tab "Thẻ điểm BSC" ở trang kết quả. 4 góc nhìn, mỗi góc 2 chỉ số (`DG_BSC` trong `assets/dg-common.js`): Tài chính 25%, Khách hàng 25%, Quy trình nội bộ 30%, Học hỏi phát triển 20%. Chấm mức đạt so với mục tiêu 3 tháng gần đây: 1 dưới 50%, 2 từ 50–79%, 3 từ 80–99%, 4 đạt, 5 vượt; chỉ số không thuộc phần việc thì chọn Không áp dụng. Tổng = cộng theo trọng số các góc có điểm (có điểm của giám đốc thì lấy trung bình hai bên). Xếp loại: từ 4,5 Xuất sắc, từ 3,5 Tốt, từ 2,5 Đạt, dưới 2,5 Cần cải thiện. Không ghi số tiền, chỉ chấm mức đạt.
+
 ## Quy tắc
 - Chữ tiếng Việt, ngắn gọn, dùng tốt ở rộng 390px, không cuộn ngang.
 - Không ghi CCCD, số sổ đỏ, số điện thoại, số tiền vào repo hay trang. Máy chủ che chuỗi số dài trong ô chữ.

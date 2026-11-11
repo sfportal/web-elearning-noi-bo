@@ -37,6 +37,18 @@ const DG_COMP=[
  ["k10","Dẫn dắt, kèm người khác","Hướng dẫn, giao việc, tạo động lực",["Chưa từng hướng dẫn ai","Kèm được 1 người làm một việc cụ thể","Dẫn một nhóm, đào tạo người mới thành thạo"]]];
 // Năng lực chung cần cho từng đầu việc (dùng để đánh giá phù hợp, chưa phù hợp).
 const DG_REQ={a1:["k2","k1","k4","k10","k9"],a2:["k3","k5","k9","k1","k8"],a3:["k7","k2","k6","k5"],a4:["k6","k3","k7","k8"],a5:["k2","k3","k10","k9","k4"],a6:["k3","k8","k1","k5"],a7:["k10","k3","k5","k4"],a8:["k7","k2","k5"]};
+// Thẻ điểm cân bằng (Balanced Scorecard) rút gọn cho nội bộ: 4 góc nhìn, mỗi góc 2 chỉ số, chấm mức đạt so với mục tiêu 3 tháng gần đây.
+// [mã, tên, trọng số %, [[mã chỉ số, nội dung]]]
+const DG_BSC=[
+ ["f","Tài chính",25,[["f1","Đạt chỉ tiêu doanh thu, hợp đồng, thu tiền được giao"],["f2","Chi đúng kế hoạch, chứng từ đủ, không thất thoát"]]],
+ ["c","Khách hàng",25,[["c1","Khách, xã, bà con hài lòng, ít phàn nàn"],["c2","Phản hồi khách đúng hẹn, theo việc đến khi xong"]]],
+ ["p","Quy trình nội bộ",30,[["p1","Việc được giao xong đúng hạn"],["p2","Hồ sơ, số liệu đúng ngay lần đầu, cập nhật lên hệ thống"]]],
+ ["l","Học hỏi, phát triển",20,[["l1","Học thêm được kỹ năng, công cụ mới và dùng vào việc"],["l2","Chia sẻ, kèm người khác, góp ý cải tiến"]]]];
+const DG_BSC_SCALE=["","Dưới 50% mục tiêu","50–79% mục tiêu","80–99%, gần đạt","Đạt 100%","Vượt mục tiêu"];
+const dgBscK=()=>DG_BSC.flatMap(g=>g[3].map(i=>i[0]));
+// Điểm BSC: trung bình chỉ số mỗi góc (bỏ chỉ số "không áp dụng" = -1), cộng theo trọng số các góc có điểm.
+function dgBscScore(get){ let sw=0,sv=0; const per={}; DG_BSC.forEach(([g,,w,it])=>{ const v=dgAvg(it.map(([k])=>get(k))); per[g]=v; if(v){ sw+=w; sv+=w*v; } }); return {per,total:sw?sv/sw:0}; }
+const dgBscRank=t=>!t?"":t>=4.5?"Xuất sắc":t>=3.5?"Tốt":t>=2.5?"Đạt":"Cần cải thiện";
 const DG_SCALE=["","Chưa làm bao giờ","Làm được khi có người kèm","Tự làm trọn việc","Làm tốt, ổn định, kèm được người khác","Cải tiến quy trình, đào tạo lại cho đội"];
 const DG_WANT=[["yes","Rất muốn làm"],["maybe","Làm được"],["no","Không muốn"]], DG_WV={yes:5,maybe:3,no:1};
 const DG_LOAD=[["low","Còn ít việc"],["ok","Vừa sức"],["high","Hơi nhiều"],["over","Quá tải"]];
@@ -47,8 +59,8 @@ const DG_STAFF=["trinh","tuan","man","ngoc","huy","minh"];
 const DG_NAME={trinh:"Chị Trinh",tuan:"Anh Tuấn",man:"Chị Mẫn",ngoc:"Chị Ngọc",huy:"Anh Huy",minh:"Anh Minh"};
 const dgAvg=a=>{ const v=(a||[]).filter(x=>x>0); return v.length?v.reduce((s,x)=>s+x,0)/v.length:0; };
 const dgF=n=>n?(Math.round(n*10)/10).toLocaleString("vi-VN"):"–";
-function dgBlank(){ const areas={}; DG_AREAS.forEach(a=>areas[a[0]]={s:[0,0,0],want:"",note:""}); return {now:"",sat:0,load:"",good:"",hard:"",help:"",areas,comp:{},ex:"",lead:[],support:[],learn:"",topics:[],other:""}; }
-function dgFill(r){ const b=dgBlank(); if(!r) return b; const o={...b,...r}; o.areas={...b.areas}; DG_AREAS.forEach(([k])=>{ const x=r.areas?.[k]; if(x) o.areas[k]={s:[0,1,2].map(i=>x.s?.[i]||0),want:x.want||"",note:x.note||""}; }); o.comp={...(r.comp||{})}; o.lead=[...(r.lead||[])]; o.support=[...(r.support||[])]; o.topics=[...(r.topics||[])]; return o; }
+function dgBlank(){ const areas={}; DG_AREAS.forEach(a=>areas[a[0]]={s:[0,0,0],want:"",note:""}); return {now:"",sat:0,load:"",good:"",hard:"",help:"",areas,comp:{},ex:"",bsc:{},goal:{},lead:[],support:[],learn:"",topics:[],other:""}; }
+function dgFill(r){ const b=dgBlank(); if(!r) return b; const o={...b,...r}; o.areas={...b.areas}; DG_AREAS.forEach(([k])=>{ const x=r.areas?.[k]; if(x) o.areas[k]={s:[0,1,2].map(i=>x.s?.[i]||0),want:x.want||"",note:x.note||""}; }); o.comp={...(r.comp||{})}; o.bsc={...(r.bsc||{})}; o.goal={...(r.goal||{})}; o.lead=[...(r.lead||[])]; o.support=[...(r.support||[])]; o.topics=[...(r.topics||[])]; return o; }
 function dgSeg(attr,val,n,labels){ let h='<div class="dgseg" role="group">'; for(let i=1;i<=n;i++) h+='<button type="button" '+attr+' data-v="'+i+'"'+(val===i?' class="on"':'')+' title="'+esc(labels?labels[i]:"")+'" aria-pressed="'+(val===i)+'">'+i+'</button>'; return h+'</div>'; }
 function dgChips(attr,opts,val,multi){ return '<div class="dgchips">'+opts.map(([k,l])=>'<button type="button" '+attr+' data-v="'+k+'"'+((multi?(val||[]).includes(k):val===k)?' class="on"':'')+'>'+esc(l)+'</button>').join("")+'</div>'; }
 const dgCompName=k=>(DG_COMP.find(c=>c[0]===k)||[,k])[1];
