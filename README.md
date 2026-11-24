@@ -10,7 +10,7 @@ Web tĩnh (GitHub Pages) cho đội BVI, FarmBase. Tách riêng khỏi BVI Đi�
 | `danh-gia.html?xem-thu` | Xem thử phiếu, không lưu | Không |
 | `quy-trinh.html` | Mọi người: danh sách cẩm nang | Không |
 | `cam-nang-ban-hang.html` | Sales, quản lý follow khách | Chọn tên |
-| `cam-nang-marketing.html` | Marketing: lịch Fanpage, mẫu bài, KPI | Chọn tên |
+| `cam-nang-marketing.html` | Marketing: 8 mảng làm song song, giám đốc giám sát | Chọn tên |
 | `ket-qua.html` | Giám đốc: ma trận, đánh giá sơ bộ, từng người, chấm và nhận xét | Mã PIN |
 
 ## Không dùng cơ sở dữ liệu
@@ -42,4 +42,4 @@ Mục riêng trong phiếu và tab "Thẻ điểm BSC" ở trang kết quả. 4 
 - Góp ý: nút "Góp ý" ở từng mục, ghi "muốn sửa thành" và lý do. Tab Góp ý gom tất cả, có nút Chép để gửi qua Zalo.
 - Góp ý chung lưu ở bảng `camnang_gopy` trên Supabase (cấu hình trong `assets/cn-config.js`, khóa công khai). Khách chỉ được đọc, thêm góp ý và đánh dấu đã xử lý, không sửa hay xóa được. Cột `cam_nang` tách góp ý theo từng cẩm nang (trang đặt `window.CN_ID`, mặc định `ban-hang`). Để trống `url` thì góp ý chỉ lưu trên máy từng người. Mở trang với `?quan-ly` để hiện nút "Đánh dấu đã xử lý". Chuỗi số dài trong góp ý được che trước khi gửi.
 - Bản soạn gốc nằm ở thư mục dự án `SalesKit_TXNG_2026-11/CamNang_BanHang_CSKH.html`; sửa nội dung ở đó rồi chép sang đây.
-- Cẩm nang marketing (`cam-nang-marketing.html`, `CN_ID='marketing'`): lịch Fanpage tháng 12 lấy từ file lịch đã quyết (16 chốt, 3 cân nhắc, 8 bỏ), khung 6 chuyên mục, mẫu bài, KPI và quảng cáo theo kế hoạch marketing hằng tháng 24/11/2026. Bản soạn gốc ở thư mục dự án `Marketing_2026-11/CamNang_Marketing/`. Lịch tháng mới: thay mảng `CAL` trong trang.
+- Cẩm nang marketing (`cam-nang-marketing.html`, `CN_ID='marketing'`): lịch Fanpage tháng 12 lấy từ file lịch đã quyết (16 chốt, 3 cân nhắc, 8 bỏ), bản 2 chia 8 mảng (nội dung, văn phong, quảng cáo Facebook, offline, sự kiện, chương trình, đo lường, Chiến dịch 10.000 ha), không có việc từng ngày và KPI. Bản soạn gốc ở thư mục dự án `Marketing_2026-11/CamNang_Marketing/`. Lịch tháng mới: thay mảng `CAL` trong trang.
