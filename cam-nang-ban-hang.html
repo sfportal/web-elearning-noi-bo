@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Cẩm nang bán hàng FarmBase</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: sổ tay hiện trường, rõ, gần gũi cho người mới
+   IDEA: cuốn sổ bỏ túi của người đi vườn, mỗi tab là một trang, ai đọc cũng ghi góp ý được ngay bên lề
+   PICTURE: thanh 8 giai đoạn và các bước demo như hàng cây, bấm là ra việc
+   COLOUR and TYPE: xanh rừng FarmBase, ngọc phụ, vàng sầu riêng nhấn; Montserrat + Be Vietnam Pro
+   LAYOUT: thanh tab trên, một cột nội dung, thẻ có nút Chép và Góp ý */
+:root{color-scheme:light dark;--bg:light-dark(#f4f8f3,#0e1a14);--card:light-dark(#fff,#15261d);--ink:light-dark(#13261b,#e6f1ea);--mut:light-dark(#5b6b61,#9db3a5);--g:#1b5e3b;--g2:light-dark(#1b5e3b,#5fc08a);--t:light-dark(#0f8b8d,#4cc6c8);--y:#e0a800;--line:light-dark(#dbe6dd,#29402f);--soft:light-dark(#e8f3ec,#1b3325);--fb:light-dark(#fff7dc,#2b2610)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'Be Vietnam Pro',system-ui,sans-serif;overflow-x:clip}
+header{background:var(--g);color:#fff;padding:16px max(4vw,16px) 0}
+h1,h2,h3{font-family:Montserrat,sans-serif;line-height:1.15;margin:0 0 8px}
+h1{font-size:clamp(22px,5vw,34px)}h2{font-size:21px;color:var(--g2);margin-top:8px}h3{font-size:16px;margin-top:14px}
+.who{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;margin:6px 0 10px}
+.who button{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:6px 12px;font:600 13px 'Be Vietnam Pro';cursor:pointer}
+nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav a{flex:none;color:#fff;text-decoration:none;padding:10px 13px;border-radius:10px 10px 0 0;font-weight:600;font-size:14px;opacity:.8}
+nav a.on{background:var(--bg);color:var(--g2);opacity:1}
+main{max-width:860px;margin:auto;padding:16px max(4vw,14px) 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
+.mut{color:var(--mut);font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:10px 14px;font:600 14px 'Be Vietnam Pro';cursor:pointer;min-height:44px}
+.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.say{background:var(--soft);border-left:4px solid var(--t);border-radius:8px;padding:10px 12px;margin:8px 0;white-space:pre-wrap}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:0;background:var(--t);color:#fff;border-radius:8px;padding:8px 12px;font:600 13px 'Be Vietnam Pro';cursor:pointer;min-height:36px}
+.btn.fbb{background:transparent;color:var(--ink);border:1px dashed var(--y)}
+.btn.g{background:var(--g)}
+.warn{border-left:4px solid var(--y);background:var(--fb);padding:10px 12px;border-radius:8px;margin:10px 0;font-size:15px}
+ul,ol{padding-left:20px;margin:6px 0}li{margin:3px 0}
+.stages{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;margin:10px 0}
+.st{border:0;border-radius:10px;padding:8px 2px;background:var(--soft);color:var(--ink);font:700 12px 'Be Vietnam Pro';cursor:pointer;min-height:56px}
+.st b{display:block;font:800 18px Montserrat}.st.on{background:var(--g);color:#fff}
+input,select,textarea{font:16px 'Be Vietnam Pro';padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:100%}
+textarea{min-height:70px}
+label{font-size:13px;color:var(--mut);display:block;margin-top:6px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}th{color:var(--mut);font-weight:600}
+td.n{text-align:right;white-space:nowrap}
+details{border-bottom:1px solid var(--line);padding:10px 0}summary{font-weight:600;cursor:pointer;min-height:28px}
+.check li{list-style:none;margin-left:-20px}.check input{width:auto;margin-right:8px;transform:scale(1.3)}
+.big{font:800 clamp(24px,6vw,38px) Montserrat;color:var(--g2)}
+.step{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;border-top:1px solid var(--line);padding:12px 0}
+.step .t{font:800 14px Montserrat;color:var(--t)}
+.step .wow{font-size:14px;color:var(--mut)}
+.fbx{margin-top:6px}.fbform{background:var(--fb);border-radius:10px;padding:10px;margin-top:6px}
+.fbl .it{border-left:3px solid var(--y);padding:4px 10px;margin:6px 0;font-size:14px;background:var(--fb);border-radius:0 8px 8px 0}
+.fbl .it.done{opacity:.6;border-color:var(--g2)}
+.cnt[hidden]{display:none}.cnt{display:inline-block;background:var(--y);color:#13261b;border-radius:999px;padding:0 7px;font-size:12px;font-weight:700;margin-left:4px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+.ov .card{max-width:420px;width:100%}
+.calc .out{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:10px}
+.calc .out div{background:var(--soft);border-radius:10px;padding:10px}
+@media(max-width:600px){.stages{grid-template-columns:repeat(4,minmax(0,1fr))}.grid2{grid-template-columns:minmax(0,1fr)}table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:7.5em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7em;margin-inline-start:-7.5em;color:var(--mut);font-size:12px}.stack td:empty{display:none}.stack tr:first-child{display:none}}
+:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+</style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head><body>
+<header><div style="font-size:13px;margin-bottom:6px"><a href="quy-trinh.html" style="color:#fff;opacity:.85">← Quy trình nội bộ</a></div><h1>Cẩm nang bán hàng FarmBase</h1>
+<div class="who"><span id="who">Mã số vùng trồng, truy xuất nguồn gốc · bản 1.1, 25/11/2026</span><button id="chg" type="button">Đổi tên</button></div><nav id="nav"></nav></header>
+<main id="main"></main>
+<div id="ovl"></div>
+<script src="assets/cn-config.js"></script><script src="assets/dg-common.js"></script>
+<script>
+{
+const HL='Hotline BVI 0944 374 068 · info@bvi.vn';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const st={get(k,d){try{return JSON.parse(localStorage.getItem('fbk_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem('fbk_'+k,JSON.stringify(v))}catch(e){}}};
+let me=st.get('me',{toi:'',khach:'',xung:'anh'});
+const myName=()=>(me.toi||'').replace(/^(Anh|Chị|Em|Cô|Chú)\s+/i,'');
+const fill=t=>t.replace(/\[tên bạn\]/g,myName()||'[tên bạn]').replace(/\[tên khách\]/g,me.khach||'[tên khách]').replace(/\banh\b/g,me.xung||'anh');
+
+const TABS=[['hom-nay','Hôm nay'],['khach','Theo nhóm khách'],['giai-doan','Theo giai đoạn'],['demo','Demo'],['gia','Dịch vụ và giá'],['tin-mau','Tin nhắn mẫu'],['tu-choi','Khách từ chối'],['ngung','Khi nào ngưng'],['hoc','Học và hỏi'],['gop-y','Góp ý']];
+
+const DAILY=['Mở trang sales: xử lý lead quá hạn trước (nóng quá 2 ngày, ấm quá 7 ngày)','Chạm hết lead mới trong 24 giờ','Gọi đủ 20 cuộc hoặc tin nhắn có nội dung','Mỗi lần chạm: ghi kết quả, nhiệt độ, ngày hẹn tiếp theo','Gửi tóm tắt (tin M4) trong 24 giờ sau mỗi buổi gặp','Báo giá cần gửi: nhờ trưởng mảng duyệt trước','Câu khách hỏi mà mình chưa trả lời được: bấm Góp ý ở mục liên quan','Cuối ngày: không còn lead nào thiếu ngày hẹn'];
+
+const MSG=[
+['M1','Làm quen khi gọi không được','Chào anh [tên khách], em là [tên bạn] bên FarmBase, Công ty CP BVI ở Buôn Ma Thuột. Bên em hỗ trợ HTX, doanh nghiệp làm mã số vùng trồng và truy xuất nguồn gốc, nông dân ghi nhật ký ngay trên Zalo. Em gửi anh tờ giới thiệu ngắn. Khi nào tiện anh cho em xin 10 phút gọi lại nhé.'],
+['M2','Sau cuộc gọi đầu','Cảm ơn anh đã dành thời gian. Em gửi anh hồ sơ năng lực bên em. Em đề xuất mình gặp một buổi để em xem danh sách hộ và demo phần mềm. Thứ mấy anh tiện hơn?'],
+['M3','Một câu hỏi ngắn','Anh [tên khách] ơi, em hỏi nhanh một câu: vùng mình đã có mã số vùng trồng chưa anh, hay đang làm hồ sơ?'],
+['M4','Tóm tắt sau buổi gặp','Cảm ơn anh hôm nay. Em tóm lại: (1) vùng … ha, … hộ, đã/chưa có mã; (2) vướng chính: …; (3) bước tiếp: anh gửi em danh sách hộ trước ngày …, em gửi báo giá trong 3 ngày làm việc.'],
+['M5','Gửi báo giá','Em gửi anh báo giá cho vùng … theo phương án …. Giá áp dụng đến hết 12/2026, chưa gồm VAT. Ngày mai em gọi anh 10 phút để giải thích từng mục nhé.'],
+['M6','Nhắc báo giá (sau 5 ngày)','Anh [tên khách] ơi, báo giá hôm trước anh thấy phần nào cần điều chỉnh không? Nếu cần, em tính thêm phương án tự nhập liệu, chia đợt hoặc bắt đầu 1 vùng để anh so sánh.'],
+['M7','Câu chuyện vùng tương tự','Em chia sẻ anh tham khảo: một HTX ở Krông Pắc dùng FarmBase, cả vùng 100% hộ tự ghi nhật ký trên Zalo, hồ sơ có sẵn khi xã kiểm tra. Nếu anh muốn, em xin lịch để anh xuống xem vùng mẫu.'],
+['M8','Hỏi thẳng khi chững lại','Anh [tên khách], em hỏi thật để khỏi làm phiền anh: kế hoạch làm mã của HTX bây giờ thế nào ạ? Nếu chưa phải lúc, anh cho em biết tháng nào phù hợp để em nhắc lại.'],
+['M9','Cảm ơn sau ký','Cảm ơn anh đã tin chọn FarmBase. Người phụ trách triển khai vùng mình là …. Tuần này bên em cấp tài khoản và hẹn buổi hướng dẫn ban đầu. Có gì anh cứ nhắn em hoặc hotline 0944 374 068.'],
+['M10','Báo cáo tháng','Báo cáo tháng … của vùng …: …/… hộ đã ghi nhật ký; … bản ghi đã đồng bộ hệ thống của Bộ; việc tháng tới: …. Hộ còn chậm bên em sẽ gọi hỗ trợ trong tuần.'],
+['M11','Xin giới thiệu','Vụ vừa rồi cảm ơn anh đã đồng hành. Nếu anh biết HTX, doanh nghiệp nào đang cần làm mã hoặc truy xuất, anh giới thiệu giúp em nhé.'],
+['M12','Mời tập huấn, sự kiện','Bên em tổ chức buổi hướng dẫn truy xuất nguồn gốc và mã số vùng trồng tại …, giờ …, ngày …. Anh và bà con trong HTX tham dự được không, em giữ chỗ cho mình nhé.'],
+['M13','Hâm nóng lead lạnh (30 ngày)','Chào anh [tên khách], em [tên bạn] bên FarmBase. Em gửi anh tin ngắn: …. Nếu vùng mình cần trao đổi, em sẵn sàng gọi lại.'],
+['M14','Gia hạn (60 ngày trước hạn)','Kỳ sử dụng FarmBase của vùng … hết vào ngày …. Em gửi anh tổng kết năm và phí duy trì năm sau. Mình hẹn 20 phút để rà lại và tính thêm phần diện tích còn lại nhé.'],
+['M15','Đóng lead lịch sự','Em cảm ơn anh đã trao đổi. Em tạm dừng liên hệ để không làm phiền anh. Khi nào cần, anh nhắn em hoặc hotline 0944 374 068.']];
+const msgOf=id=>MSG.find(m=>m[0]===id);
+
+const STAGES=[
+['Cần tìm liên hệ','Có số điện thoại, Zalo của người quyết định','Tra MST, trang vàng, Hiệp hội, xã, khách cũ giới thiệu',[],'Có tên, chức vụ, số liên hệ','3 ngày'],
+['Mới','Chạm lần đầu','Gọi theo kịch bản nhóm khách. Không gọi được thì nhắn Zalo kèm brochure',['M1'],'Đã nói chuyện hoặc khách trả lời','24 giờ'],
+['Đã liên hệ','Đặt được buổi gặp hoặc demo','Gửi hồ sơ năng lực hoặc video; hỏi 3 đến 4 câu khám phá; hẹn lịch',['M2','M3','M12'],'Có lịch gặp hoặc demo','7 ngày'],
+['Đang tư vấn','Hiểu nhu cầu, demo, có đủ đầu vào báo giá','Gặp, demo theo tab Demo, hỏi đủ 10 câu khám phá; gửi tóm tắt sau buổi gặp',['M4'],'Biết: cây, ha, số vùng, đã có mã chưa, có kho không, khoảng cách','14 ngày'],
+['Đã báo giá','Khách nhận báo giá đúng gói','Lập báo giá theo tab Gói và giá, trưởng mảng duyệt, gửi; gọi lại trong 48 giờ',['M5','M6'],'Khách phản hồi về giá, phạm vi','7 ngày'],
+['Thương lượng','Chốt phạm vi, lịch, người ký','Xử lý từ chối; đưa phương án (gộp vùng, chia đợt, bắt đầu nhỏ). Giảm tối đa 10% để đổi lấy điều kiện; trên 10% xin trưởng mảng',['M7','M8'],'Thống nhất bằng tin nhắn hoặc biên bản','14 ngày'],
+['Đã ký','Hợp đồng, nhận đợt 1, bàn giao triển khai','Gửi cảm ơn, giới thiệu người triển khai, bắt đầu lịch chăm sóc sau ký',['M9','M10','M14','M11'],'Nhận thanh toán đợt 1','Theo hợp đồng'],
+['Không theo','Đóng lead có lý do','Ghi lý do; nhắn đóng lịch sự; hâm nóng theo quý nếu khách không cấm',['M15','M13'],'—','—']];
+
+const AFTER=[['Ngày ký','Tin cảm ơn M9; giới thiệu người triển khai; nhóm Zalo riêng của khách'],['Tuần 1','Cấp tài khoản, tạo vùng, buổi hướng dẫn ban đầu'],['Tuần 2–4','Khảo sát lô, nhập nông hộ, hướng dẫn Mini App'],['Ngày 30','Gọi hỏi hài lòng 5 câu'],['Hằng tháng','Báo cáo ngắn M10'],['Theo mốc mã','Báo khi xã kiểm tra, có mã nội địa, có mã GACC (không hứa ngày)'],['Đầu vụ, trước thu hoạch','Nhắc tập huấn, cách ly, bẫy, điều tra dịch hại'],['60 ngày trước hết kỳ','Tổng kết năm + phí duy trì năm sau (M14)'],['30 ngày trước hết kỳ','Gọi chốt gia hạn, đề xuất mở rộng'],['Sau thu hoạch','Xin giới thiệu khách mới (M11)']];
+
+const Q=['Anh trồng cây gì, ở xã nào, bao nhiêu ha, bao nhiêu hộ?','Vùng đã có mã số vùng trồng chưa? Mã nội địa hay mã GACC?','Bán cho ai, thị trường nào (Trung Quốc, EU, nội địa)?','Nhật ký canh tác đang ghi ở đâu?','Ai đứng tên mã: HTX, THT, doanh nghiệp?','Đất có sổ đỏ đủ không, có đất thuê, đất tranh chấp không?','Có kho, cơ sở đóng gói không? Cần tem QR không?','Vướng nhất hiện nay là gì?','Ai quyết định, có cần họp thành viên không? Muốn xong trước mốc nào?','Vùng cách Buôn Ma Thuột bao xa?'];
+
+const SEG=[
+{k:'htx-chua-ma',n:'HTX sầu riêng chưa có mã',who:'HTX, THT 30–200 thành viên, 30–200 ha; một phần chưa có mã hoặc chờ lâu.',demo:'vung',
+call:'Dạ chào anh [tên khách], em là [tên bạn] bên FarmBase, Công ty Cổ phần BVI ở Buôn Ma Thuột. Bên em đang hỗ trợ các HTX sầu riêng ở Krông Pắc, Buôn Hồ, Ea Drông làm mã số vùng trồng và nhật ký điện tử để giữ mã. Phần diện tích chưa có mã của HTX mình hiện tính sao rồi anh?',
+zalo:'Chào anh [tên khách], em là [tên bạn] bên FarmBase (Công ty CP BVI). Bên em hỗ trợ HTX làm mã số vùng trồng sầu riêng từ khảo sát, hồ sơ đến nhật ký điện tử trên Zalo, đã kết nối hệ thống truy xuất của Bộ NN&MT. Em gửi anh tờ giới thiệu 4 trang. Anh cho em xin 10 phút gọi lại nhé.',
+val:[['Chờ mã lâu, hồ sơ bị trả','Bên em làm đủ 19 thành phần hồ sơ, đối chiếu lô, tọa độ, giấy tờ trên hệ thống trước khi ký nên ít phải sửa. Thời gian cấp mã là của cơ quan nhà nước, bên em không hứa ngày.'],['Nông dân không ghi nhật ký','Bà con ghi trên Zalo, chụp ảnh bao bì là xong, người thân ghi giúp được. Một HTX ở Krông Pắc có 100% hộ tự ghi. Gói làm mã trọn năm có người bên em nhập giúp 12 tháng.'],['Lo mất đất, mất quyền bán','Làm mã không ảnh hưởng quyền sử dụng đất, bà con vẫn tự chủ bán cho ai.']],
+pk:['Gói làm mã trọn năm: 4.500.000 đ/ha (nên chào). Ví dụ 20 ha: 90 triệu','Gói làm mã + truy xuất: 3.500.000 đ/ha nếu HTX tự nhập liệu','Bà con tự đứng tên qua THT: gói đồng hành xã khoảng 20 triệu/vùng','Dưới 10 ha: gợi ý gộp hộ liền kề'],
+close:'Để báo giá đúng, em xin hẹn anh một buổi tại HTX khoảng 1 tiếng: em demo phần mềm trên vùng mẫu và xem danh sách hộ. Thứ mấy anh tiện?',
+w:'Hỏi ngay chuyện đất. Chốt hình thức đứng mã trước khi ký bất kỳ hồ sơ nào.'},
+{k:'co-ma',n:'Vùng đã có mã (truy xuất, giữ mã)',who:'HTX đã có mã nội địa hoặc GACC, lo hậu kiểm, cảnh báo, hoặc bị đòi truy xuất.',demo:'vung',
+call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase. Từ 01/07/2026 bên em đã kết nối hệ thống truy xuất nguồn gốc nông sản của Bộ. Vùng mình đã có mã rồi, phần nhật ký và hậu kiểm hằng năm HTX đang làm thế nào anh?',
+zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. Vùng đã có mã vẫn phải giữ nhật ký, giám sát dịch hại và sẵn sàng hậu kiểm. FarmBase giúp HTX ghi nhật ký trên Zalo, in QR vùng, lô và đồng bộ lên hệ thống của Bộ. Em gửi anh tóm tắt tính năng.',
+val:[['Có mã rồi, cần gì nữa','Có mã mới là bắt đầu. Mã có thể bị đình chỉ nếu kiểm tra không đạt hoặc phát hiện sinh vật kiểm dịch. FarmBase giữ nhật ký cả vụ để có sẵn khi hậu kiểm.'],['Nhà nước có hệ thống miễn phí','Hệ thống của Bộ là nơi nhận dữ liệu. FarmBase là công cụ ghi dữ liệu từ vườn và đẩy lên đó, kèm người hướng dẫn tận vườn.'],['DN, xã đòi truy xuất','Có QR vùng và QR từng lô. Sổ đỏ không công khai, CCCD chỉ hiện 4 số cuối.']],
+pk:['Truy xuất có nhập liệu: 1.500.000 đ/ha/năm','Truy xuất tự nhập liệu: 800.000 đ/ha/năm','Xã có chương trình đồng hành: năm đầu miễn phí'],
+close:'Bên em tạo thử vùng của HTX trên FarmBase với 3 đến 5 hộ để anh xem, rồi mình tính cả vùng. Tuần này anh gửi em danh sách hộ được không?'},
+{k:'dn-dong-goi',n:'Doanh nghiệp đóng gói, xuất khẩu',who:'DN thu mua, đóng gói sầu riêng; mua từ nhiều mã vùng trồng.',demo:'dn',
+call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase, Công ty CP BVI. Công ty mình đang thu mua từ khoảng bao nhiêu mã vùng trồng anh? Bên em làm phần mềm giúp biết từng container đến từ mã nào và in tem QR theo lô, đã kết nối hệ thống truy xuất của Bộ.',
+zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. FarmBase nối dữ liệu vùng trồng đến lô hàng: nguồn hàng theo mã vùng, container, tem QR song ngữ. Bên em cũng làm mã vùng trồng cho vùng nguyên liệu DN đứng tên. Em xin 15 phút demo trực tuyến.',
+val:[['Sợ lẫn hàng ngoài mã','Nguồn hàng chỉ thêm được khi nông dân đã có hồ sơ và gắn mã vùng trồng; mỗi lô ghi rõ nông hộ, mã vùng, nhật ký.'],['Thiếu vùng có mã','DN đứng mã: miễn phí với nông dân, DN trả 3,5 triệu/ha, trả trước 50%.'],['Đã có phần mềm khác','Bên em kết nối được, không khóa dữ liệu. Phần mạnh là dữ liệu từ vườn.']],
+pk:['Module cơ sở đóng gói: thiết lập 5 tr, duy trì 5 tr/năm, tích hợp GS1 và hệ thống của Bộ 5 tr/năm (gồm 3 sản phẩm), tem QR từ 80 đ/mã. Ví dụ 3 sản phẩm + 10.000 QR: 15,8 tr năm đầu','DN đứng mã: 3,5 tr/ha'],
+close:'Em đề nghị buổi demo 20 phút trên một lô hàng mẫu, có anh kỹ thuật bên em đi cùng. Anh cho em xin danh sách sản phẩm, quy cách thùng.',
+w:'Demo lô hàng, GS1, in tem còn chạy thử: luôn có kỹ thuật đi kèm.'},
+{k:'ca-phe',n:'Cà phê (EUDR)',who:'DN xuất khẩu cà phê nhiều hộ liên kết; HTX cà phê.',demo:'vung',
+call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase. Từ 30/12/2026 cà phê vào EU cần tọa độ từng thửa và bằng chứng sản xuất hợp pháp. Dữ liệu thửa của các hộ cung ứng bên mình đã đủ chưa anh?',
+zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. FarmBase quản lý lô đất, tọa độ, số tờ, số thửa, nhật ký của từng hộ; nông dân ghi trên Zalo. Em xin 15 phút trao đổi phần vùng chưa có dữ liệu.',
+val:[['EUDR áp dụng cho ai','Nhà nhập khẩu EU nộp tờ khai, nhưng DN, HTX Việt Nam phải đưa đủ dữ liệu. Mốc: DN lớn và vừa 30/12/2026, DN nhỏ 30/6/2027.'],['Việt Nam rủi ro thấp mà','Vẫn bắt buộc tọa độ từng thửa và bằng chứng hợp pháp.'],['Đã có chương trình khác','Bên em làm phần thực địa: đo thửa, làm sạch dữ liệu, gộp hộ trùng, giữ dữ liệu sống bằng nhật ký.']],
+pk:['Truy xuất vùng trồng cây khác, tính theo vùng: 1 vùng 1 vụ 20 tr năm đầu / 15 tr năm sau; 3 vùng 30/25 tr; 5 vùng 44/39 tr','Khảo sát polygon EUDR: báo giá sau khảo sát'],
+close:'Em đề xuất chạy thử ở một HTX trước. Anh giới thiệu em HTX nào phù hợp nhất?',w:'Không nói FarmBase “đạt chuẩn EUDR”, không tự đặt giá polygon.'},
+{k:'cay-khac',n:'Cây khác (chuối, thanh long, vải…)',who:'HTX, DN có vùng xuất khẩu; liên hiệp HTX nhiều mã.',demo:'vung',
+call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase. Bên em làm nền tảng quản lý vùng trồng có mã cho mọi cây trồng: nhật ký, giám sát dịch hại theo lô, QR. Vùng mình có bao nhiêu mã, đang quản lý bằng gì anh?',
+zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. Một nền tảng cho nhiều mã vùng trồng, đồng bộ hệ thống truy xuất của Bộ, nông dân ghi trên Zalo. Em gửi anh tóm tắt tính năng.',
+val:[['Có làm mã cho cây này không','Có hỗ trợ, yêu cầu khác nhau theo cây và thị trường nên khảo sát rồi mới báo giá.'],['Nhiều mã, nhiều HTX','Từ vùng thứ 4 chỉ 2 triệu/vùng/năm; một tài khoản, phân quyền từng HTX.']],
+pk:['Truy xuất vùng trồng cây khác theo vùng, như cà phê','Mã số vùng trồng cây khác: báo giá sau khảo sát'],close:'Anh gửi em danh sách mã, diện tích, em báo giá theo vùng trong 3 ngày làm việc.'},
+{k:'xa',n:'UBND xã, phường',who:'Chủ tịch, Phó Chủ tịch xã; Phòng Kinh tế.',demo:'xa',
+call:'Dạ kính chào anh, em là [tên bạn] của Công ty Cổ phần BVI. Công ty đã hỗ trợ số hóa vùng trồng, mã số vùng trồng và truy xuất nguồn gốc tại Krông Pắc, Buôn Hồ, Ea Drông, đã bàn giao tài khoản truy xuất cho UBND xã Krông Pắc ngày 28/10/2026. Công ty xin lịch báo cáo chương trình đồng hành truy xuất cho bà con, miễn phí đến hết năm 2026.',
+zalo:'Kính gửi anh. Công ty CP BVI xin gửi tờ thông tin 1 trang về chương trình đồng hành truy xuất nguồn gốc cho xã, và xin lịch làm việc khi xã thuận tiện.',
+val:[['Xã không có kinh phí','Hướng dẫn truy xuất miễn phí đến 31/12/2026; tài khoản cấp xã miễn phí.'],['Có bắt buộc dùng FarmBase không','Không. Cấp mã thuộc thẩm quyền nhà nước; bà con tự chọn. Công ty không khóa dữ liệu.']],
+pk:['Vùng đã có mã: năm 1 miễn phí, từ năm 2 là 800.000 đ/ha/năm','Làm mã mới do THT của bà con đứng tên: khoảng 20 tr/vùng (15 tr đợt 1, 5 tr khi có mã GACC)'],
+close:'Công ty xin gửi công văn và đề xuất 01 buổi tập huấn tại xã, thời gian và địa điểm do xã sắp xếp.',w:'Công văn gửi xã không nêu số vùng, số hộ, diện tích; không ghi chi phí tập huấn.'}];
+
+const DEMO={
+vung:{n:'HTX, vùng trồng (20 phút)',ai:'HTX, THT, vùng đã có hoặc chưa có mã; cà phê; cây khác',
+prep:['Tài khoản demo trên app.farmbase.vn (mã tổ chức, email, mật khẩu) với vùng mẫu đã làm mờ tên, số điện thoại','Điện thoại có Zalo, đã mở sẵn FarmBase Mini App và thêm vào màn hình chính','In sẵn 1 mã QR vùng mẫu để khách quét','4G dự phòng, sạc đầy; nếu chiếu thì mang cáp','Biết trước: cây, ha, số hộ, đã có mã chưa, vướng gì (từ cuộc gọi)','Nếu được: xin trước tọa độ 1 vườn của khách để tạo thử'],
+steps:[
+['0–2','Mở đầu','Nhắc lại vướng mắc khách đã nói, nói trước 3 việc sẽ xem.','Hôm trước anh nói vướng nhất là [vướng mắc]. Hôm nay em cho anh xem 3 việc: tạo vùng, nông dân ghi nhật ký trên Zalo, và người mua quét QR thấy gì.','Khách thấy buổi demo nói đúng chuyện của mình'],
+['2–5','Tổng quan vùng, bản đồ','Đăng nhập trang quản lý. Mở tổng quan: số điểm sản xuất, nông hộ, diện tích, số cây. Mở bản đồ lô, lọc theo cây trồng, xã.','Đây là cả vùng trên một màn hình. Bấm vào lô nào là thấy chủ hộ, diện tích, giống, số cây.','Cả vùng gọn trên một màn hình'],
+['5–8','Tạo một lô ngay tại chỗ','Thêm lô: tìm nông dân theo số điện thoại (chưa có thì thêm mới), nhập tọa độ hoặc định vị, bấm tìm lô đất. Nhập diện tích, giống, số cây, năm trồng, thuần hay xen.','Anh thấy không, nhập tọa độ là hệ thống tự điền số tờ, số thửa. Ảnh sổ đỏ chỉ để làm hồ sơ, không hiện ra ngoài.','Tự điền số tờ, số thửa'],
+['8–12','Nông dân ghi nhật ký trên Zalo','Đưa điện thoại cho khách tự bấm: Zalo, FarmBase, chọn vườn, Thêm ghi chép, chọn thuốc trong danh mục (thấy hoạt chất, liều, thời gian cách ly), chụp ảnh bao bì, lưu. Cho xem ủy quyền người thân và cập nhật thu hoạch.','Bà con không phải cài thêm gì, Zalo đang dùng hằng ngày. Chụp ảnh bao bì là xong, con cháu ghi giúp cũng được.','Khách tự ghi được một nhật ký'],
+['12–14','Nhật ký về trang quản lý','Quay lại web: nhật ký vừa ghi đã hiện. Cho xem nhập Excel hàng loạt (hệ thống báo dòng lỗi) và cột trạng thái cần đồng bộ, đã đồng bộ.','Vùng đã có mã thì nhật ký được đồng bộ lên hệ thống truy xuất của Bộ, HTX theo dõi được còn bao nhiêu bản ghi chưa đồng bộ.','Thấy kết nối với hệ thống của Bộ'],
+['14–17','QR và trang truy xuất','Tải QR vùng và QR một lô. Mời khách quét bằng điện thoại của họ: vùng, mùa vụ, nhật ký, ảnh, tài liệu trong thư viện.','Người mua quét là thấy vườn, nhật ký, ảnh. CCCD chỉ hiện 4 số cuối, sổ đỏ không công khai.','Khách tự quét trên máy mình'],
+['17–18','Nối vào hồ sơ mã','Nói ngắn: dữ liệu này là nguồn cho 5 nhật ký bắt buộc, Phiếu khảo sát phía Trung Quốc và hậu kiểm.','Sai ở đâu thì sửa trên hệ thống rồi xuất lại, không phải sửa tay trên giấy.','Hiểu phần mềm phục vụ việc giữ mã'],
+['18–20','Chốt bước tiếp','Hỏi phần nào hợp nhất, đề xuất tạo thử, hẹn ngày.','Anh thấy phần nào hợp với HTX nhất? Em đề xuất tạo thử 3 đến 5 hộ của mình trong tuần này. Anh gửi em danh sách hộ trước thứ mấy được?','Có ngày hẹn cụ thể']]},
+dn:{n:'Doanh nghiệp đóng gói, lô hàng (25 phút)',ai:'DN thu mua, đóng gói, xuất khẩu. Bắt buộc có kỹ thuật đi kèm',
+prep:['Kỹ thuật FarmBase đi cùng, tài khoản có phân hệ lô hàng (Warehub) và một lô mẫu','Hỏi trước: số cơ sở đóng gói, mã cơ sở, sản phẩm và quy cách thùng, đã là thành viên GS1 chưa, có GTIN chưa','Mở sẵn file “Câu hỏi làm rõ thiết lập demo 19/11” để ghi câu trả lời','Một vùng mẫu đã có mã để làm nguồn hàng','Nhớ nói: phân hệ cơ sở đóng gói dự kiến chính thức từ 11/2026, GS1 theo lộ trình'],
+steps:[
+['0–2','Mở đầu','Hỏi số mã vùng trồng đang thu mua, cách đang ghi nguồn hàng.','Hôm nay em cho anh xem một lô hàng đi từ vườn đến container và tem: nguồn hàng theo mã vùng, container, GS1 và tem QR.','Đúng nỗi lo lẫn hàng, chứng từ'],
+['2–5','Vùng cấp hàng','Mở bản đồ các vùng đã có mã cấp hàng, bấm vào một vùng xem nông hộ, nhật ký.','Trước khi có lô hàng, mình phải biết hàng đến từ vùng nào, vùng đó ghi chép ra sao.','Thấy nguồn hàng có dữ liệu thật'],
+['5–9','Tạo lô hàng','Tạo lô: mã lô tự sinh; chọn cơ sở đóng gói, ngày thu hoạch, đóng gói, sản xuất, hết hạn; nhà xuất khẩu, nhập khẩu, cửa khẩu. Thêm hàng hóa: số thùng, tấn, số trái; container, số seal, ngày đóng.','Mỗi container một hồ sơ, số seal ghi ngay trong lô.','Một màn hình cho cả lô'],
+['9–13','Nguồn gốc theo mã vùng','Thêm nguồn hàng bằng CCCD nông dân: hệ thống tra tên, mã vùng trồng, sinh đơn mua hàng, kèm nhật ký canh tác.','Hộ không có hồ sơ, không gắn mã vùng thì không thêm vào lô được. Đó là cách chặn hàng ngoài mã.','Không lẫn hàng ngoài mã'],
+['13–17','GS1 và Cổng truy xuất','Kỹ thuật thao tác: tạo lệnh sản xuất (GTIN, vùng GS1), nạp sự kiện tự động: trồng, thu hoạch, lưu kho, bán, vận chuyển, đóng gói; gửi lên. Tra trên Cổng truy xuất quốc gia bằng GTIN và số lô.','Dữ liệu từ vườn tự thành chuỗi sự kiện, không phải nhập lại.','Thấy kết quả trên Cổng quốc gia'],
+['17–20','In tem','In tem trái, tem thùng, tem container song ngữ Việt, Anh, Trung: mã vùng trồng, mã cơ sở đóng gói, ngày đóng gói, số lô, QR, mã vạch GS1-128.','Mỗi lần in sinh dải mã mới gắn đúng lô.','Tem cầm tay được'],
+['20–22','Trang QR của lô','Quét tem: mã hợp lệ, container, seal, mã vùng trồng, nông hộ, nhật ký.','Nhà nhập khẩu, hải quan quét là thấy.','Khách tự quét'],
+['22–25','Chốt và hỏi thiết lập','Hỏi theo file câu hỏi: tổ chức, chữ ký số, GS1, GTIN, địa điểm, quy tắc lô. Hẹn báo giá.','Để dựng đúng như hàng của mình, em xin anh mấy thông tin này, em gửi báo giá trong 3 ngày làm việc.','Có đủ đầu vào báo giá']]},
+xa:{n:'UBND xã, phường (15 phút)',ai:'Lãnh đạo xã, Phòng Kinh tế, cán bộ nông nghiệp',
+prep:['Công văn, tờ thông tin 1 trang của công ty','Tài khoản demo có nhiều vùng trên một địa bàn','Không nêu số vùng, số hộ, diện tích của khách khác','Nhớ: hướng dẫn truy xuất miễn phí đến 31/12/2026, không bắt buộc dùng FarmBase'],
+steps:[
+['0–2','Mở đầu','Nhắc nhiệm vụ của xã theo Nghị quyết 36/2026: xã kiểm tra, xác nhận hồ sơ mã, hậu kiểm.','Công ty xin báo cáo cách FarmBase giúp xã nắm vùng trồng trên địa bàn và hỗ trợ bà con làm hồ sơ.','Đúng việc của xã'],
+['2–6','Bản đồ vùng trên địa bàn','Mở bản đồ lọc theo xã: các vùng, lô, chủ hộ (tên che), diện tích.','Xã nhìn được vùng nào, ở đâu, bao nhiêu hộ, không phải chờ báo cáo giấy.','Nhìn toàn địa bàn'],
+['6–10','Nhật ký và đồng bộ','Mở một vùng có mã: nhật ký của các hộ, trạng thái đồng bộ hệ thống truy xuất của Bộ.','Khi hậu kiểm, xã xem được vùng nào ghi đều, vùng nào bỏ trống.','Hỗ trợ hậu kiểm'],
+['10–12','Nông dân dùng Zalo','Cho xem Mini App: bà con ghi nhật ký bằng ảnh bao bì.','Bà con không phải cài thêm ứng dụng.','Dễ cho dân'],
+['12–15','Đề xuất','Đề xuất 01 buổi tập huấn tại xã, thời gian, địa điểm do xã sắp xếp; giới thiệu chương trình đồng hành.','Công ty xin phép gửi công văn chính thức và phối hợp tổ chức buổi tập huấn.','Có lịch tập huấn']]}};
+const DEMO_NO=['Không demo tính năng không có trong hướng dẫn sử dụng: AI chẩn đoán, dự báo năng suất, sàn mua bán','Không nói ứng dụng cấp mã. Cấp mã thuộc cơ quan nhà nước','Vườn nông dân tự tạo trên Mini App là điểm sản xuất cá nhân, không thuộc mã vùng','Mất mạng: chuyển sang video giới thiệu và ảnh chụp màn hình trong tài liệu tóm tắt tính năng, hẹn demo lại'];
+
+const OBJ=[['Đắt quá','Gói làm mã trọn năm khoảng 450 đồng mỗi m², gồm mã, phần mềm và người nhập liệu 12 tháng. Có thể tách: làm gói mã + truy xuất trước, tự nhập liệu.','Anh muốn em tính phương án tự nhập liệu không?'],
+['Nhà nước có hệ thống miễn phí','Hệ thống của Bộ là nơi nhận dữ liệu. FarmBase ghi dữ liệu từ vườn và đẩy lên đó, kèm người hướng dẫn. Bên em kết nối từ 01/07/2026.','Hiện ai ở HTX nhập dữ liệu lên hệ thống của Bộ?'],
+['VNPT, Viettel cũng làm','Anh cứ so sánh. Bên em mạnh nghiệp vụ mã vùng trồng và đội xuống vườn; dữ liệu không bị khóa.','Điều anh cần nhất ở phần mềm là gì?'],
+['Bao lâu có mã, có cam kết không','Cấp mã do xã, tỉnh, Bộ và phía Trung Quốc quyết, bên em không hứa ngày. Kinh nghiệm: nộp online khoảng 30 ngày từ khi chốt danh sách; mã nội địa thường 10–15 ngày sau khi nộp.','Vùng mình muốn kịp vụ nào?'],
+['Làm mã có mất đất không','Không. Làm mã không ảnh hưởng quyền sử dụng đất, bà con tự chủ mua bán.','Hộ nào đang lo nhất, em nói chuyện trực tiếp được không?'],
+['Vùng chỉ 5 ha','Vẫn làm được. 10 ha là mức khuyến nghị để giảm chi phí mỗi ha; thử gộp với vườn liền kề.','Quanh đó có vườn nào cùng làm không?'],
+['Nông dân lớn tuổi','Ghi trên Zalo, chụp ảnh bao bì là xong; con cháu ghi giúp được. Gói trọn năm có người nhập giúp.','HTX có bao nhiêu hộ dùng Zalo?'],
+['Dữ liệu có bị lộ','Sổ đỏ không công khai, CCCD chỉ hiện 4 số cuối. Mỗi người một tài khoản, phân quyền.','Anh muốn giới hạn ai xem phần nào?'],
+['Để bàn với thành viên','Dạ hợp lý. Em gửi bản tóm tắt để anh trình bày; cần thì em xuống nói cùng.','Buổi họp dự kiến ngày nào?'],
+['Để vụ sau','Để kịp vụ sau, nhật ký cần phủ trọn chu kỳ, khởi động ngay sau thu hoạch là đẹp nhất.','Em nhắc anh vào tháng nào?'],
+['Giảm giá được không','Em hỗ trợ được tối đa 10% phí dịch vụ nếu mình chốt sớm, trả trước, hoặc làm nhiều vùng. Các khoản thu hộ, công tác, tem in thì giữ nguyên.','Nếu em giảm 10%, anh ký trong tuần này được không?']];
+
+const SVC=[
+{k:'msvt',n:'Mã số vùng trồng sầu riêng',usp:['Làm trọn từ khảo sát, GPS, bản đồ, hồ sơ 19 thành phần đến khi xã kiểm tra, có mã GACC','Dữ liệu lô, giấy tờ đối chiếu trên hệ thống trước khi ký nên ít phải sửa','Nhật ký ghi trên Zalo ngay từ đầu, giữ mã được sau khi cấp','Đã có 20++ mã vùng trồng có mã GACC (số tự công bố)'],
+ai:'HTX, THT, doanh nghiệp thu mua có vùng sầu riêng chưa có mã; ưu tiên vùng từ 10 ha, khách từ 50 ha',
+pain:['Chờ mã lâu, hồ sơ bị trả về nhiều lần','Không biết bắt đầu từ đâu khi hồ sơ nộp qua xã (Nghị quyết 36/2026)','Không có mã thì bán không được giá, DN đóng gói không nhận','Nông dân không ghi nhật ký, dồn sổ cuối vụ'],
+rows:[['Mã số vùng trồng (khảo sát, GPS, bản đồ, hồ sơ kỹ thuật)','3.000.000 đ/ha'],['**Gói làm mã + truy xuất**: mã + phí sử dụng FarmBase năm đầu (mua lẻ 3,8 tr)','3.500.000 đ/ha'],['**Gói làm mã trọn năm**: mã + phí sử dụng + nhập liệu 12 tháng. Nên chào','4.500.000 đ/ha'],['DN đứng mã cho vùng nguyên liệu, miễn phí với nông dân (trả trước 50%)','3.500.000 đ/ha'],['Bà con tự đứng tên qua THT, HTX của mình (chương trình xã)','≈ 20 tr/vùng']],
+note:['Ví dụ 10 ha: gói làm mã + truy xuất 35 tr; trọn năm 45 tr','Sau kỳ đầu: phí duy trì chốt trong hợp đồng (tham chiếu 800.000 đ/ha/năm)','Thanh toán: 50% khi xác nhận, 50% khi bàn giao','Ngoài phạm vi: VietGAP, xét nghiệm, kiểm nghiệm, lệ phí nhà nước'],
+demo:'vung',info:['Gửi: brochure, hồ sơ năng lực, tóm tắt quy trình làm mã (K07)','Hỏi khách: số hộ, diện tích, danh sách hộ, ai đứng tên mã, giấy tờ đất (đất thuê có hợp đồng), có kho không, khoảng cách tới Buôn Ma Thuột'],
+chot:['Hình thức đứng mã: HTX/THT của bà con, DN đứng mã, hay HTX hợp tác sâu','Danh sách hộ và diện tích thật, không có đất tranh chấp','Gói: trọn năm hay làm mã + truy xuất','Thanh toán đợt 1 và ngày khảo sát','Người đại diện, đầu mối vùng'],
+no:'Không hứa thời gian cấp mã. 10 ha là khuyến nghị, không bắt buộc. Ký hồ sơ chỉ sau khi chốt hình thức đứng mã.'},
+{k:'txvt',n:'Truy xuất vùng trồng sầu riêng (vùng đã có mã)',usp:['Đã kết nối hệ thống truy xuất nông sản của Bộ NN&MT từ 01/07/2026','Nông dân ghi nhật ký trên Zalo, chụp ảnh bao bì, người thân ghi giúp được','QR vùng và QR từng lô; sổ đỏ không công khai, CCCD chỉ hiện 4 số cuối','Có người hướng dẫn tận vườn, nhắc nhật ký để sẵn sàng hậu kiểm'],
+ai:'HTX, vùng sầu riêng đã có mã nội địa hoặc GACC; DN đứng mã cần giữ mã',
+pain:['Sợ bị cảnh báo, tạm dừng mã vì nhật ký thiếu','Xã, DN mua hàng đòi dữ liệu truy xuất','Dữ liệu nằm rời ở nhiều sổ, nhiều người'],
+rows:[['Phí sử dụng FarmBase (tài khoản, vùng, lô, nhật ký, QR, đồng bộ hệ thống của Bộ, 01 buổi hướng dẫn). HTX tự nhập','800.000 đ/ha/năm'],['Hỗ trợ nhập liệu (tối thiểu 2 nhật ký/tháng/ha)','700.000 đ/ha/năm'],['**Gói truy xuất có nhập liệu** (2 mục trên)','1.500.000 đ/ha/năm'],['Vùng thuộc xã có chương trình đồng hành','Năm 1 miễn phí']],
+note:['Ví dụ 10 ha: tự nhập 8 tr/năm; có nhập liệu 15 tr/năm','Đồng bộ hệ thống của Bộ chỉ áp dụng cho vùng đã có mã'],
+demo:'vung',info:['Gửi: tóm tắt tính năng truy xuất (K06), hướng dẫn nông dân dùng Zalo (K11)','Hỏi khách: mã vùng, số hộ, diện tích, nhật ký đang ghi ở đâu, lần hậu kiểm gần nhất'],
+chot:['Danh sách hộ để tạo thử 3–5 hộ','HTX tự nhập hay cần người nhập liệu','Ngày buổi hướng dẫn ban đầu'],
+no:'Không nói FarmBase thay hệ thống của Bộ. FarmBase là công cụ ghi dữ liệu và đẩy lên hệ thống đó.'},
+{k:'ck',n:'Truy xuất cà phê và cây khác (theo vùng)',usp:['Một nền tảng cho mọi cây trồng, nhiều mã, nhiều HTX, phân quyền từng HTX','Lô đất có tọa độ, số tờ, số thửa: nền cho dữ liệu EUDR của cà phê','Đồng bộ hệ thống truy xuất của Bộ, nông dân ghi trên Zalo','Từ vùng thứ 4 chỉ 2 tr/vùng/năm'],
+ai:'DN, HTX cà phê bán EU; HTX, DN chuối, thanh long, vải, dứa, rau quả có mã hoặc cần mã',
+pain:['Cà phê: thiếu tọa độ, đa giác thửa trước mốc EUDR 30/12/2026','Nhiều mã phải giám sát, dễ bị thu hồi','Gian lận mã, hàng nơi khác dán mã vùng mình'],
+rows:[['Thiết lập vùng trồng','5.000.000 đ/lần'],['Duy trì hệ thống','5.000.000 đ/năm'],['Tích hợp hệ thống truy xuất của Bộ (gồm 3 vùng)','5.000.000 đ/năm'],['Từ vùng thứ 4','2.000.000 đ/vùng/năm'],['Nhập liệu mùa vụ','5.000.000 đ/vụ/vùng'],['Mã số vùng trồng cây khác','Báo giá sau khảo sát'],['Khảo sát polygon EUDR (cà phê)','Báo giá sau khảo sát']],
+note:['Năm sau = năm đầu trừ thiết lập','Ví dụ: 1 vùng 1 vụ 20 tr / 15 tr; 3 vùng 30 / 25 tr; 5 vùng 44 / 39 tr','Thanh toán: thiết lập 50% khi ký, 50% khi nghiệm thu; phí định kỳ trả đầu kỳ'],
+demo:'vung',info:['Gửi: tóm tắt tính năng (K06); cà phê: trích ý tài liệu EUDR (nội bộ K13)','Hỏi khách: số vùng, số hộ, diện tích, thị trường, đã có dữ liệu thửa chưa, số vụ/năm'],
+chot:['Chạy thử 1 HTX hoặc 1 vùng trước','Số vùng, số vụ để tính giá','Lịch khảo sát (nếu cần làm mã, polygon)'],
+no:'Không nói FarmBase “đạt chuẩn EUDR”. Không tự đặt giá làm mã cây khác, polygon.'},
+{k:'cs',n:'Truy xuất cơ sở đóng gói, lô hàng, GS1, tem QR',usp:['Nối vườn đến container: nguồn hàng chỉ thêm được khi hộ đã có hồ sơ và gắn mã vùng','Chuỗi sự kiện GS1 tự nạp từ dữ liệu vườn, gửi lên Cổng truy xuất quốc gia','Tem trái, thùng, container song ngữ Việt, Anh, Trung; mỗi lần in sinh dải mã đúng lô','Dùng cho mọi nông sản'],
+ai:'DN thu mua, đóng gói, xuất khẩu; có hoặc đang chờ mã cơ sở đóng gói',
+pain:['Lẫn hàng ngoài mã, cả mã bị cảnh báo','Truy xuất lô hàng làm tay, Excel','Nhà nhập khẩu, hải quan đòi chứng từ nguồn gốc','Chuẩn bị cho Nghị định 372/2026 (từ 01/01/2027)'],
+rows:[['Thiết lập cơ sở đóng gói','5.000.000 đ/lần'],['Duy trì','5.000.000 đ/năm'],['Tích hợp GS1 và hệ thống truy xuất (gồm 3 sản phẩm)','5.000.000 đ/năm'],['Từ sản phẩm thứ 4','2.000.000 đ/sản phẩm/năm'],['Tên miền truy xuất','BVI miễn phí; riêng 2.000.000 đ/năm'],['Tem QR động 10.000–50.000 mã','80 đ/mã/năm'],['Trên 50.000–100.000','72 đ/mã'],['Trên 100.000–200.000','64 đ/mã'],['Trên 200.000–500.000','56 đ/mã'],['Trên 500.000','50 đ/mã'],['In tem vật lý','Báo riêng'],['Tư vấn hồ sơ mã cơ sở đóng gói','Báo giá sau khảo sát']],
+note:['QR lũy tiến từng bậc, tối thiểu 10.000 mã, bội số 5.000, hiệu lực 1 năm. Ví dụ 120.000 mã = 8,88 tr','Ví dụ 3 sản phẩm + 10.000 QR + tên miền BVI: 15,8 tr năm đầu / 10,8 tr năm sau','Dự kiến chính thức từ 11/2026; GS1 theo lộ trình'],
+demo:'dn',info:['Gửi: hồ sơ năng lực, tóm tắt tính năng (phần lô hàng, GS1)','Hỏi khách theo file câu hỏi thiết lập: số cơ sở, mã cơ sở, sản phẩm và quy cách thùng, đã là thành viên GS1 chưa, GTIN, địa điểm GLN, chữ ký số, số tem/năm'],
+chot:['Số cơ sở, số sản phẩm, số tem/năm','Tên miền BVI hay riêng','Chữ ký số của DN hay của BVI','Vùng cấp hàng cần làm mã hoặc truy xuất thêm'],
+no:'Demo luôn có kỹ thuật đi kèm. Không hứa ngày GS1 chính thức.'},
+{k:'xa',n:'Đồng hành xã, phường',usp:['Hướng dẫn truy xuất cho nông hộ, THT, HTX miễn phí đến 31/12/2026','Tài khoản quản lý cấp xã miễn phí','Đã bàn giao tài khoản truy xuất cho UBND xã Krông Pắc ngày 28/10/2026','Không bắt buộc dùng FarmBase, không khóa dữ liệu'],
+ai:'UBND xã, phường; nông hộ, THT trên địa bàn',
+pain:['Xã thiếu người, thiếu công cụ khi kiểm tra hồ sơ mã, hậu kiểm','Chỉ tiêu số hóa, kết nối hệ thống truy xuất','Bà con muốn tự đứng tên mã nhưng không biết làm'],
+rows:[['Hướng dẫn truy xuất trên địa bàn','Miễn phí đến 31/12/2026'],['Vùng đã có mã: thiết lập, đồng bộ hệ thống của Bộ','Năm 1 miễn phí; từ năm 2: 800.000 đ/ha/năm'],['Hỗ trợ cập nhật nhật ký (tự nguyện)','700.000 đ/ha/vụ'],['Tài khoản quản lý cấp xã','Miễn phí'],['Làm mã mới do THT, HTX của bà con đứng tên: đợt 1 khi triển khai','15.000.000 đ/vùng'],['Đợt 2, chỉ khi có mã GACC','5.000.000 đ/vùng']],
+note:['Đợt 1 gồm: đi lại 1,5 tr/ngày × 3 ngày, công tác phí 2 chuyên gia 1 tr/ngày × 3, in ấn 0,75 tr, flycam 1,5 tr, vật tư 0,75 tr, thù lao đầu mối 2 tr, hậu cần đợt kiểm tra 2,5 tr','Từ 30 km: đi lại 12.000 đ/km cả đi và về','Vùng 10 ha ≈ 2 tr/ha; chưa gồm duy trì, hậu kiểm'],
+demo:'xa',info:['Gửi: công văn, tờ thông tin 1 trang (K10)','Không nêu số vùng, số hộ, diện tích trong công văn'],
+chot:['Lịch 01 buổi tập huấn, xã sắp xếp thời gian, địa điểm','Đầu mối của xã','Danh sách THT, HTX muốn làm mã'],
+no:'Không ghi chi phí buổi tập huấn trong công văn. Người ký: Giám đốc.'},
+{k:'dt',n:'Tập huấn và công tác',usp:['Chuyên gia thực địa về mã vùng trồng, VietGAP, giám sát dịch hại, truy xuất','Tối đa 20 người/buổi để thực hành được'],
+ai:'Khách đã ký cần tập huấn thêm; HTX, xã, đối tác',pain:['Bà con không nhớ cách ghi, ghi sai','Đầu vụ, trước thu hoạch cần nhắc kỹ thuật'],
+rows:[['Hướng dẫn ban đầu + hỗ trợ Zalo, email','Đã gồm'],['Tập huấn online','2.000.000 đ/chuyên gia/buổi'],['Tập huấn trực tiếp (tối đa 20 người)','4.000.000 đ/chuyên gia/buổi'],['Vùng trên 80 km: xăng xe khoán','2.000.000 đ/ngày'],['Công tác phí','2.000.000 đ/ngày/người']],
+note:['Ví dụ 10 ha gói trọn năm, vùng 200 km, 2 người 2 ngày, 1 buổi tập huấn: 45 + 4 + 8 + 4 = 61 tr'],
+demo:'vung',info:['Gửi: tài liệu VietGAP, ISPM 6, hướng dẫn nông dân'],chot:['Số buổi, hình thức, số người, địa điểm'],no:''}];
+const DISC=['Sales được giảm tối đa **10%** trên phí dịch vụ của báo giá, không cần xin','Giảm trên 10%: xin trưởng mảng trước khi hứa với khách','Không giảm các khoản: thu hộ (thù lao đầu mối, hậu cần vùng), xăng xe, công tác phí, in tem, chi phí bên thứ ba','Dùng giảm giá để đổi lấy điều kiện: ký trong tuần, trả trước, diện tích lớn, nhiều vùng, giới thiệu thêm khách','Ghi rõ % giảm và lý do trên báo giá; báo giá vẫn qua trưởng mảng duyệt'];
+const LOAI=['Chưa gồm VAT, giá áp dụng đến hết 12/2026','Giảm giá: sales tối đa 10% trên phí dịch vụ; trên 10% xin trưởng mảng','Loại trừ: tem in, chứng nhận VietGAP/GlobalG.A.P., xét nghiệm, kiểm nghiệm, lệ phí nhà nước, chi phí bên thứ ba','Không hứa thời gian cấp mã. 10 ha là khuyến nghị, không bắt buộc','Báo giá chính thức phải được trưởng mảng duyệt'];
+const FLOW=[
+['Vùng trồng','Vùng, lô, nông hộ, tọa độ, số tờ, số thửa trên trang quản lý','Vùng có hoặc chưa có mã đều tạo được'],
+['Nhật ký','Nông dân ghi trên Zalo, HTX ghi trên web hoặc nhập Excel','Theo dõi bản ghi cần đồng bộ, đã đồng bộ'],
+['Hệ thống của Bộ NN&MT','Vùng đã có mã: nhật ký, thu hoạch đồng bộ lên hệ thống truy xuất nông sản (txng.mae.gov.vn). Đã kết nối từ 01/07/2026','Vùng chưa có mã thì chưa đồng bộ; vườn nông dân tự tạo không thuộc mã vùng'],
+['QR vùng, QR lô','In QR vùng và từng lô, trang truy xuất có vùng, mùa vụ, nhật ký, ảnh, tài liệu','CCCD chỉ hiện 4 số cuối, sổ đỏ không công khai'],
+['Lô hàng tại cơ sở đóng gói','Tạo lô, container, seal; thêm nguồn hàng theo CCCD nông dân gắn mã vùng','Hộ ngoài mã không thêm vào lô được'],
+['GS1 và Cổng truy xuất quốc gia','Lệnh sản xuất theo GTIN; sự kiện trồng, thu hoạch, lưu kho, bán, vận chuyển, đóng gói tự nạp và gửi lên; tra bằng GTIN + số lô hoặc GS1 Digital Link','GS1 theo lộ trình, dự kiến 11/2026. Khách cần: là thành viên GS1 Việt Nam, có GTIN đã công bố, địa điểm GLN, chữ ký số (của DN hay BVI: chốt khi thiết lập)'],
+['Tem','Tem trái, thùng, container song ngữ; mã vùng trồng, mã cơ sở đóng gói, QR, GS1-128','Từ 01/01/2027 Nghị định 372/2026 áp dụng nền tảng định danh, truy xuất quốc gia; hàng xuất khẩu tự nguyện trừ khi luật chuyên ngành quy định khác']];
+
+const STOP=[['Từ chối rõ','Nhắn M15, ghi lý do → Không theo; hâm nóng mỗi quý nếu khách không cấm'],['Khách bảo dừng liên hệ','Dừng ngay, không hâm nóng'],['3 lần chạm trong 30 ngày không phản hồi','Chuyển Lạnh, nhịp 30 ngày'],['Lạnh 6 tháng không phản hồi','Nhắn M15, đóng lead'],['Không đủ điều kiện (đất tranh chấp, không có người đứng mã)','Ghi lý do, hẹn lại nếu có thể thay đổi'],['Đã chọn đơn vị khác','Cảm ơn, hẹn hỏi lại cuối vụ; hâm nóng 6 tháng/lần'],['Không gia hạn sau hợp đồng','Hỏi lý do, ghi lại, hâm nóng theo mùa vụ'],['Nợ quá hạn','Báo trưởng mảng']];
+const LEVEL=[['1. Cơ bản (tuần 1)','Tự gọi, nhắn, đặt lịch','Học tab Theo nhóm khách, Tin nhắn mẫu; đóng vai 10 cuộc gọi với trưởng mảng'],['2. Demo, báo giá (tuần 2–3)','Tự demo vùng trồng, báo giá đúng gói','Demo thử trước nhóm theo tab Demo; làm 3 báo giá mẫu đúng 100%'],['3. Nghiệp vụ mã vùng trồng (tháng 1–2)','Tư vấn hồ sơ','Đi cùng 1 vùng từ khảo sát đến xã kiểm tra'],['4. Chuyên sâu (tháng 2–3)','DN lớn, cà phê EUDR, cơ quan nhà nước','Đi kèm trưởng mảng 2 hợp đồng DN; demo lô hàng cùng kỹ thuật']];
+const ASK=['Khách xin giảm trên 10%, đổi điều khoản thanh toán','Khách hỏi giá cây khác, polygon EUDR, hồ sơ cơ sở đóng gói, in tem','Đất tranh chấp, đất thuê thiếu hồ sơ','Khách là cơ quan nhà nước, tập đoàn, báo chí','Khách đòi cam kết thời gian cấp mã hoặc cam kết đầu ra','Không chắc dữ kiện'];
+
+/* ---------- góp ý ---------- */
+let DB=null,USER=null,UID=null,OWNER=false,ALL=[],PROF={},CANW=true;
+const SUPA=(window.CN_SUPA&&window.CN_SUPA.url)?window.CN_SUPA:null,CN=window.CN_ID||'ban-hang';
+const mask=t=>String(t||'').replace(/\d[\d .-]{7,}\d/g,'***');
+const sh=(m,path,body,extra)=>fetch(SUPA.url+'/rest/v1/'+path,{method:m,headers:{apikey:SUPA.key,Authorization:'Bearer '+SUPA.key,'Content-Type':'application/json',Prefer:'return=minimal',...(extra||{})},body:body?JSON.stringify(body):undefined}).then(r=>{if(!r.ok)throw new Error(r.status);return m==='GET'?r.json():null});
+async function supaLoad(){try{const rows=await sh('GET','camnang_gopy?cam_nang=eq.'+encodeURIComponent(CN)+'&select=*&order=at.desc&limit=1000');ALL=rows.map(r=>({k:r.k,label:r.label||'',goc:r.goc||'',sua:r.sua||'',lydo:r.lydo||'',at:Date.parse(r.at)||0,xong:!!r.xong,id:r.id,uid:'s',ten:r.ten||''}));paintFb()}catch(e){alert0('Chưa tải được góp ý chung, thử lại sau.')}}
+const LBL={};
+const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+const copyBtn=t=>`<button class="btn" data-c="${esc(t)}">Chép</button>`;
+function fb(key,label,cur){LBL[key]=[label,cur||''];return `<div class="fbx"><button class="btn fbb" data-fb="${esc(key)}">Góp ý<span class="cnt" data-fbc="${esc(key)}" hidden></span></button><div data-fbf="${esc(key)}"></div><div class="fbl" data-fbl="${esc(key)}"></div></div>`}
+function itemsFor(k){return ALL.filter(i=>i.k===k)}
+function nameOf(i){return i.ten||PROF[i.uid]||'Ai đó'}
+function itemHtml(i){return `<div class="it ${i.xong?'done':''}"><b>${esc(nameOf(i))}</b> · <span class="mut">${esc(new Date(i.at).toLocaleDateString('vi-VN'))}${i.xong?' · đã xử lý':''}</span><br>${i.sua?'Sửa thành: '+esc(i.sua):''}${i.lydo?'<br><span class="mut">Lý do: '+esc(i.lydo)+'</span>':''}${OWNER&&!i.xong&&i.uid?` <button class="btn g" data-done="${esc(i.uid)}|${esc(i.id)}">Đánh dấu đã xử lý</button>`:''}</div>`}
+function paintFb(){document.querySelectorAll('[data-fbl]').forEach(el=>{const its=itemsFor(el.dataset.fbl);el.innerHTML=its.map(itemHtml).join('')});document.querySelectorAll('[data-fbc]').forEach(el=>{const n=itemsFor(el.dataset.fbc).filter(i=>!i.xong).length;el.hidden=!n;el.textContent=n});const g=document.getElementById('gopall');if(g)g.innerHTML=allFbHtml();const tab=nav.querySelector('a[href="#gop-y"]');if(tab){const n=ALL.filter(i=>!i.xong).length;tab.textContent='Góp ý'+(n?' ('+n+')':'')}}
+function allFbHtml(){if(!ALL.length)return '<p class="mut">Chưa có góp ý nào. Bấm nút “Góp ý” ở bất kỳ mục nào để ghi.</p>';const open=ALL.filter(i=>!i.xong),done=ALL.filter(i=>i.xong);const grp=list=>{const m={};list.forEach(i=>{(m[i.k]=m[i.k]||[]).push(i)});return Object.entries(m).map(([k,its])=>`<div class="card"><b>${esc(its[0].label||k)}</b>${its[0].goc?`<div class="say" style="font-size:14px">${esc(its[0].goc.slice(0,300))}</div>`:''}<div class="fbl">${its.map(itemHtml).join('')}</div></div>`).join('')};const txt=open.map(i=>`[${i.label}] ${nameOf(i)}: ${i.sua}${i.lydo?' (lý do: '+i.lydo+')':''}`).join('\n');return `<div class="row">${copyBtn('Góp ý cẩm nang bán hàng:\n'+txt)}<span class="mut">${open.length} chưa xử lý · ${done.length} đã xử lý</span></div><h3>Chưa xử lý</h3>${grp(open)||'<p class="mut">Không còn.</p>'}${done.length?`<details><summary>Đã xử lý (${done.length})</summary>${grp(done)}</details>`:''}`}
+function localItems(){const l=st.get('local',{});return Object.entries(l).map(([id,v])=>({...v,id,uid:'',ten:me.toi}))}
+async function saveItem(it){
+ if(SUPA){await sh('POST','camnang_gopy',{cam_nang:CN,k:it.k,label:it.label,goc:it.goc,sua:mask(it.sua),lydo:mask(it.lydo),ten:me.toi});await supaLoad();return true}
+ if(DB&&UID&&CANW){const ref=DB.doc('gopy/'+UID);const snap=await ref.get();const d=snap.exists?structuredClone(snap.data()):{items:{}};d.ten=me.toi;d.items=d.items||{};d.items[it.id]=it;await ref.set(d);return true}
+ const l=st.get('local',{});l[it.id]=it;st.set('local',l);ALL=localItems();paintFb();return false}
+async function markDone(uid,id){if(SUPA){try{await sh('PATCH','camnang_gopy?id=eq.'+encodeURIComponent(id),{xong:true});await supaLoad()}catch(e){alert0('Chưa đánh dấu được, thử lại sau.')}return}try{const ref=DB.doc('gopy/'+uid);const s=await ref.get();if(!s.exists)return;const d=structuredClone(s.data());if(d.items&&d.items[id]){d.items[id].xong=true;await ref.set(d)}}catch(e){alert0('Chưa đánh dấu được, thử lại sau.')}}
+function alert0(t){const g=document.getElementById('toast');if(g){g.textContent=t}}
+async function initDb(){
+ if(SUPA){OWNER=/[?&]quan-ly/.test(location.search);await supaLoad();setInterval(()=>{if(!document.hidden&&!document.querySelector('.fbform'))supaLoad()},30000);return}
+ try{USER=await window.claude?.use('user');DB=await window.claude?.use('db')}catch(e){}
+ if(USER){try{UID=await USER.id();OWNER=(await USER.isOwner())??false;const c=await USER.can('data.write');if(c===false)CANW=false;if(UID){const p=await USER.profiles([UID]);const nm=p?.[UID]?.name||'';if(nm&&!me.toi){me.toi=nm;st.set('me',me);paintWho()}}}catch(e){}}
+ if(!DB||!UID){ALL=localItems();paintFb();return}
+ let timer=setTimeout(()=>alert0('Chưa tải được góp ý chung, có thể đang mất mạng.'),10000);
+ DB.collection('gopy').onSnapshot(async snap=>{clearTimeout(timer);const out=[];const ids=[];snap.docs.forEach(d=>{const v=d.data()||{};ids.push(d.id);Object.entries(v.items||{}).forEach(([id,it])=>{if(it&&typeof it==='object')out.push({k:String(it.k||''),label:String(it.label||''),goc:String(it.goc||''),sua:String(it.sua||''),lydo:String(it.lydo||''),at:+it.at||0,xong:!!it.xong,id,uid:d.id,ten:String(v.ten||'')})})});out.sort((a,b)=>b.at-a.at);ALL=out;try{const ps=await USER.profiles(ids);ids.forEach(i=>{PROF[i]=ps?.[i]?.name||''})}catch(e){}paintFb()},e=>{clearTimeout(timer);ALL=localItems();paintFb()});
+}
+
+/* ---------- views ---------- */
+let segK=st.get('seg','htx-chua-ma'),stg=st.get('stg',1),demoK=st.get('demo','vung'),priceK=st.get('svc','msvt');
+const msgCard=id=>{const m=msgOf(id);return `<div class="card"><div class="row" style="justify-content:space-between"><b>${m[0]} · ${esc(m[1])}</b>${copyBtn(fill(m[2]))}</div><div class="say">${esc(fill(m[2]))}</div>${fb('msg:'+m[0],'Tin '+m[0]+' · '+m[1],m[2])}</div>`};
+const khForm=()=>`<div class="grid2"><div><label for="f_kh">Tên khách (để tin tự điền)</label><input id="f_kh" value="${esc(me.khach)}"></div><div><label for="f_x">Xưng hô</label><select id="f_x">${['anh','chị','chú','cô'].map(x=>`<option ${x===me.xung?'selected':''}>${x}</option>`).join('')}</select></div></div>`;
+const V={
+'hom-nay':()=>{const done=st.get('daily_'+new Date().toDateString(),[]);return `<h2>Việc mỗi ngày</h2><p class="mut">Tick xong việc nào thì đánh dấu. Tự xóa sang ngày mới.</p><div class="card"><ul class="check">${DAILY.map((t,i)=>`<li><label style="color:var(--ink);font-size:16px"><input type="checkbox" data-d="${i}" ${done.includes(i)?'checked':''}>${esc(t)}</label></li>`).join('')}</ul>${fb('daily','Việc mỗi ngày')}</div>
+<h2>Lần chạm tiếp theo</h2><div class="card"><div class="grid2"><div><label for="c_t">Nhiệt độ lead</label><select id="c_t"><option value="2">Nóng (hỏi giá, hẹn ký)</option><option value="7" selected>Ấm (đã nghe, đã xem demo)</option><option value="30">Lạnh (chưa cần)</option><option value="1">Mới nhận</option></select></div><div><label for="c_d">Lần chạm gần nhất</label><input type="date" id="c_d"></div></div><p>Phải chạm lại trước: <span class="big" id="c_out">—</span></p></div>
+<div class="warn">Lead nào cũng phải có ngày hẹn tiếp theo. Mỗi lần chạm phải có ích cho khách. Không gọi trước 7 giờ, sau 20 giờ.</div>`},
+'khach':()=>{const s=SEG.find(x=>x.k===segK)||SEG[0];return `<h2>Chọn nhóm khách</h2><div class="chips">${SEG.map(x=>`<button class="chip ${x.k===s.k?'on':''}" data-s="${x.k}">${esc(x.n)}</button>`).join('')}</div>
+<div class="card">${khForm()}<p class="mut">${esc(s.who)}</p>
+<h3>1. Gọi điện mở lời (30 giây)</h3><div class="say">${esc(fill(s.call))}</div><div class="row">${copyBtn(fill(s.call))}</div>${fb('seg:'+s.k+':call',s.n+' · Gọi điện mở lời',s.call)}
+<h3>2. Tin Zalo đầu tiên</h3><div class="say">${esc(fill(s.zalo))}</div><div class="row">${copyBtn(fill(s.zalo))}</div>${fb('seg:'+s.k+':zalo',s.n+' · Tin Zalo đầu tiên',s.zalo)}
+<h3>3. Hỏi để hiểu khách (hỏi dần)</h3><ol>${Q.map(q=>`<li>${esc(fill(q))}</li>`).join('')}</ol>${fb('seg:cauhoi','10 câu hỏi khám phá')}
+<h3>4. Khách nói gì, mình đáp gì</h3><table class="stack"><tr><th>Khách nói</th><th>Mình đáp</th></tr>${s.val.map(v=>`<tr><td>${esc(v[0])}</td><td>${esc(v[1])}</td></tr>`).join('')}</table>${fb('seg:'+s.k+':val',s.n+' · Khách nói, mình đáp')}
+<h3>5. Demo</h3><p><a href="#demo" data-gd="${s.demo}">Mở kịch bản demo ${esc(DEMO[s.demo].n)}</a></p>
+<h3>6. Gói nên chào</h3><ul>${s.pk.map(p=>`<li>${esc(p)}</li>`).join('')}</ul><p><a href="#gia">Xem bảng giá chi tiết</a></p>${fb('seg:'+s.k+':pk',s.n+' · Gói nên chào')}
+<h3>7. Chốt bước tiếp</h3><div class="say">${esc(fill(s.close))}</div><div class="row">${copyBtn(fill(s.close))}</div>${fb('seg:'+s.k+':close',s.n+' · Chốt bước tiếp',s.close)}
+${s.w?`<div class="warn">${esc(s.w)}</div>`:''}</div>`},
+'giai-doan':()=>{const s=STAGES[stg];return `<h2>Khách đang ở giai đoạn nào?</h2><p class="mut">Trùng 8 giai đoạn trên trang sales. Bấm số để xem việc và tin nhắn dùng ở bước đó.</p><div class="stages">${STAGES.map((x,i)=>`<button class="st ${i===stg?'on':''}" data-g="${i}"><b>${i}</b>${esc(x[0])}</button>`).join('')}</div>
+<div class="card"><h3>${stg}. ${esc(s[0])}</h3><table class="stack"><tr><th>Mục</th><th>Nội dung</th></tr><tr><td>Mục tiêu</td><td>${esc(s[1])}</td></tr><tr><td>Làm gì</td><td>${esc(s[2])}</td></tr><tr><td>Qua bước khi</td><td>${esc(s[4])}</td></tr><tr><td>Hạn tối đa</td><td>${esc(s[5])}</td></tr></table>${fb('stg:'+stg,'Giai đoạn '+stg+' · '+s[0])}</div>
+${s[3].length?`<h2>Tin nhắn dùng ở bước này</h2>${khForm()}${s[3].map(msgCard).join('')}`:'<p class="mut">Bước này chưa cần tin nhắn mẫu.</p>'}
+${stg===3?`<p><a href="#demo">Mở kịch bản demo</a></p>`:''}${stg===4?`<p><a href="#gia">Mở bảng giá chi tiết</a></p>`:''}
+${stg===6?`<h2>Chăm sóc sau ký</h2><div class="card"><table class="stack"><tr><th>Mốc</th><th>Việc</th></tr>${AFTER.map(a=>`<tr><td>${esc(a[0])}</td><td>${esc(a[1])}</td></tr>`).join('')}</table>${fb('after','Chăm sóc sau ký')}</div>`:''}`},
+'demo':()=>{const d=DEMO[demoK];return `<h2>Kịch bản demo</h2><div class="chips">${Object.entries(DEMO).map(([k,x])=>`<button class="chip ${k===demoK?'on':''}" data-dm="${k}">${esc(x.n)}</button>`).join('')}</div>
+<div class="card"><p class="mut">Dùng cho: ${esc(d.ai)}</p><h3>Chuẩn bị trước</h3><ul class="check">${d.prep.map((p,i)=>`<li><label style="color:var(--ink)"><input type="checkbox">${esc(p)}</label></li>`).join('')}</ul>${fb('demo:'+demoK+':prep','Demo '+d.n+' · Chuẩn bị')}</div>
+<div class="card"><h3>Từng bước</h3>${d.steps.map((s,i)=>`<div class="step"><div class="t">${esc(s[0])}<br>phút</div><div><b>${esc(s[1])}</b><p style="margin:4px 0">${esc(s[2])}</p><div class="say">${esc(s[3])}</div><div class="wow">Khách cần thấy: ${esc(s[4])}</div>${fb('demo:'+demoK+':'+i,'Demo '+d.n+' · Bước '+(i+1)+': '+s[1],s[3])}</div></div>`).join('')}</div>
+<div class="warn"><b>Không được và khi có sự cố</b><ul>${DEMO_NO.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><p>Sau buổi demo: gửi tin <a href="#tin-mau">M4 tóm tắt</a> trong 24 giờ, chuyển khách sang giai đoạn 3 hoặc 4.</p>`},
+'gia':()=>{const p=SVC.find(x=>x.k===priceK)||SVC[0];const L=(t,arr)=>`<h3>${t}</h3><ul>${arr.map(x=>`<li>${md(x)}</li>`).join('')}</ul>`;return `<h2>Dịch vụ và giá</h2><p class="mut">Chọn dịch vụ để xem: bán cho ai, nỗi đau, điểm mạnh, giá, demo, thông tin cần gửi và cần chốt. Giá chưa VAT, áp dụng đến hết 12/2026.</p><div class="chips">${SVC.map(x=>`<button class="chip ${x.k===p.k?'on':''}" data-pr="${x.k}">${esc(x.n)}</button>`).join('')}</div>
+<div class="card"><h3 style="font-size:19px;color:var(--g2)">${esc(p.n)}</h3><p><b>Khách mục tiêu:</b> ${esc(p.ai)}</p>${L('Nỗi đau của khách',p.pain)}${L('Điểm mạnh nói với khách',p.usp)}${fb('svc:'+p.k+':usp',p.n+' · Khách, nỗi đau, điểm mạnh')}
+<h3>Giá</h3><table><tr><th>Hạng mục</th><th style="text-align:right">Giá</th></tr>${p.rows.map(r=>`<tr><td>${md(r[0])}</td><td class="n">${esc(r[1])}</td></tr>`).join('')}</table><ul class="mut">${p.note.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>${fb('svc:'+p.k+':gia',p.n+' · Giá')}
+<h3>Demo gì</h3><p><a href="#demo" data-gd="${p.demo}">Kịch bản demo ${esc(DEMO[p.demo].n)}</a></p>${L('Cung cấp, thu thập thông tin gì',p.info)}${L('Cần chốt gì',p.chot)}${fb('svc:'+p.k+':chot',p.n+' · Demo, thông tin, cần chốt')}${p.no?`<div class="warn">${esc(p.no)}</div>`:''}</div>
+<h2>Giảm giá</h2><div class="card"><ul>${DISC.map(x=>`<li>${md(x)}</li>`).join('')}</ul>${fb('discount','Quy tắc giảm giá')}</div>
+<h2>Tính nhanh</h2><div class="card calc"><div class="grid2"><div><label for="k_l">Loại</label><select id="k_l"><option value="sr2">Sầu riêng chưa mã: gói làm mã trọn năm</option><option value="sr1">Sầu riêng chưa mã: gói làm mã + truy xuất</option><option value="sr3">Sầu riêng đã có mã: truy xuất có nhập liệu</option><option value="sr4">Sầu riêng đã có mã: truy xuất tự nhập</option><option value="ck">Cà phê, cây khác (theo vùng)</option><option value="cs">Cơ sở đóng gói</option></select><label for="k_d">Giảm giá (%)</label><select id="k_d">${[0,3,5,7,10].map(x=>`<option value="${x}">${x}%</option>`).join('')}</select></div><div id="k_in"></div></div><div class="out"><div>Năm đầu<br><span class="big" id="k_y1">—</span></div><div>Năm sau<br><span class="big" id="k_y2">—</span></div></div><p class="mut" id="k_note"></p></div>
+<h2>Truy xuất nối với GS1 và Bộ NN&MT thế nào</h2><div class="card"><table class="stack"><tr><th>Chặng</th><th>FarmBase làm gì</th><th>Lưu ý</th></tr>${FLOW.map(f=>`<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join('')}</table>${fb('flow','Truy xuất, GS1, Bộ NN&MT')}</div>
+<div class="warn"><ul>${LOAI.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`},
+'tin-mau':()=>`<h2>Tin nhắn mẫu</h2><p class="mut">Chỗ “…” tự điền trước khi gửi. Bấm Chép rồi dán vào Zalo. Tin của từng giai đoạn cũng hiện trong tab Theo giai đoạn.</p>${khForm()}${MSG.map(m=>msgCard(m[0])).join('')}`,
+'tu-choi':()=>`<h2>Khách từ chối</h2><p class="mut">Nghe hết → nhắc lại ý khách → đáp bằng dữ kiện → hỏi lại một câu. Không cãi, không chê đối thủ.</p><input id="o_q" placeholder="Gõ để tìm, ví dụ: đắt, đất, bao lâu"><div id="o_l">${objList('')}</div>`,
+'ngung':()=>`<h2>Khi nào ngưng chăm sóc</h2><div class="card"><table class="stack"><tr><th>Tình huống</th><th>Làm gì</th></tr>${STOP.map(s=>`<tr><td>${esc(s[0])}</td><td>${esc(s[1])}</td></tr>`).join('')}</table>${fb('stop','Khi nào ngưng chăm sóc')}</div><div class="warn">Mở lại lead khi khách nhắn hỏi, đến sự kiện, được giới thiệu, hoặc có quy định mới ảnh hưởng đến khách.</div>`,
+'hoc':()=>`<h2>Học từ cơ bản đến chuyên sâu</h2><div class="card"><table class="stack"><tr><th>Cấp</th><th>Làm được</th><th>Cách học</th></tr>${LEVEL.map(l=>`<tr><td>${esc(l[0])}</td><td>${esc(l[1])}</td><td>${esc(l[2])}</td></tr>`).join('')}</table>${fb('hoc','Lộ trình học')}</div><h2>Báo về hội ý ngay khi</h2><div class="card"><ul>${ASK.map(a=>`<li>${esc(a)}</li>`).join('')}</ul><p class="mut">Cấp 1: buổi gặp đầu và buổi chốt luôn có người đi cùng.</p></div>`,
+'gop-y':()=>`<h2>Góp ý của cả đội</h2><p class="mut">${(DB&&UID)||SUPA?'Góp ý được lưu chung, mọi người mở cẩm nang đều thấy.':'Góp ý đang lưu trên máy này. Bấm Chép rồi gửi qua Zalo cho trưởng mảng.'} Trưởng mảng gom lại, Claude cập nhật nội dung chính.</p><p id="toast" class="mut"></p><div id="gopall"></div><p class="mut">${HL}</p>`};
+function objList(q){q=q.toLowerCase();return OBJ.filter(o=>!q||o.join(' ').toLowerCase().includes(q)).map((o,i)=>`<details><summary>“${esc(o[0])}”</summary><div class="say">${esc(fill(o[1]))}</div><p><b>Hỏi lại:</b> ${esc(fill(o[2]))}</p>${fb('obj:'+o[0],'Từ chối: '+o[0],o[1])}</details>`).join('')||'<p class="mut">Không thấy. Bấm Góp ý ở đây để thêm câu mới.</p>'+fb('obj:moi','Câu từ chối mới')}
+
+/* ---------- tính giá ---------- */
+const VND=n=>(Math.round(n/1e5)/10).toLocaleString('vi-VN')+' tr';
+function qrCost(q){if(q<=0)return 0;q=Math.max(10000,Math.ceil(q/5000)*5000);const B=[[50000,80],[100000,72],[200000,64],[500000,56],[Infinity,50]];let c=0,prev=0;for(const [cap,p] of B){if(q>prev){c+=(Math.min(q,cap)-prev)*p;prev=cap}}return c}
+function calcIn(){const l=document.getElementById('k_l').value,box=document.getElementById('k_in');const f=(id,lb,v)=>`<label for="${id}">${lb}</label><input id="${id}" type="number" min="0" inputmode="numeric" value="${v}">`;
+ box.innerHTML=l.startsWith('sr')?f('k_a','Diện tích (ha)',10):l==='ck'?f('k_a','Số vùng',1)+f('k_b','Số vụ mỗi năm',1):f('k_a','Số sản phẩm',3)+f('k_b','Số tem QR/năm',10000)+`<label for="k_c">Tên miền</label><select id="k_c"><option value="0">Tên miền BVI (miễn phí)</option><option value="1">Tên miền riêng</option></select>`;calcOut()}
+function calcOut(){const l=document.getElementById('k_l').value,a=+(document.getElementById('k_a')?.value||0),b=+(document.getElementById('k_b')?.value||0),c=+(document.getElementById('k_c')?.value||0);let y1=0,y2=0,n='';
+ if(l==='sr2'){y1=a*4.5e6;y2=a*8e5;n='Năm sau tính theo phí sử dụng tham chiếu 800.000 đ/ha/năm (tự nhập), chốt trong hợp đồng.'}
+ if(l==='sr1'){y1=a*3.5e6;y2=a*8e5;n='Năm sau tham chiếu 800.000 đ/ha/năm, chốt trong hợp đồng.'}
+ if(l==='sr3'){y1=y2=a*1.5e6}
+ if(l==='sr4'){y1=y2=a*8e5}
+ if(l==='ck'){const base=5e6+5e6+Math.max(0,a-3)*2e6+a*b*5e6;y1=a?base+5e6:0;y2=a?base:0;n='Thiết lập 5 tr + duy trì 5 tr + tích hợp 5 tr (gồm 3 vùng) + từ vùng thứ 4: 2 tr/vùng + nhập liệu 5 tr/vụ/vùng. Chưa gồm làm mã cây khác (báo giá sau khảo sát).'}
+ if(l==='cs'){const base=5e6+5e6+Math.max(0,a-3)*2e6+qrCost(b)+(c?2e6:0);y1=base+5e6;y2=base;n='QR tính lũy tiến, tối thiểu 10.000 mã, làm tròn bội số 5.000. Chưa gồm in tem.'}
+ const dc=+(document.getElementById('k_d')?.value||0);y1*=1-dc/100;y2*=1-dc/100;if(dc)n='Đã trừ '+dc+'%. '+n;document.getElementById('k_y1').textContent=VND(y1);document.getElementById('k_y2').textContent=VND(y2);document.getElementById('k_note').textContent=n+' Chưa VAT, chưa gồm công tác xa, tập huấn thêm.'}
+
+/* ---------- khung ---------- */
+const main=document.getElementById('main'),nav=document.getElementById('nav'),ovl=document.getElementById('ovl');
+function paintWho(){document.getElementById('who').textContent=me.toi?'Đang xem: '+me.toi:'Chưa ghi tên người xem'}
+function askName(){const staff=(typeof DG_NAME!=='undefined')?Object.values(DG_NAME).concat(['Giám đốc']):[];ovl.innerHTML=`<div class="ov"><form class="card" id="nmf"><h2>Bạn là ai?</h2><p class="mut">Tên hiện trên góp ý của bạn và tự điền vào tin nhắn mẫu.</p>${staff.length?`<div class="chips">${staff.map(n=>`<button type="button" class="chip" data-pick="${esc(n)}">${esc(n)}</button>`).join('')}</div><label for="nm">Hoặc gõ tên khác</label>`:''}${staff.length?"":`<label for="nm">Tên của bạn</label>`}<input id="nm" required value="${esc(me.toi)}" placeholder="Ví dụ: Ngọc"><div class="row" style="margin-top:10px"><button class="btn g" type="submit">Vào cẩm nang</button></div></form></div>`;setTimeout(()=>document.getElementById('nm')?.focus(),50)}
+ovl.addEventListener('click',e=>{const b=e.target.closest('[data-pick]');if(!b)return;document.getElementById('nm').value=b.dataset.pick;document.getElementById('nmf').requestSubmit()});
+ovl.addEventListener('submit',e=>{e.preventDefault();const v=document.getElementById('nm').value.trim();if(!v)return;me.toi=v;st.set('me',me);ovl.innerHTML='';paintWho();render()});
+document.getElementById('chg').addEventListener('click',askName);
+function render(){const h=(location.hash.slice(1)||'hom-nay');const id=V[h]?h:'hom-nay';nav.innerHTML=TABS.map(t=>`<a href="#${t[0]}" class="${t[0]===id?'on':''}">${t[1]}</a>`).join('');main.innerHTML=V[id]();const a=nav.querySelector('.on');a&&a.scrollIntoView({block:'nearest',inline:'center'});const cd=document.getElementById('c_d');if(cd){cd.valueAsDate=new Date();calc()}if(document.getElementById('k_l'))calcIn();paintFb()}
+function calc(){const d=document.getElementById('c_d').valueAsDate,n=+document.getElementById('c_t').value;if(!d)return;d.setDate(d.getDate()+n);document.getElementById('c_out').textContent=d.toLocaleDateString('vi-VN',{weekday:'short',day:'2-digit',month:'2-digit'})}
+main.addEventListener('click',async e=>{const gd=e.target.closest('[data-gd]');if(gd){demoK=gd.dataset.gd;st.set('demo',demoK)}
+ const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.c!==undefined){try{await navigator.clipboard.writeText(b.dataset.c);b.textContent='Đã chép'}catch(_){b.textContent='Chọn chữ để chép'}setTimeout(()=>b.textContent='Chép',1500)}
+ if(b.dataset.s){segK=b.dataset.s;st.set('seg',segK);render()}
+ if(b.dataset.g){stg=+b.dataset.g;st.set('stg',stg);render()}
+ if(b.dataset.dm){demoK=b.dataset.dm;st.set('demo',demoK);render()}
+ if(b.dataset.pr){priceK=b.dataset.pr;st.set('svc',priceK);render()}
+ if(b.dataset.done){const [u,i]=b.dataset.done.split('|');b.disabled=true;await markDone(u,i)}
+ if(b.dataset.fb){const k=b.dataset.fb,box=main.querySelector(`[data-fbf="${CSS.escape(k)}"]`);if(box.innerHTML){box.innerHTML='';return}if(!me.toi){askName();return}
+  box.innerHTML=`<form class="fbform" data-fk="${esc(k)}"><label>Muốn sửa thành (viết câu mới hoặc ý cần sửa)</label><textarea name="sua" required></textarea><label>Lý do, tình huống gặp phải (không bắt buộc)</label><input name="lydo"><div class="row" style="margin-top:8px"><button class="btn g" type="submit">Gửi góp ý</button><span class="mut">Người góp ý: ${esc(me.toi)}</span></div></form>`;box.querySelector('textarea').focus()}});
+main.addEventListener('submit',async e=>{const f=e.target.closest('[data-fk]');if(!f)return;e.preventDefault();const k=f.dataset.fk,sua=f.sua.value.trim();if(!sua)return;const btn=f.querySelector('button');btn.disabled=true;btn.textContent='Đang gửi…';
+ const it={k,label:(LBL[k]||[k])[0],goc:String((LBL[k]||['',''])[1]).slice(0,600),sua:sua.slice(0,1500),lydo:f.lydo.value.trim().slice(0,500),at:Date.now(),xong:false,id:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+ try{const shared=await saveItem(it);f.outerHTML=`<p class="mut">${shared?'Đã gửi. Cả đội thấy góp ý này.':'Đã lưu trên máy này. Vào tab Góp ý để chép gửi trưởng mảng.'}</p>`}catch(err){if(err&&err.code==='invalid_argument'){CANW=false;await saveItem(it);f.outerHTML='<p class="mut">Bạn chưa có quyền ghi góp ý chung, đã lưu trên máy này. Nhờ chủ cẩm nang cấp quyền Contributor.</p>'}else{btn.disabled=false;btn.textContent='Gửi lại'}}});
+main.addEventListener('change',e=>{const t=e.target;
+ if(t.dataset.d!==undefined){const k='daily_'+new Date().toDateString();let a=st.get(k,[]);const i=+t.dataset.d;a=t.checked?[...a,i]:a.filter(x=>x!==i);st.set(k,a)}
+ if(t.id==='c_t'||t.id==='c_d')calc();
+ if(t.id==='k_l')calcIn();
+ if(['k_a','k_b','k_c','k_d'].includes(t.id))calcOut();
+ if(t.id==='f_kh'||t.id==='f_x'){me.khach=document.getElementById('f_kh').value.trim();me.xung=document.getElementById('f_x').value;st.set('me',me);render()}});
+main.addEventListener('input',e=>{const t=e.target;if(t.id==='o_q'){document.getElementById('o_l').innerHTML=objList(t.value);paintFb()}if(['k_a','k_b'].includes(t.id))calcOut()});
+addEventListener('hashchange',()=>{render();scrollTo(0,0)});
+paintWho();render();if(!me.toi)askName();initDb();
+}
+</script></body></html>
