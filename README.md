@@ -8,6 +8,8 @@ Web tĩnh (GitHub Pages) cho đội BVI, FarmBase. Tách riêng khỏi BVI Đi�
 | `index.html` | Mọi người | Không |
 | `danh-gia.html` | Nhân sự làm phiếu tự đánh giá (đợt 11/2026) | Chọn tên |
 | `danh-gia.html?xem-thu` | Xem thử phiếu, không lưu | Không |
+| `quy-trinh.html` | Mọi người: danh sách cẩm nang | Không |
+| `cam-nang-ban-hang.html` | Sales, quản lý follow khách | Chọn tên |
 | `ket-qua.html` | Giám đốc: ma trận, đánh giá sơ bộ, từng người, chấm và nhận xét | Mã PIN |
 
 ## Không dùng cơ sở dữ liệu
@@ -32,3 +34,10 @@ Mục riêng trong phiếu và tab "Thẻ điểm BSC" ở trang kết quả. 4 
 ## Quy tắc
 - Chữ tiếng Việt, ngắn gọn, dùng tốt ở rộng 390px, không cuộn ngang.
 - Không ghi CCCD, số sổ đỏ, số điện thoại, số tiền vào repo hay trang. Máy chủ che chuỗi số dài trong ô chữ.
+
+## Cẩm nang (Xây dựng quy trình)
+- `quy-trinh.html` liệt kê các cẩm nang. Thêm cẩm nang mới: tạo trang `cam-nang-<ten>.html`, đặt `window.CN_ID` riêng nếu cần, thêm thẻ vào `quy-trinh.html`.
+- Người xem chọn tên (danh sách lấy từ `DG_NAME` trong `assets/dg-common.js`, hoặc gõ tên khác). Tên hiện trên góp ý và tự điền vào tin nhắn mẫu.
+- Góp ý: nút "Góp ý" ở từng mục, ghi "muốn sửa thành" và lý do. Tab Góp ý gom tất cả, có nút Chép để gửi qua Zalo.
+- Góp ý chung: điền `url`, `key` (khóa công khai) của Supabase vào `assets/cn-config.js`, bảng `camnang_gopy`. Để trống thì góp ý chỉ lưu trên máy từng người. Mở trang với `?quan-ly` để hiện nút "Đánh dấu đã xử lý". Chuỗi số dài trong góp ý được che trước khi gửi.
+- Bản soạn gốc nằm ở thư mục dự án `SalesKit_TXNG_2026-11/CamNang_BanHang_CSKH.html`; sửa nội dung ở đó rồi chép sang đây.
