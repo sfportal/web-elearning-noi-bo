@@ -39,5 +39,5 @@ Mục riêng trong phiếu và tab "Thẻ điểm BSC" ở trang kết quả. 4 
 - `quy-trinh.html` liệt kê các cẩm nang. Thêm cẩm nang mới: tạo trang `cam-nang-<ten>.html`, đặt `window.CN_ID` riêng nếu cần, thêm thẻ vào `quy-trinh.html`.
 - Người xem chọn tên (danh sách lấy từ `DG_NAME` trong `assets/dg-common.js`, hoặc gõ tên khác). Tên hiện trên góp ý và tự điền vào tin nhắn mẫu.
 - Góp ý: nút "Góp ý" ở từng mục, ghi "muốn sửa thành" và lý do. Tab Góp ý gom tất cả, có nút Chép để gửi qua Zalo.
-- Góp ý chung: điền `url`, `key` (khóa công khai) của Supabase vào `assets/cn-config.js`, bảng `camnang_gopy`. Để trống thì góp ý chỉ lưu trên máy từng người. Mở trang với `?quan-ly` để hiện nút "Đánh dấu đã xử lý". Chuỗi số dài trong góp ý được che trước khi gửi.
+- Góp ý chung lưu ở bảng `camnang_gopy` trên Supabase (cấu hình trong `assets/cn-config.js`, khóa công khai). Khách chỉ được đọc, thêm góp ý và đánh dấu đã xử lý, không sửa hay xóa được. Cột `cam_nang` tách góp ý theo từng cẩm nang (trang đặt `window.CN_ID`, mặc định `ban-hang`). Để trống `url` thì góp ý chỉ lưu trên máy từng người. Mở trang với `?quan-ly` để hiện nút "Đánh dấu đã xử lý". Chuỗi số dài trong góp ý được che trước khi gửi.
 - Bản soạn gốc nằm ở thư mục dự án `SalesKit_TXNG_2026-11/CamNang_BanHang_CSKH.html`; sửa nội dung ở đó rồi chép sang đây.
