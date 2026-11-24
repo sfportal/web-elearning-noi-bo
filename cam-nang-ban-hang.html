@@ -110,33 +110,33 @@ const AFTER=[['Ngày ký','Tin cảm ơn M9; giới thiệu người triển kha
 const Q=['Anh trồng cây gì, ở xã nào, bao nhiêu ha, bao nhiêu hộ?','Vùng đã có mã số vùng trồng chưa? Mã nội địa hay mã GACC?','Bán cho ai, thị trường nào (Trung Quốc, EU, nội địa)?','Nhật ký canh tác đang ghi ở đâu?','Ai đứng tên mã: HTX, THT, doanh nghiệp?','Đất có sổ đỏ đủ không, có đất thuê, đất tranh chấp không?','Có kho, cơ sở đóng gói không? Cần tem QR không?','Vướng nhất hiện nay là gì?','Ai quyết định, có cần họp thành viên không? Muốn xong trước mốc nào?','Vùng cách Buôn Ma Thuột bao xa?'];
 
 const SEG=[
-{k:'htx-chua-ma',n:'HTX sầu riêng chưa có mã',who:'HTX, THT 30–200 thành viên, 30–200 ha; một phần chưa có mã hoặc chờ lâu.',demo:'vung',
+{k:'htx-chua-ma',n:'HTX sầu riêng chưa có mã',who:'HTX, THT 30–200 thành viên, 30–200 ha; một phần chưa có mã hoặc chờ lâu.',demo:'msvt',
 call:'Dạ chào anh [tên khách], em là [tên bạn] bên FarmBase, Công ty Cổ phần BVI ở Buôn Ma Thuột. Bên em đang hỗ trợ các HTX sầu riêng ở Krông Pắc, Buôn Hồ, Ea Drông làm mã số vùng trồng và nhật ký điện tử để giữ mã. Phần diện tích chưa có mã của HTX mình hiện tính sao rồi anh?',
 zalo:'Chào anh [tên khách], em là [tên bạn] bên FarmBase (Công ty CP BVI). Bên em hỗ trợ HTX làm mã số vùng trồng sầu riêng từ khảo sát, hồ sơ đến nhật ký điện tử trên Zalo, đã kết nối hệ thống truy xuất của Bộ NN&MT. Em gửi anh tờ giới thiệu 4 trang. Anh cho em xin 10 phút gọi lại nhé.',
 val:[['Chờ mã lâu, hồ sơ bị trả','Bên em làm đủ 19 thành phần hồ sơ, đối chiếu lô, tọa độ, giấy tờ trên hệ thống trước khi ký nên ít phải sửa. Thời gian cấp mã là của cơ quan nhà nước, bên em không hứa ngày.'],['Nông dân không ghi nhật ký','Bà con ghi trên Zalo, chụp ảnh bao bì là xong, người thân ghi giúp được. Một HTX ở Krông Pắc có 100% hộ tự ghi. Gói làm mã trọn năm có người bên em nhập giúp 12 tháng.'],['Lo mất đất, mất quyền bán','Làm mã không ảnh hưởng quyền sử dụng đất, bà con vẫn tự chủ bán cho ai.']],
 pk:['Gói làm mã trọn năm: 4.500.000 đ/ha (nên chào). Ví dụ 20 ha: 90 triệu','Gói làm mã + truy xuất: 3.500.000 đ/ha nếu HTX tự nhập liệu','Bà con tự đứng tên qua THT: gói đồng hành xã khoảng 20 triệu/vùng','Dưới 10 ha: gợi ý gộp hộ liền kề'],
 close:'Để báo giá đúng, em xin hẹn anh một buổi tại HTX khoảng 1 tiếng: em demo phần mềm trên vùng mẫu và xem danh sách hộ. Thứ mấy anh tiện?',
 w:'Hỏi ngay chuyện đất. Chốt hình thức đứng mã trước khi ký bất kỳ hồ sơ nào.'},
-{k:'co-ma',n:'Vùng đã có mã (truy xuất, giữ mã)',who:'HTX đã có mã nội địa hoặc GACC, lo hậu kiểm, cảnh báo, hoặc bị đòi truy xuất.',demo:'vung',
+{k:'co-ma',n:'Vùng đã có mã (truy xuất, giữ mã)',who:'HTX đã có mã nội địa hoặc GACC, lo hậu kiểm, cảnh báo, hoặc bị đòi truy xuất.',demo:'txvt',
 call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase. Từ 01/07/2026 bên em đã kết nối hệ thống truy xuất nguồn gốc nông sản của Bộ. Vùng mình đã có mã rồi, phần nhật ký và hậu kiểm hằng năm HTX đang làm thế nào anh?',
 zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. Vùng đã có mã vẫn phải giữ nhật ký, giám sát dịch hại và sẵn sàng hậu kiểm. FarmBase giúp HTX ghi nhật ký trên Zalo, in QR vùng, lô và đồng bộ lên hệ thống của Bộ. Em gửi anh tóm tắt tính năng.',
 val:[['Có mã rồi, cần gì nữa','Có mã mới là bắt đầu. Mã có thể bị đình chỉ nếu kiểm tra không đạt hoặc phát hiện sinh vật kiểm dịch. FarmBase giữ nhật ký cả vụ để có sẵn khi hậu kiểm.'],['Nhà nước có hệ thống miễn phí','Hệ thống của Bộ là nơi nhận dữ liệu. FarmBase là công cụ ghi dữ liệu từ vườn và đẩy lên đó, kèm người hướng dẫn tận vườn.'],['DN, xã đòi truy xuất','Có QR vùng và QR từng lô. Sổ đỏ không công khai, CCCD chỉ hiện 4 số cuối.']],
 pk:['Truy xuất có nhập liệu: 1.500.000 đ/ha/năm','Truy xuất tự nhập liệu: 800.000 đ/ha/năm','Xã có chương trình đồng hành: năm đầu miễn phí'],
 close:'Bên em tạo thử vùng của HTX trên FarmBase với 3 đến 5 hộ để anh xem, rồi mình tính cả vùng. Tuần này anh gửi em danh sách hộ được không?'},
-{k:'dn-dong-goi',n:'Doanh nghiệp đóng gói, xuất khẩu',who:'DN thu mua, đóng gói sầu riêng; mua từ nhiều mã vùng trồng.',demo:'dn',
+{k:'dn-dong-goi',n:'Doanh nghiệp đóng gói, xuất khẩu',who:'DN thu mua, đóng gói sầu riêng; mua từ nhiều mã vùng trồng.',demo:'cs',
 call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase, Công ty CP BVI. Công ty mình đang thu mua từ khoảng bao nhiêu mã vùng trồng anh? Bên em làm phần mềm giúp biết từng container đến từ mã nào và in tem QR theo lô, đã kết nối hệ thống truy xuất của Bộ.',
 zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. FarmBase nối dữ liệu vùng trồng đến lô hàng: nguồn hàng theo mã vùng, container, tem QR song ngữ. Bên em cũng làm mã vùng trồng cho vùng nguyên liệu DN đứng tên. Em xin 15 phút demo trực tuyến.',
 val:[['Sợ lẫn hàng ngoài mã','Nguồn hàng chỉ thêm được khi nông dân đã có hồ sơ và gắn mã vùng trồng; mỗi lô ghi rõ nông hộ, mã vùng, nhật ký.'],['Thiếu vùng có mã','DN đứng mã: miễn phí với nông dân, DN trả 3,5 triệu/ha, trả trước 50%.'],['Đã có phần mềm khác','Bên em kết nối được, không khóa dữ liệu. Phần mạnh là dữ liệu từ vườn.']],
 pk:['Module cơ sở đóng gói: thiết lập 5 tr, duy trì 5 tr/năm, tích hợp GS1 và hệ thống của Bộ 5 tr/năm (gồm 3 sản phẩm), tem QR từ 80 đ/mã. Ví dụ 3 sản phẩm + 10.000 QR: 15,8 tr năm đầu','DN đứng mã: 3,5 tr/ha'],
 close:'Em đề nghị buổi demo 20 phút trên một lô hàng mẫu, có anh kỹ thuật bên em đi cùng. Anh cho em xin danh sách sản phẩm, quy cách thùng.',
 w:'Demo lô hàng, GS1, in tem còn chạy thử: luôn có kỹ thuật đi kèm.'},
-{k:'ca-phe',n:'Cà phê (EUDR)',who:'DN xuất khẩu cà phê nhiều hộ liên kết; HTX cà phê.',demo:'vung',
+{k:'ca-phe',n:'Cà phê (EUDR)',who:'DN xuất khẩu cà phê nhiều hộ liên kết; HTX cà phê.',demo:'ck',
 call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase. Từ 30/12/2026 cà phê vào EU cần tọa độ từng thửa và bằng chứng sản xuất hợp pháp. Dữ liệu thửa của các hộ cung ứng bên mình đã đủ chưa anh?',
 zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. FarmBase quản lý lô đất, tọa độ, số tờ, số thửa, nhật ký của từng hộ; nông dân ghi trên Zalo. Em xin 15 phút trao đổi phần vùng chưa có dữ liệu.',
 val:[['EUDR áp dụng cho ai','Nhà nhập khẩu EU nộp tờ khai, nhưng DN, HTX Việt Nam phải đưa đủ dữ liệu. Mốc: DN lớn và vừa 30/12/2026, DN nhỏ 30/6/2027.'],['Việt Nam rủi ro thấp mà','Vẫn bắt buộc tọa độ từng thửa và bằng chứng hợp pháp.'],['Đã có chương trình khác','Bên em làm phần thực địa: đo thửa, làm sạch dữ liệu, gộp hộ trùng, giữ dữ liệu sống bằng nhật ký.']],
 pk:['Truy xuất vùng trồng cây khác, tính theo vùng: 1 vùng 1 vụ 20 tr năm đầu / 15 tr năm sau; 3 vùng 30/25 tr; 5 vùng 44/39 tr','Khảo sát polygon EUDR: báo giá sau khảo sát'],
 close:'Em đề xuất chạy thử ở một HTX trước. Anh giới thiệu em HTX nào phù hợp nhất?',w:'Không nói FarmBase “đạt chuẩn EUDR”, không tự đặt giá polygon.'},
-{k:'cay-khac',n:'Cây khác (chuối, thanh long, vải…)',who:'HTX, DN có vùng xuất khẩu; liên hiệp HTX nhiều mã.',demo:'vung',
+{k:'cay-khac',n:'Cây khác (chuối, thanh long, vải…)',who:'HTX, DN có vùng xuất khẩu; liên hiệp HTX nhiều mã.',demo:'ck',
 call:'Dạ chào anh [tên khách], em [tên bạn] bên FarmBase. Bên em làm nền tảng quản lý vùng trồng có mã cho mọi cây trồng: nhật ký, giám sát dịch hại theo lô, QR. Vùng mình có bao nhiêu mã, đang quản lý bằng gì anh?',
 zalo:'Chào anh [tên khách], em [tên bạn] bên FarmBase. Một nền tảng cho nhiều mã vùng trồng, đồng bộ hệ thống truy xuất của Bộ, nông dân ghi trên Zalo. Em gửi anh tóm tắt tính năng.',
 val:[['Có làm mã cho cây này không','Có hỗ trợ, yêu cầu khác nhau theo cây và thị trường nên khảo sát rồi mới báo giá.'],['Nhiều mã, nhiều HTX','Từ vùng thứ 4 chỉ 2 triệu/vùng/năm; một tài khoản, phân quyền từng HTX.']],
@@ -149,36 +149,125 @@ pk:['Vùng đã có mã: năm 1 miễn phí, từ năm 2 là 800.000 đ/ha/năm'
 close:'Công ty xin gửi công văn và đề xuất 01 buổi tập huấn tại xã, thời gian và địa điểm do xã sắp xếp.',w:'Công văn gửi xã không nêu số vùng, số hộ, diện tích; không ghi chi phí tập huấn.'}];
 
 const DEMO={
-vung:{n:'HTX, vùng trồng (20 phút)',ai:'HTX, THT, vùng đã có hoặc chưa có mã; cà phê; cây khác',
-prep:['Tài khoản demo trên app.farmbase.vn (mã tổ chức, email, mật khẩu) với vùng mẫu đã làm mờ tên, số điện thoại','Điện thoại có Zalo, đã mở sẵn FarmBase Mini App và thêm vào màn hình chính','In sẵn 1 mã QR vùng mẫu để khách quét','4G dự phòng, sạc đầy; nếu chiếu thì mang cáp','Biết trước: cây, ha, số hộ, đã có mã chưa, vướng gì (từ cuộc gọi)','Nếu được: xin trước tọa độ 1 vườn của khách để tạo thử'],
+msvt:{dv:'Mã số vùng trồng',n:'Làm mã số vùng trồng sầu riêng',t:'25 phút',ai:'HTX, tổ hợp tác, nông hộ, doanh nghiệp muốn có mã vùng trồng sầu riêng',
+tl:[['Tóm tắt quy trình làm mã (K07)','Bước 2: đi qua các bước từ khảo sát đến giữ mã','In 1 bản để trên bàn, gửi Zalo sau buổi gặp'],
+['Bộ hồ sơ mẫu làm mã (bản đã che tên, CCCD, sổ đỏ, số điện thoại)','Bước 3: lật từng thành phần, chỉ chỗ hay bị trả','In hoặc mở PDF trên máy tính bảng. Chỉ cho xem, không gửi bản mẫu cho khách'],
+['Ứng dụng FarmBase quản lý vùng trồng (trang quản lý app.farmbase.vn)','Bước 4: bản đồ lô, tạo một lô ngay tại chỗ','Tài khoản demo, vùng mẫu đã làm mờ tên và số điện thoại'],
+['Ứng dụng nhập liệu FarmBase trên Zalo (Mini App)','Bước 5: nhật ký để giữ mã','Điện thoại có Zalo, mở sẵn Mini App'],
+['Bảng giá dịch vụ (K08)','Bước 7: chỉ mở khi khách hỏi giá','Xem tab Dịch vụ và giá. Giảm tối đa 10%']],
+prep:['Biết trước: số hộ, số ha, ai đứng tên, giấy tờ đất, đã từng nộp hồ sơ chưa (từ cuộc gọi)','In K07 và bộ hồ sơ mẫu đã che thông tin','Tài khoản demo trên app.farmbase.vn, vùng mẫu đã làm mờ','Điện thoại có Zalo, mở sẵn Mini App','Nếu được: xin trước tọa độ 1 vườn của khách để tạo thử','4G dự phòng, sạc đầy'],
 steps:[
-['0–2','Mở đầu','Nhắc lại vướng mắc khách đã nói, nói trước 3 việc sẽ xem.','Hôm trước anh nói vướng nhất là [vướng mắc]. Hôm nay em cho anh xem 3 việc: tạo vùng, nông dân ghi nhật ký trên Zalo, và người mua quét QR thấy gì.','Khách thấy buổi demo nói đúng chuyện của mình'],
-['2–5','Tổng quan vùng, bản đồ','Đăng nhập trang quản lý. Mở tổng quan: số điểm sản xuất, nông hộ, diện tích, số cây. Mở bản đồ lô, lọc theo cây trồng, xã.','Đây là cả vùng trên một màn hình. Bấm vào lô nào là thấy chủ hộ, diện tích, giống, số cây.','Cả vùng gọn trên một màn hình'],
-['5–8','Tạo một lô ngay tại chỗ','Thêm lô: tìm nông dân theo số điện thoại (chưa có thì thêm mới), nhập tọa độ hoặc định vị, bấm tìm lô đất. Nhập diện tích, giống, số cây, năm trồng, thuần hay xen.','Anh thấy không, nhập tọa độ là hệ thống tự điền số tờ, số thửa. Ảnh sổ đỏ chỉ để làm hồ sơ, không hiện ra ngoài.','Tự điền số tờ, số thửa'],
-['8–12','Nông dân ghi nhật ký trên Zalo','Đưa điện thoại cho khách tự bấm: Zalo, FarmBase, chọn vườn, Thêm ghi chép, chọn thuốc trong danh mục (thấy hoạt chất, liều, thời gian cách ly), chụp ảnh bao bì, lưu. Cho xem ủy quyền người thân và cập nhật thu hoạch.','Bà con không phải cài thêm gì, Zalo đang dùng hằng ngày. Chụp ảnh bao bì là xong, con cháu ghi giúp cũng được.','Khách tự ghi được một nhật ký'],
-['12–14','Nhật ký về trang quản lý','Quay lại web: nhật ký vừa ghi đã hiện. Cho xem nhập Excel hàng loạt (hệ thống báo dòng lỗi) và cột trạng thái cần đồng bộ, đã đồng bộ.','Vùng đã có mã thì nhật ký được đồng bộ lên hệ thống truy xuất của Bộ, HTX theo dõi được còn bao nhiêu bản ghi chưa đồng bộ.','Thấy kết nối với hệ thống của Bộ'],
-['14–17','QR và trang truy xuất','Tải QR vùng và QR một lô. Mời khách quét bằng điện thoại của họ: vùng, mùa vụ, nhật ký, ảnh, tài liệu trong thư viện.','Người mua quét là thấy vườn, nhật ký, ảnh. CCCD chỉ hiện 4 số cuối, sổ đỏ không công khai.','Khách tự quét trên máy mình'],
-['17–18','Nối vào hồ sơ mã','Nói ngắn: dữ liệu này là nguồn cho 5 nhật ký bắt buộc, Phiếu khảo sát phía Trung Quốc và hậu kiểm.','Sai ở đâu thì sửa trên hệ thống rồi xuất lại, không phải sửa tay trên giấy.','Hiểu phần mềm phục vụ việc giữ mã'],
-['18–20','Chốt bước tiếp','Hỏi phần nào hợp nhất, đề xuất tạo thử, hẹn ngày.','Anh thấy phần nào hợp với HTX nhất? Em đề xuất tạo thử 3 đến 5 hộ của mình trong tuần này. Anh gửi em danh sách hộ trước thứ mấy được?','Có ngày hẹn cụ thể']]},
-dn:{n:'Doanh nghiệp đóng gói, lô hàng (25 phút)',ai:'DN thu mua, đóng gói, xuất khẩu. Bắt buộc có kỹ thuật đi kèm',
-prep:['Kỹ thuật FarmBase đi cùng, tài khoản có phân hệ lô hàng (Warehub) và một lô mẫu','Hỏi trước: số cơ sở đóng gói, mã cơ sở, sản phẩm và quy cách thùng, đã là thành viên GS1 chưa, có GTIN chưa','Mở sẵn file “Câu hỏi làm rõ thiết lập demo 19/11” để ghi câu trả lời','Một vùng mẫu đã có mã để làm nguồn hàng','Nhớ nói: phân hệ cơ sở đóng gói dự kiến chính thức từ 11/2026, GS1 theo lộ trình'],
+['0–2','Mở đầu','Nhắc lại vướng mắc khách đã nói, nói trước sẽ xem gì.','Hôm trước anh nói vướng nhất là [vướng mắc]. Hôm nay em cho anh xem 3 việc: quy trình làm mã, bộ hồ sơ mẫu, và phần mềm quản lý vùng để giữ mã.','Buổi gặp nói đúng chuyện của mình','Không cần'],
+['2–7','Quy trình làm mã','Đi qua từng bước: khảo sát vườn, lập hồ sơ, nộp, cơ quan kiểm tra, cấp mã, giữ mã hằng năm. Nói rõ phần nào bên mình làm, phần nào khách làm.','Bên em lo khảo sát, lập đủ hồ sơ và nhập liệu. Cấp mã là việc của cơ quan nhà nước nên em không hứa ngày, nhưng hồ sơ đúng ngay từ đầu thì ít bị trả.','Biết mình phải làm gì, bên mình làm gì','Tóm tắt quy trình làm mã (K07)'],
+['7–12','Bộ hồ sơ mẫu','Lật từng thành phần: danh sách hộ, bản đồ và tọa độ lô, giấy tờ đất, cam kết, nhật ký canh tác, phiếu khảo sát. Chỉ 2 đến 3 chỗ hay bị trả: tọa độ lệch, tên trên sổ khác tên hộ, thiếu nhật ký.','Đây là bộ hồ sơ thật đã che thông tin. Hồ sơ hay bị trả ở mấy chỗ này. Bên em đối chiếu trên phần mềm trước khi ký nên tránh được.','Hồ sơ cụ thể, không mơ hồ','Bộ hồ sơ mẫu (đã che thông tin)'],
+['12–17','Phần mềm quản lý vùng','Đăng nhập trang quản lý: tổng quan vùng, bản đồ lô. Tạo một lô: tìm nông dân theo số điện thoại, nhập tọa độ, hệ thống tự điền số tờ, số thửa; nhập diện tích, giống, số cây.','Nhập tọa độ là tự điền số tờ, số thửa, nên hồ sơ khớp với đất thật. Ảnh sổ đỏ chỉ để làm hồ sơ, không hiện ra ngoài.','Dữ liệu lô khớp hồ sơ','Ứng dụng FarmBase quản lý vùng trồng'],
+['17–20','Nhật ký để giữ mã','Đưa điện thoại cho khách tự ghi một nhật ký trên Zalo: chọn vườn, chọn thuốc trong danh mục, chụp ảnh bao bì, lưu. Quay lại web thấy nhật ký đã hiện.','Có mã rồi vẫn phải ghi nhật ký và sẵn sàng hậu kiểm. Bà con ghi trên Zalo, người thân ghi giúp cũng được.','Khách tự ghi được một nhật ký','Ứng dụng nhập liệu trên Zalo'],
+['20–22','Giấy tờ và đứng tên','Hỏi thẳng: ai đứng tên mã, đất có sổ không, có đất thuê không, có hộ nào chưa đủ giấy. Ghi lại.','Để hồ sơ không bị trả, em cần biết trước mấy chuyện về đất và người đứng tên.','Khách thấy mình được hỏi kỹ','Danh sách câu hỏi ở phần Thông tin phải lấy'],
+['22–25','Chốt bước tiếp','Hỏi phần nào hợp nhất. Đề xuất ngày khảo sát và hạn gửi danh sách hộ. Giá chỉ nói khi khách hỏi.','Em đề xuất bên em khảo sát vườn vào [ngày]. Anh gửi em danh sách hộ và ảnh giấy tờ đất trước [ngày] được không? Em gửi báo giá trong 3 ngày làm việc.','Có ngày khảo sát cụ thể','Bảng giá (K08), chỉ khi hỏi']],
+groups:[
+{g:'HTX, tổ hợp tác sầu riêng chưa có mã',nh:'Đi đủ 7 bước. Nhấn bộ hồ sơ mẫu và phần mềm đối chiếu lô.',muc:'Có ngày khảo sát và người phụ trách phía HTX.',chot:['Hình thức đứng mã (HTX hay từng hộ qua tổ hợp tác)','Số hộ, số ha tham gia đợt đầu','Ngày khảo sát'],next:'Gửi báo giá trong 3 ngày làm việc, khảo sát theo ngày đã hẹn'},
+{g:'Nông hộ, vườn nhỏ dưới 10 ha',nh:'Rút gọn bước 4. Nhấn bộ hồ sơ và chi phí. Gợi ý gộp với hộ liền kề hoặc đi qua tổ hợp tác, chương trình của xã.',muc:'Khách đồng ý gộp hộ hoặc giới thiệu tổ hợp tác.',chot:['Gộp với hộ nào, tổng bao nhiêu ha','Ai là người đại diện liên hệ'],next:'Khách gom danh sách hộ liền kề trong 7 ngày, gọi lại xác nhận'},
+{g:'Doanh nghiệp đứng mã vùng nguyên liệu',nh:'Nhấn: DN đứng tên, miễn phí với nông dân, dữ liệu vùng nối thẳng sang lô hàng. Gợi ý thêm buổi demo cơ sở đóng gói.',muc:'DN chọn vùng ưu tiên và số ha đợt đầu.',chot:['Vùng ưu tiên, số ha','Người phụ trách phía DN','Điều kiện thanh toán (trả trước 50%)'],next:'Gửi đề xuất và báo giá trong 3 ngày làm việc, hẹn khảo sát'}],
+muc:'Khách hiểu rõ quy trình và hồ sơ, đồng ý cho khảo sát vườn.',
+chot:['Ai đứng tên mã','Số hộ, số ha đợt đầu','Ngày khảo sát','Hạn gửi danh sách hộ và ảnh giấy tờ đất'],
+info:['Danh sách hộ: tên, số ha, số cây, năm trồng (nhận qua Zalo, không ghi vào tài liệu chung)','Tình trạng đất: có sổ, đất thuê, đất chưa có giấy','Đã từng nộp hồ sơ chưa, bị trả vì sao','Người quyết định và người phụ trách làm việc hằng ngày'],
+next:[['Gửi tin tóm tắt buổi gặp (M4)','trong 24 giờ'],['Gửi báo giá','3 ngày làm việc'],['Gọi nhắc danh sách hộ','2 ngày trước hạn'],['Khảo sát vườn','theo ngày đã hẹn']],
+neu:'Chưa chốt được ngày khảo sát: xin danh sách 3 đến 5 hộ để tạo thử trên phần mềm, hẹn gọi lại sau 3 ngày.'},
+
+txvt:{dv:'Truy xuất nguồn gốc · vùng trồng',n:'Truy xuất vùng trồng sầu riêng',t:'20 phút',ai:'HTX, doanh nghiệp có vùng sầu riêng đã có mã, lo giữ mã, hậu kiểm, bị đòi truy xuất',
+tl:[['Ứng dụng quản lý FarmBase (trang quản lý app.farmbase.vn)','Bước 2, 3, 5: tổng quan vùng, bản đồ, tạo lô, nhật ký về trang quản lý, đồng bộ','Tài khoản demo, vùng mẫu đã làm mờ'],
+['Ứng dụng nhập liệu FarmBase trên Zalo (Mini App)','Bước 4: khách tự ghi nhật ký','Điện thoại có Zalo, đã thêm Mini App ra màn hình chính'],
+['Mã QR vùng mẫu in sẵn','Bước 6: khách tự quét bằng điện thoại của họ','In 1 tờ'],
+['Tóm tắt tính năng truy xuất (K06)','Gửi sau buổi gặp','Không cần mở trong buổi'],
+['Hướng dẫn dùng FarmBase cho HTX, DN và cho nông dân (K11), tờ rời A5','Bước 4 và cuối buổi: để lại cho khách','In tờ rời A5']],
+prep:['Biết trước: mã vùng, số hộ, số ha, nhật ký đang ghi ở đâu, lần hậu kiểm gần nhất','Tài khoản demo trên app.farmbase.vn','Điện thoại có Zalo, mở sẵn Mini App','In 1 mã QR vùng mẫu và tờ rời A5','4G dự phòng, sạc đầy; nếu chiếu thì mang cáp'],
 steps:[
-['0–2','Mở đầu','Hỏi số mã vùng trồng đang thu mua, cách đang ghi nguồn hàng.','Hôm nay em cho anh xem một lô hàng đi từ vườn đến container và tem: nguồn hàng theo mã vùng, container, GS1 và tem QR.','Đúng nỗi lo lẫn hàng, chứng từ'],
-['2–5','Vùng cấp hàng','Mở bản đồ các vùng đã có mã cấp hàng, bấm vào một vùng xem nông hộ, nhật ký.','Trước khi có lô hàng, mình phải biết hàng đến từ vùng nào, vùng đó ghi chép ra sao.','Thấy nguồn hàng có dữ liệu thật'],
-['5–9','Tạo lô hàng','Tạo lô: mã lô tự sinh; chọn cơ sở đóng gói, ngày thu hoạch, đóng gói, sản xuất, hết hạn; nhà xuất khẩu, nhập khẩu, cửa khẩu. Thêm hàng hóa: số thùng, tấn, số trái; container, số seal, ngày đóng.','Mỗi container một hồ sơ, số seal ghi ngay trong lô.','Một màn hình cho cả lô'],
-['9–13','Nguồn gốc theo mã vùng','Thêm nguồn hàng bằng CCCD nông dân: hệ thống tra tên, mã vùng trồng, sinh đơn mua hàng, kèm nhật ký canh tác.','Hộ không có hồ sơ, không gắn mã vùng thì không thêm vào lô được. Đó là cách chặn hàng ngoài mã.','Không lẫn hàng ngoài mã'],
-['13–17','GS1 và Cổng truy xuất','Kỹ thuật thao tác: tạo lệnh sản xuất (GTIN, vùng GS1), nạp sự kiện tự động: trồng, thu hoạch, lưu kho, bán, vận chuyển, đóng gói; gửi lên. Tra trên Cổng truy xuất quốc gia bằng GTIN và số lô.','Dữ liệu từ vườn tự thành chuỗi sự kiện, không phải nhập lại.','Thấy kết quả trên Cổng quốc gia'],
-['17–20','In tem','In tem trái, tem thùng, tem container song ngữ Việt, Anh, Trung: mã vùng trồng, mã cơ sở đóng gói, ngày đóng gói, số lô, QR, mã vạch GS1-128.','Mỗi lần in sinh dải mã mới gắn đúng lô.','Tem cầm tay được'],
-['20–22','Trang QR của lô','Quét tem: mã hợp lệ, container, seal, mã vùng trồng, nông hộ, nhật ký.','Nhà nhập khẩu, hải quan quét là thấy.','Khách tự quét'],
-['22–25','Chốt và hỏi thiết lập','Hỏi theo file câu hỏi: tổ chức, chữ ký số, GS1, GTIN, địa điểm, quy tắc lô. Hẹn báo giá.','Để dựng đúng như hàng của mình, em xin anh mấy thông tin này, em gửi báo giá trong 3 ngày làm việc.','Có đủ đầu vào báo giá']]},
-xa:{n:'UBND xã, phường (15 phút)',ai:'Lãnh đạo xã, Phòng Kinh tế, cán bộ nông nghiệp',
-prep:['Công văn, tờ thông tin 1 trang của công ty','Tài khoản demo có nhiều vùng trên một địa bàn','Không nêu số vùng, số hộ, diện tích của khách khác','Nhớ: hướng dẫn truy xuất miễn phí đến 31/12/2026, không bắt buộc dùng FarmBase'],
+['0–2','Mở đầu','Nhắc lại vướng mắc, nói trước 3 việc sẽ xem.','Hôm trước anh nói vướng nhất là [vướng mắc]. Hôm nay em cho anh xem 3 việc: quản lý vùng trên web, nông dân ghi nhật ký trên Zalo, và người mua quét QR thấy gì.','Đúng chuyện của mình','Không cần'],
+['2–5','Tổng quan vùng, bản đồ','Mở tổng quan: số điểm sản xuất, nông hộ, diện tích, số cây. Mở bản đồ lô, lọc theo cây, xã.','Đây là cả vùng trên một màn hình. Bấm vào lô nào là thấy chủ hộ, diện tích, giống, số cây.','Cả vùng gọn trên một màn hình','Ứng dụng quản lý'],
+['5–8','Tạo một lô tại chỗ','Thêm lô: tìm nông dân theo số điện thoại, nhập tọa độ, hệ thống tự điền số tờ, số thửa; nhập diện tích, giống, số cây.','Nhập tọa độ là tự điền số tờ, số thửa.','Tự điền số tờ, số thửa','Ứng dụng quản lý'],
+['8–12','Nông dân ghi nhật ký','Đưa điện thoại cho khách tự bấm: Zalo, FarmBase, chọn vườn, Thêm ghi chép, chọn thuốc trong danh mục (thấy hoạt chất, liều, thời gian cách ly), chụp ảnh bao bì, lưu. Cho xem ủy quyền người thân, cập nhật thu hoạch.','Bà con không phải cài thêm gì. Chụp ảnh bao bì là xong, con cháu ghi giúp cũng được.','Khách tự ghi được một nhật ký','Ứng dụng nhập liệu trên Zalo'],
+['12–14','Nhật ký về trang quản lý, đồng bộ','Quay lại web: nhật ký vừa ghi đã hiện. Cho xem nhập Excel hàng loạt (báo dòng lỗi) và cột trạng thái cần đồng bộ, đã đồng bộ.','Vùng đã có mã thì nhật ký được đồng bộ lên hệ thống truy xuất của Bộ NN&MT, HTX biết còn bao nhiêu bản ghi chưa đồng bộ.','Thấy kết nối với hệ thống của Bộ','Ứng dụng quản lý'],
+['14–17','QR và trang truy xuất','Tải QR vùng và QR một lô. Mời khách quét bằng máy của họ: vùng, mùa vụ, nhật ký, ảnh.','Người mua quét là thấy vườn, nhật ký, ảnh. CCCD chỉ hiện 4 số cuối, sổ đỏ không công khai.','Khách tự quét trên máy mình','Mã QR vùng mẫu in sẵn'],
+['17–20','Chốt bước tiếp','Hỏi phần nào hợp nhất. Đề xuất tạo thử 3 đến 5 hộ, hỏi HTX tự nhập liệu hay để bên mình nhập.','Em đề xuất tạo thử 3 đến 5 hộ của mình trong tuần này. HTX muốn tự nhập hay để bên em nhập giúp?','Có ngày tạo thử','Tờ rời A5 để lại']],
+groups:[
+{g:'HTX sầu riêng đã có mã',nh:'Đi đủ 7 bước. Nhấn nhật ký để giữ mã, đồng bộ hệ thống của Bộ, sẵn sàng hậu kiểm.',muc:'HTX gửi danh sách 3 đến 5 hộ để tạo thử.',chot:['Tạo thử bao nhiêu hộ, hạn gửi danh sách','HTX tự nhập liệu hay bên mình nhập','Người phụ trách nhập liệu phía HTX'],next:'Tạo thử trong 7 ngày, gọi lại cho xem kết quả'},
+{g:'Doanh nghiệp có vùng nguyên liệu đã có mã',nh:'Rút gọn bước 4. Nhấn: dữ liệu vùng là nguồn hàng cho lô, chặn hàng ngoài mã. Hẹn buổi demo cơ sở đóng gói.',muc:'DN đồng ý tạo thử một vùng và hẹn demo lô hàng.',chot:['Vùng nào tạo thử','Ngày demo cơ sở đóng gói (có kỹ thuật)'],next:'Tạo thử vùng, chuẩn bị demo lô hàng theo file câu hỏi thiết lập'},
+{g:'Nông hộ lẻ có mã',nh:'Chỉ bước 4 và 6, khoảng 8 phút. Nhấn dễ dùng trên Zalo.',muc:'Hộ giới thiệu HTX, tổ hợp tác hoặc các hộ cùng mã.',chot:['Tên HTX hoặc người đại diện vùng mã'],next:'Liên hệ người đại diện trong 3 ngày'}],
+muc:'Khách thấy phần mềm dễ dùng và đồng ý tạo thử trên vùng của mình.',
+chot:['Số hộ tạo thử và hạn gửi danh sách','Tự nhập liệu hay bên mình nhập','Người phụ trách phía khách'],
+info:['Mã vùng, số hộ, số ha','Nhật ký đang ghi ở đâu (sổ giấy, Excel, phần mềm khác)','Lần hậu kiểm gần nhất, có bị nhắc gì không','Bán cho ai, người mua có đòi truy xuất không'],
+next:[['Gửi tin tóm tắt (M4) kèm K06, K11','trong 24 giờ'],['Tạo thử 3 đến 5 hộ','7 ngày'],['Gọi lại cho xem kết quả, gửi báo giá','sau khi tạo thử']],
+neu:'Chưa đồng ý tạo thử: để lại tờ rời, hẹn gọi lại sau 7 ngày, hỏi ai khác trong HTX cần xem.'},
+
+cs:{dv:'Truy xuất nguồn gốc · cơ sở đóng gói',n:'Truy xuất cơ sở đóng gói, lô hàng sầu riêng',t:'25 phút',ai:'Doanh nghiệp thu mua, đóng gói, xuất khẩu sầu riêng. Bắt buộc có kỹ thuật đi kèm',
+tl:[['Phân hệ lô hàng trên ứng dụng quản lý, một lô mẫu','Bước 2 đến 4: vùng cấp hàng, tạo lô, nguồn hàng theo mã vùng','Kỹ thuật chuẩn bị tài khoản có phân hệ lô hàng'],
+['Kết nối GS1 và Cổng truy xuất quốc gia','Bước 5: kỹ thuật thao tác, sales chỉ dẫn lời','Kỹ thuật thao tác. Nói rõ GS1 theo lộ trình'],
+['Mẫu tem trái, tem thùng, tem container in sẵn','Bước 6, 7: khách cầm tay và tự quét','Kỹ thuật in trước'],
+['Hướng dẫn demo lô hàng, GS1 (K12, nội bộ)','Kỹ thuật đọc trước. Không đưa khách','Thư mục tài liệu nội bộ'],
+['File câu hỏi làm rõ thiết lập (K12, nội bộ)','Bước 8: hỏi và ghi câu trả lời','Mở sẵn trên máy'],
+['Tóm tắt tính năng truy xuất (K06), hồ sơ năng lực (K02)','Gửi sau buổi gặp','']],
+prep:['Kỹ thuật FarmBase đi cùng, tài khoản có phân hệ lô hàng và một lô mẫu','Hỏi trước: số cơ sở đóng gói, mã cơ sở, sản phẩm, quy cách thùng, đã là thành viên GS1 chưa, có GTIN chưa','Mở sẵn file câu hỏi làm rõ thiết lập','Một vùng mẫu đã có mã để làm nguồn hàng','Nhớ nói: phân hệ cơ sở đóng gói dự kiến chính thức từ 11/2026, GS1 theo lộ trình'],
 steps:[
-['0–2','Mở đầu','Nhắc nhiệm vụ của xã theo Nghị quyết 36/2026: xã kiểm tra, xác nhận hồ sơ mã, hậu kiểm.','Công ty xin báo cáo cách FarmBase giúp xã nắm vùng trồng trên địa bàn và hỗ trợ bà con làm hồ sơ.','Đúng việc của xã'],
-['2–6','Bản đồ vùng trên địa bàn','Mở bản đồ lọc theo xã: các vùng, lô, chủ hộ (tên che), diện tích.','Xã nhìn được vùng nào, ở đâu, bao nhiêu hộ, không phải chờ báo cáo giấy.','Nhìn toàn địa bàn'],
-['6–10','Nhật ký và đồng bộ','Mở một vùng có mã: nhật ký của các hộ, trạng thái đồng bộ hệ thống truy xuất của Bộ.','Khi hậu kiểm, xã xem được vùng nào ghi đều, vùng nào bỏ trống.','Hỗ trợ hậu kiểm'],
-['10–12','Nông dân dùng Zalo','Cho xem Mini App: bà con ghi nhật ký bằng ảnh bao bì.','Bà con không phải cài thêm ứng dụng.','Dễ cho dân'],
-['12–15','Đề xuất','Đề xuất 01 buổi tập huấn tại xã, thời gian, địa điểm do xã sắp xếp; giới thiệu chương trình đồng hành.','Công ty xin phép gửi công văn chính thức và phối hợp tổ chức buổi tập huấn.','Có lịch tập huấn']]}};
+['0–2','Mở đầu','Hỏi số mã vùng đang thu mua, cách đang ghi nguồn hàng.','Hôm nay em cho anh xem một lô hàng đi từ vườn đến container và tem: nguồn hàng theo mã vùng, container, GS1 và tem QR.','Đúng nỗi lo lẫn hàng, chứng từ','Không cần'],
+['2–5','Vùng cấp hàng','Mở bản đồ các vùng đã có mã cấp hàng, bấm vào một vùng xem nông hộ, nhật ký.','Trước khi có lô hàng, mình phải biết hàng đến từ vùng nào, vùng đó ghi chép ra sao.','Nguồn hàng có dữ liệu thật','Ứng dụng quản lý, vùng mẫu'],
+['5–9','Tạo lô hàng','Tạo lô: mã lô tự sinh; chọn cơ sở đóng gói, ngày thu hoạch, đóng gói, hết hạn; nhà xuất khẩu, nhập khẩu, cửa khẩu. Thêm hàng: số thùng, tấn, số trái; container, số seal.','Mỗi container một hồ sơ, số seal ghi ngay trong lô.','Một màn hình cho cả lô','Phân hệ lô hàng'],
+['9–13','Nguồn gốc theo mã vùng','Thêm nguồn hàng bằng CCCD nông dân: hệ thống tra tên, mã vùng trồng, sinh đơn mua hàng, kèm nhật ký.','Hộ không có hồ sơ, không gắn mã vùng thì không thêm vào lô được. Đó là cách chặn hàng ngoài mã.','Không lẫn hàng ngoài mã','Phân hệ lô hàng'],
+['13–17','GS1 và Cổng truy xuất','Kỹ thuật thao tác: tạo lệnh sản xuất (GTIN, vùng GS1), nạp sự kiện tự động, gửi lên. Tra trên Cổng truy xuất quốc gia bằng GTIN và số lô.','Dữ liệu từ vườn tự thành chuỗi sự kiện, không phải nhập lại.','Thấy kết quả trên Cổng quốc gia','Kết nối GS1, Cổng truy xuất (kỹ thuật)'],
+['17–20','In tem','In tem trái, tem thùng, tem container song ngữ Việt, Anh, Trung: mã vùng trồng, mã cơ sở đóng gói, ngày đóng gói, số lô, QR, mã vạch GS1-128.','Mỗi lần in sinh dải mã mới gắn đúng lô.','Tem cầm tay được','Mẫu tem in sẵn'],
+['20–22','Trang QR của lô','Mời khách quét tem: mã hợp lệ, container, seal, mã vùng trồng, nông hộ, nhật ký.','Nhà nhập khẩu, hải quan quét là thấy.','Khách tự quét','Mẫu tem in sẵn'],
+['22–25','Chốt và hỏi thiết lập','Hỏi theo file câu hỏi: tổ chức, chữ ký số, GS1, GTIN, địa điểm, quy tắc lô. Hẹn báo giá.','Để dựng đúng như hàng của mình, em xin anh mấy thông tin này, em gửi báo giá trong 3 ngày làm việc.','Đủ đầu vào báo giá','File câu hỏi làm rõ thiết lập']],
+groups:[
+{g:'Doanh nghiệp xuất khẩu đã là thành viên GS1',nh:'Đi đủ 8 bước. Nhấn bước 5 (GS1, Cổng quốc gia) và bước 6 (tem).',muc:'Có đủ thông tin thiết lập để báo giá.',chot:['Số sản phẩm, quy cách thùng, GTIN','Số cơ sở đóng gói','Người phụ trách kỹ thuật phía DN'],next:'Báo giá trong 3 ngày làm việc, hẹn thiết lập'},
+{g:'Cơ sở đóng gói vừa, nhỏ, chưa có GS1',nh:'Rút gọn bước 5, chỉ nói GS1 làm sau. Nhấn nguồn hàng theo mã vùng và tem QR theo lô.',muc:'Khách đồng ý thử phần lô hàng và tem QR trước.',chot:['Sản phẩm, quy cách thùng','Số tem dự kiến mỗi vụ'],next:'Báo giá phần cơ sở đóng gói và tem trong 3 ngày, GS1 tính sau'},
+{g:'DN thu mua thiếu vùng có mã',nh:'Thêm 3 phút cuối nói về DN đứng mã vùng nguyên liệu.',muc:'Hẹn thêm buổi về làm mã vùng nguyên liệu.',chot:['Vùng nguyên liệu dự kiến, số ha'],next:'Hẹn buổi demo làm mã số vùng trồng'}],
+muc:'Có đủ thông tin thiết lập và khách đồng ý nhận báo giá.',
+chot:['Sản phẩm, quy cách thùng, số tem dự kiến','Có GS1, GTIN chưa','Người phụ trách kỹ thuật phía khách','Ngày nhận báo giá'],
+info:['Theo file câu hỏi làm rõ thiết lập: tổ chức, chữ ký số, GS1, GTIN, địa điểm, quy tắc đặt số lô','Số mã vùng đang thu mua','Phần mềm đang dùng (nếu có)'],
+next:[['Gửi tin tóm tắt (M4) kèm K06','trong 24 giờ'],['Gửi báo giá','3 ngày làm việc'],['Kỹ thuật trả lời câu hỏi còn mở','5 ngày làm việc']],
+neu:'Chưa đủ thông tin: gửi file câu hỏi qua Zalo, hẹn gọi lại sau 3 ngày với người phụ trách kỹ thuật.'},
+
+ck:{dv:'Truy xuất nguồn gốc · vùng trồng',n:'Truy xuất cà phê và cây khác',t:'20 phút',ai:'DN xuất khẩu cà phê nhiều hộ liên kết (EUDR), HTX cà phê, vùng chuối, thanh long, vải',
+tl:[['Ứng dụng quản lý FarmBase','Bước 2, 3: bản đồ lô, tọa độ, số tờ, số thửa','Tài khoản demo có vùng cà phê hoặc cây khác'],
+['Ứng dụng nhập liệu trên Zalo','Bước 4: khách tự ghi nhật ký','Điện thoại có Zalo'],
+['Tài liệu EUDR (K13, nội bộ)','Sales đọc trước để trả lời. Chỉ trích ý, không gửi nguyên bản','Thư mục tài liệu nội bộ'],
+['Tóm tắt tính năng truy xuất (K06)','Gửi sau buổi gặp','']],
+prep:['Biết trước: số vùng, số hộ, số ha, thị trường bán, đã có dữ liệu thửa chưa','Tài khoản demo, điện thoại có Zalo','Đọc lại K13: mốc 30/12/2026 cho DN lớn và vừa, 30/6/2027 cho DN nhỏ'],
+steps:[
+['0–2','Mở đầu','Hỏi thị trường bán và người mua đang đòi gì.','Hôm nay em cho anh xem cách quản lý từng thửa, nhật ký trên Zalo và QR theo vùng.','Đúng yêu cầu của người mua','Không cần'],
+['2–7','Bản đồ thửa','Mở bản đồ lô, bấm một lô: tọa độ, số tờ, số thửa, diện tích, chủ hộ.','Dữ liệu từng thửa nằm sẵn, khi người mua EU đòi là xuất ra được.','Có tọa độ từng thửa','Ứng dụng quản lý'],
+['7–10','Tạo một lô','Thêm lô bằng tọa độ, hệ thống tự điền số tờ, số thửa.','Nhập tọa độ là tự điền số tờ, số thửa.','Nhanh, ít sai','Ứng dụng quản lý'],
+['10–14','Nhật ký trên Zalo','Khách tự ghi một nhật ký, chụp ảnh bao bì.','Bà con không phải cài thêm gì.','Khách tự ghi được','Ứng dụng nhập liệu trên Zalo'],
+['14–17','QR vùng','Tải và quét QR vùng.','Người mua quét là thấy vùng và nhật ký.','Khách tự quét','Ứng dụng quản lý'],
+['17–20','Chốt','Đề xuất chạy thử ở một HTX hoặc một vùng.','Em đề xuất chạy thử ở một HTX trước. Anh giới thiệu em HTX nào phù hợp nhất?','Có nơi chạy thử','Không cần']],
+groups:[
+{g:'DN cà phê xuất khẩu EU',nh:'Nhấn bước 2 (tọa độ từng thửa) và mốc EUDR. Không nói FarmBase đạt chuẩn EUDR.',muc:'DN chọn một HTX chạy thử.',chot:['HTX chạy thử, số hộ','Khảo sát polygon có cần không (báo giá sau khảo sát)'],next:'Hẹn khảo sát HTX chạy thử'},
+{g:'HTX cà phê, cây khác',nh:'Nhấn nhật ký trên Zalo và QR vùng.',muc:'HTX gửi danh sách hộ để tạo thử.',chot:['Số vùng, số hộ tạo thử'],next:'Tạo thử trong 7 ngày, gửi báo giá theo vùng'}],
+muc:'Có một nơi chạy thử cụ thể.',
+chot:['Nơi chạy thử, số hộ','Người phụ trách phía khách'],
+info:['Số vùng, số hộ, số ha','Thị trường bán, người mua đòi gì','Đã có dữ liệu thửa chưa, ở dạng nào'],
+next:[['Gửi tin tóm tắt (M4) kèm K06','trong 24 giờ'],['Tạo thử hoặc khảo sát','7 ngày'],['Gửi báo giá theo vùng','sau khi tạo thử']],
+neu:'Chưa có nơi chạy thử: xin giới thiệu 1 HTX liên kết, hẹn gọi lại sau 7 ngày.'},
+
+xa:{dv:'Đồng hành xã, phường',n:'UBND xã, phường',t:'15 phút',ai:'Lãnh đạo xã, Phòng Kinh tế, cán bộ nông nghiệp',
+tl:[['Công văn, tờ thông tin gửi xã (K10)','Đưa khi vào gặp, để lại','In 2 bản'],
+['Đề xuất đồng hành xã, phường (K10)','Bước 5: đề xuất','In 1 bản'],
+['Ứng dụng quản lý, tài khoản có nhiều vùng trên một địa bàn','Bước 2, 3','Không nêu số vùng, số hộ, diện tích của khách khác'],
+['Ứng dụng nhập liệu trên Zalo','Bước 4','Điện thoại có Zalo']],
+prep:['Công văn, tờ thông tin, đề xuất đồng hành (K10)','Tài khoản demo có nhiều vùng trên một địa bàn','Không nêu số vùng, số hộ, diện tích của khách khác','Nhớ: hướng dẫn truy xuất miễn phí đến 31/12/2026, không bắt buộc dùng FarmBase'],
+steps:[
+['0–2','Mở đầu','Nhắc nhiệm vụ của xã theo Nghị quyết 36/2026: kiểm tra, xác nhận hồ sơ mã, hậu kiểm.','Công ty xin báo cáo cách FarmBase giúp xã nắm vùng trồng trên địa bàn và hỗ trợ bà con làm hồ sơ.','Đúng việc của xã','Công văn, tờ thông tin (K10)'],
+['2–6','Bản đồ vùng trên địa bàn','Mở bản đồ lọc theo xã: vùng, lô, chủ hộ (tên che), diện tích.','Xã nhìn được vùng nào, ở đâu, bao nhiêu hộ, không phải chờ báo cáo giấy.','Nhìn toàn địa bàn','Ứng dụng quản lý'],
+['6–10','Nhật ký và đồng bộ','Mở một vùng có mã: nhật ký, trạng thái đồng bộ hệ thống của Bộ.','Khi hậu kiểm, xã xem được vùng nào ghi đều, vùng nào bỏ trống.','Hỗ trợ hậu kiểm','Ứng dụng quản lý'],
+['10–12','Nông dân dùng Zalo','Cho xem bà con ghi nhật ký bằng ảnh bao bì.','Bà con không phải cài thêm ứng dụng.','Dễ cho dân','Ứng dụng nhập liệu trên Zalo'],
+['12–15','Đề xuất','Đề xuất 01 buổi tập huấn tại xã, thời gian, địa điểm do xã sắp xếp; giới thiệu chương trình đồng hành.','Công ty xin phép gửi công văn chính thức và phối hợp tổ chức buổi tập huấn.','Có lịch tập huấn','Đề xuất đồng hành (K10)']],
+groups:[
+{g:'Lãnh đạo xã',nh:'Chỉ bước 1, 2 và 5, khoảng 8 phút.',muc:'Xã đồng ý nhận công văn và cử cán bộ đầu mối.',chot:['Cán bộ đầu mối','Thời điểm tập huấn'],next:'Gửi công văn chính thức trong 3 ngày làm việc'},
+{g:'Cán bộ nông nghiệp, Phòng Kinh tế',nh:'Đi đủ 5 bước, nhấn bước 3 (hậu kiểm).',muc:'Có lịch tập huấn và danh sách thôn, HTX mời.',chot:['Ngày, địa điểm tập huấn','Thôn, HTX được mời'],next:'Chuẩn bị tập huấn, gửi thư mời qua xã'}],
+muc:'Xã cử đầu mối và đồng ý tổ chức buổi tập huấn.',
+chot:['Cán bộ đầu mối','Ngày, địa điểm tập huấn','HTX, thôn được mời'],
+info:['Các vùng, HTX trên địa bàn đang làm mã','Kế hoạch của xã về mã vùng trồng năm nay'],
+next:[['Gửi công văn chính thức','3 ngày làm việc'],['Xác nhận lịch tập huấn','7 ngày']],
+neu:'Chưa có lịch: để lại tờ thông tin, xin số liên hệ cán bộ đầu mối, gọi lại sau 7 ngày.'}};
 const DEMO_NO=['Không demo tính năng không có trong hướng dẫn sử dụng: AI chẩn đoán, dự báo năng suất, sàn mua bán','Không nói ứng dụng cấp mã. Cấp mã thuộc cơ quan nhà nước','Vườn nông dân tự tạo trên Mini App là điểm sản xuất cá nhân, không thuộc mã vùng','Mất mạng: chuyển sang video giới thiệu và ảnh chụp màn hình trong tài liệu tóm tắt tính năng, hẹn demo lại'];
 
 const OBJ=[['Đắt quá','Gói làm mã trọn năm khoảng 450 đồng mỗi m², gồm mã, phần mềm và người nhập liệu 12 tháng. Có thể tách: làm gói mã + truy xuất trước, tự nhập liệu.','Anh muốn em tính phương án tự nhập liệu không?'],
@@ -199,7 +288,7 @@ ai:'HTX, THT, doanh nghiệp thu mua có vùng sầu riêng chưa có mã; ưu t
 pain:['Chờ mã lâu, hồ sơ bị trả về nhiều lần','Không biết bắt đầu từ đâu khi hồ sơ nộp qua xã (Nghị quyết 36/2026)','Không có mã thì bán không được giá, DN đóng gói không nhận','Nông dân không ghi nhật ký, dồn sổ cuối vụ'],
 rows:[['Mã số vùng trồng (khảo sát, GPS, bản đồ, hồ sơ kỹ thuật)','3.000.000 đ/ha'],['**Gói làm mã + truy xuất**: mã + phí sử dụng FarmBase năm đầu (mua lẻ 3,8 tr)','3.500.000 đ/ha'],['**Gói làm mã trọn năm**: mã + phí sử dụng + nhập liệu 12 tháng. Nên chào','4.500.000 đ/ha'],['DN đứng mã cho vùng nguyên liệu, miễn phí với nông dân (trả trước 50%)','3.500.000 đ/ha'],['Bà con tự đứng tên qua THT, HTX của mình (chương trình xã)','≈ 20 tr/vùng']],
 note:['Ví dụ 10 ha: gói làm mã + truy xuất 35 tr; trọn năm 45 tr','Sau kỳ đầu: phí duy trì chốt trong hợp đồng (tham chiếu 800.000 đ/ha/năm)','Thanh toán: 50% khi xác nhận, 50% khi bàn giao','Ngoài phạm vi: VietGAP, xét nghiệm, kiểm nghiệm, lệ phí nhà nước'],
-demo:'vung',info:['Gửi: brochure, hồ sơ năng lực, tóm tắt quy trình làm mã (K07)','Hỏi khách: số hộ, diện tích, danh sách hộ, ai đứng tên mã, giấy tờ đất (đất thuê có hợp đồng), có kho không, khoảng cách tới Buôn Ma Thuột'],
+demo:'msvt',info:['Gửi: brochure, hồ sơ năng lực, tóm tắt quy trình làm mã (K07)','Hỏi khách: số hộ, diện tích, danh sách hộ, ai đứng tên mã, giấy tờ đất (đất thuê có hợp đồng), có kho không, khoảng cách tới Buôn Ma Thuột'],
 chot:['Hình thức đứng mã: HTX/THT của bà con, DN đứng mã, hay HTX hợp tác sâu','Danh sách hộ và diện tích thật, không có đất tranh chấp','Gói: trọn năm hay làm mã + truy xuất','Thanh toán đợt 1 và ngày khảo sát','Người đại diện, đầu mối vùng'],
 no:'Không hứa thời gian cấp mã. 10 ha là khuyến nghị, không bắt buộc. Ký hồ sơ chỉ sau khi chốt hình thức đứng mã.'},
 {k:'txvt',n:'Truy xuất vùng trồng sầu riêng (vùng đã có mã)',usp:['Đã kết nối hệ thống truy xuất nông sản của Bộ NN&MT từ 01/07/2026','Nông dân ghi nhật ký trên Zalo, chụp ảnh bao bì, người thân ghi giúp được','QR vùng và QR từng lô; sổ đỏ không công khai, CCCD chỉ hiện 4 số cuối','Có người hướng dẫn tận vườn, nhắc nhật ký để sẵn sàng hậu kiểm'],
@@ -207,7 +296,7 @@ ai:'HTX, vùng sầu riêng đã có mã nội địa hoặc GACC; DN đứng m�
 pain:['Sợ bị cảnh báo, tạm dừng mã vì nhật ký thiếu','Xã, DN mua hàng đòi dữ liệu truy xuất','Dữ liệu nằm rời ở nhiều sổ, nhiều người'],
 rows:[['Phí sử dụng FarmBase (tài khoản, vùng, lô, nhật ký, QR, đồng bộ hệ thống của Bộ, 01 buổi hướng dẫn). HTX tự nhập','800.000 đ/ha/năm'],['Hỗ trợ nhập liệu (tối thiểu 2 nhật ký/tháng/ha)','700.000 đ/ha/năm'],['**Gói truy xuất có nhập liệu** (2 mục trên)','1.500.000 đ/ha/năm'],['Vùng thuộc xã có chương trình đồng hành','Năm 1 miễn phí']],
 note:['Ví dụ 10 ha: tự nhập 8 tr/năm; có nhập liệu 15 tr/năm','Đồng bộ hệ thống của Bộ chỉ áp dụng cho vùng đã có mã'],
-demo:'vung',info:['Gửi: tóm tắt tính năng truy xuất (K06), hướng dẫn nông dân dùng Zalo (K11)','Hỏi khách: mã vùng, số hộ, diện tích, nhật ký đang ghi ở đâu, lần hậu kiểm gần nhất'],
+demo:'txvt',info:['Gửi: tóm tắt tính năng truy xuất (K06), hướng dẫn nông dân dùng Zalo (K11)','Hỏi khách: mã vùng, số hộ, diện tích, nhật ký đang ghi ở đâu, lần hậu kiểm gần nhất'],
 chot:['Danh sách hộ để tạo thử 3–5 hộ','HTX tự nhập hay cần người nhập liệu','Ngày buổi hướng dẫn ban đầu'],
 no:'Không nói FarmBase thay hệ thống của Bộ. FarmBase là công cụ ghi dữ liệu và đẩy lên hệ thống đó.'},
 {k:'ck',n:'Truy xuất cà phê và cây khác (theo vùng)',usp:['Một nền tảng cho mọi cây trồng, nhiều mã, nhiều HTX, phân quyền từng HTX','Lô đất có tọa độ, số tờ, số thửa: nền cho dữ liệu EUDR của cà phê','Đồng bộ hệ thống truy xuất của Bộ, nông dân ghi trên Zalo','Từ vùng thứ 4 chỉ 2 tr/vùng/năm'],
@@ -215,7 +304,7 @@ ai:'DN, HTX cà phê bán EU; HTX, DN chuối, thanh long, vải, dứa, rau qu�
 pain:['Cà phê: thiếu tọa độ, đa giác thửa trước mốc EUDR 30/12/2026','Nhiều mã phải giám sát, dễ bị thu hồi','Gian lận mã, hàng nơi khác dán mã vùng mình'],
 rows:[['Thiết lập vùng trồng','5.000.000 đ/lần'],['Duy trì hệ thống','5.000.000 đ/năm'],['Tích hợp hệ thống truy xuất của Bộ (gồm 3 vùng)','5.000.000 đ/năm'],['Từ vùng thứ 4','2.000.000 đ/vùng/năm'],['Nhập liệu mùa vụ','5.000.000 đ/vụ/vùng'],['Mã số vùng trồng cây khác','Báo giá sau khảo sát'],['Khảo sát polygon EUDR (cà phê)','Báo giá sau khảo sát']],
 note:['Năm sau = năm đầu trừ thiết lập','Ví dụ: 1 vùng 1 vụ 20 tr / 15 tr; 3 vùng 30 / 25 tr; 5 vùng 44 / 39 tr','Thanh toán: thiết lập 50% khi ký, 50% khi nghiệm thu; phí định kỳ trả đầu kỳ'],
-demo:'vung',info:['Gửi: tóm tắt tính năng (K06); cà phê: trích ý tài liệu EUDR (nội bộ K13)','Hỏi khách: số vùng, số hộ, diện tích, thị trường, đã có dữ liệu thửa chưa, số vụ/năm'],
+demo:'ck',info:['Gửi: tóm tắt tính năng (K06); cà phê: trích ý tài liệu EUDR (nội bộ K13)','Hỏi khách: số vùng, số hộ, diện tích, thị trường, đã có dữ liệu thửa chưa, số vụ/năm'],
 chot:['Chạy thử 1 HTX hoặc 1 vùng trước','Số vùng, số vụ để tính giá','Lịch khảo sát (nếu cần làm mã, polygon)'],
 no:'Không nói FarmBase “đạt chuẩn EUDR”. Không tự đặt giá làm mã cây khác, polygon.'},
 {k:'cs',n:'Truy xuất cơ sở đóng gói, lô hàng, GS1, tem QR',usp:['Nối vườn đến container: nguồn hàng chỉ thêm được khi hộ đã có hồ sơ và gắn mã vùng','Chuỗi sự kiện GS1 tự nạp từ dữ liệu vườn, gửi lên Cổng truy xuất quốc gia','Tem trái, thùng, container song ngữ Việt, Anh, Trung; mỗi lần in sinh dải mã đúng lô','Dùng cho mọi nông sản'],
@@ -223,7 +312,7 @@ ai:'DN thu mua, đóng gói, xuất khẩu; có hoặc đang chờ mã cơ sở 
 pain:['Lẫn hàng ngoài mã, cả mã bị cảnh báo','Truy xuất lô hàng làm tay, Excel','Nhà nhập khẩu, hải quan đòi chứng từ nguồn gốc','Chuẩn bị cho Nghị định 372/2026 (từ 01/01/2027)'],
 rows:[['Thiết lập cơ sở đóng gói','5.000.000 đ/lần'],['Duy trì','5.000.000 đ/năm'],['Tích hợp GS1 và hệ thống truy xuất (gồm 3 sản phẩm)','5.000.000 đ/năm'],['Từ sản phẩm thứ 4','2.000.000 đ/sản phẩm/năm'],['Tên miền truy xuất','BVI miễn phí; riêng 2.000.000 đ/năm'],['Tem QR động 10.000–50.000 mã','80 đ/mã/năm'],['Trên 50.000–100.000','72 đ/mã'],['Trên 100.000–200.000','64 đ/mã'],['Trên 200.000–500.000','56 đ/mã'],['Trên 500.000','50 đ/mã'],['In tem vật lý','Báo riêng'],['Tư vấn hồ sơ mã cơ sở đóng gói','Báo giá sau khảo sát']],
 note:['QR lũy tiến từng bậc, tối thiểu 10.000 mã, bội số 5.000, hiệu lực 1 năm. Ví dụ 120.000 mã = 8,88 tr','Ví dụ 3 sản phẩm + 10.000 QR + tên miền BVI: 15,8 tr năm đầu / 10,8 tr năm sau','Dự kiến chính thức từ 11/2026; GS1 theo lộ trình'],
-demo:'dn',info:['Gửi: hồ sơ năng lực, tóm tắt tính năng (phần lô hàng, GS1)','Hỏi khách theo file câu hỏi thiết lập: số cơ sở, mã cơ sở, sản phẩm và quy cách thùng, đã là thành viên GS1 chưa, GTIN, địa điểm GLN, chữ ký số, số tem/năm'],
+demo:'cs',info:['Gửi: hồ sơ năng lực, tóm tắt tính năng (phần lô hàng, GS1)','Hỏi khách theo file câu hỏi thiết lập: số cơ sở, mã cơ sở, sản phẩm và quy cách thùng, đã là thành viên GS1 chưa, GTIN, địa điểm GLN, chữ ký số, số tem/năm'],
 chot:['Số cơ sở, số sản phẩm, số tem/năm','Tên miền BVI hay riêng','Chữ ký số của DN hay của BVI','Vùng cấp hàng cần làm mã hoặc truy xuất thêm'],
 no:'Demo luôn có kỹ thuật đi kèm. Không hứa ngày GS1 chính thức.'},
 {k:'xa',n:'Đồng hành xã, phường',usp:['Hướng dẫn truy xuất cho nông hộ, THT, HTX miễn phí đến 31/12/2026','Tài khoản quản lý cấp xã miễn phí','Đã bàn giao tài khoản truy xuất cho UBND xã Krông Pắc ngày 28/10/2026','Không bắt buộc dùng FarmBase, không khóa dữ liệu'],
@@ -238,7 +327,7 @@ no:'Không ghi chi phí buổi tập huấn trong công văn. Người ký: Giá
 ai:'Khách đã ký cần tập huấn thêm; HTX, xã, đối tác',pain:['Bà con không nhớ cách ghi, ghi sai','Đầu vụ, trước thu hoạch cần nhắc kỹ thuật'],
 rows:[['Hướng dẫn ban đầu + hỗ trợ Zalo, email','Đã gồm'],['Tập huấn online','2.000.000 đ/chuyên gia/buổi'],['Tập huấn trực tiếp (tối đa 20 người)','4.000.000 đ/chuyên gia/buổi'],['Vùng trên 80 km: xăng xe khoán','2.000.000 đ/ngày'],['Công tác phí','2.000.000 đ/ngày/người']],
 note:['Ví dụ 10 ha gói trọn năm, vùng 200 km, 2 người 2 ngày, 1 buổi tập huấn: 45 + 4 + 8 + 4 = 61 tr'],
-demo:'vung',info:['Gửi: tài liệu VietGAP, ISPM 6, hướng dẫn nông dân'],chot:['Số buổi, hình thức, số người, địa điểm'],no:''}];
+demo:'txvt',info:['Gửi: tài liệu VietGAP, ISPM 6, hướng dẫn nông dân'],chot:['Số buổi, hình thức, số người, địa điểm'],no:''}];
 const DISC=['Sales được giảm tối đa **10%** trên phí dịch vụ của báo giá, không cần xin','Giảm trên 10%: xin trưởng mảng trước khi hứa với khách','Không giảm các khoản: thu hộ (thù lao đầu mối, hậu cần vùng), xăng xe, công tác phí, in tem, chi phí bên thứ ba','Dùng giảm giá để đổi lấy điều kiện: ký trong tuần, trả trước, diện tích lớn, nhiều vùng, giới thiệu thêm khách','Ghi rõ % giảm và lý do trên báo giá; báo giá vẫn qua trưởng mảng duyệt'];
 const LOAI=['Chưa gồm VAT, giá áp dụng đến hết 12/2026','Giảm giá: sales tối đa 10% trên phí dịch vụ; trên 10% xin trưởng mảng','Loại trừ: tem in, chứng nhận VietGAP/GlobalG.A.P., xét nghiệm, kiểm nghiệm, lệ phí nhà nước, chi phí bên thứ ba','Không hứa thời gian cấp mã. 10 ha là khuyến nghị, không bắt buộc','Báo giá chính thức phải được trưởng mảng duyệt'];
 const FLOW=[
@@ -286,7 +375,7 @@ async function initDb(){
 }
 
 /* ---------- views ---------- */
-let segK=st.get('seg','htx-chua-ma'),stg=st.get('stg',1),demoK=st.get('demo','vung'),priceK=st.get('svc','msvt');
+let segK=st.get('seg','htx-chua-ma'),stg=st.get('stg',1),demoK=st.get('demo','msvt'),priceK=st.get('svc','msvt');
 const msgCard=id=>{const m=msgOf(id);return `<div class="card"><div class="row" style="justify-content:space-between"><b>${m[0]} · ${esc(m[1])}</b>${copyBtn(fill(m[2]))}</div><div class="say">${esc(fill(m[2]))}</div>${fb('msg:'+m[0],'Tin '+m[0]+' · '+m[1],m[2])}</div>`};
 const khForm=()=>`<div class="grid2"><div><label for="f_kh">Tên khách (để tin tự điền)</label><input id="f_kh" value="${esc(me.khach)}"></div><div><label for="f_x">Xưng hô</label><select id="f_x">${['anh','chị','chú','cô'].map(x=>`<option ${x===me.xung?'selected':''}>${x}</option>`).join('')}</select></div></div>`;
 const V={
@@ -308,10 +397,16 @@ ${s.w?`<div class="warn">${esc(s.w)}</div>`:''}</div>`},
 ${s[3].length?`<h2>Tin nhắn dùng ở bước này</h2>${khForm()}${s[3].map(msgCard).join('')}`:'<p class="mut">Bước này chưa cần tin nhắn mẫu.</p>'}
 ${stg===3?`<p><a href="#demo">Mở kịch bản demo</a></p>`:''}${stg===4?`<p><a href="#gia">Mở bảng giá chi tiết</a></p>`:''}
 ${stg===6?`<h2>Chăm sóc sau ký</h2><div class="card"><table class="stack"><tr><th>Mốc</th><th>Việc</th></tr>${AFTER.map(a=>`<tr><td>${esc(a[0])}</td><td>${esc(a[1])}</td></tr>`).join('')}</table>${fb('after','Chăm sóc sau ký')}</div>`:''}`},
-'demo':()=>{const d=DEMO[demoK];return `<h2>Kịch bản demo</h2><div class="chips">${Object.entries(DEMO).map(([k,x])=>`<button class="chip ${k===demoK?'on':''}" data-dm="${k}">${esc(x.n)}</button>`).join('')}</div>
-<div class="card"><p class="mut">Dùng cho: ${esc(d.ai)}</p><h3>Chuẩn bị trước</h3><ul class="check">${d.prep.map((p,i)=>`<li><label style="color:var(--ink)"><input type="checkbox">${esc(p)}</label></li>`).join('')}</ul>${fb('demo:'+demoK+':prep','Demo '+d.n+' · Chuẩn bị')}</div>
-<div class="card"><h3>Từng bước</h3>${d.steps.map((s,i)=>`<div class="step"><div class="t">${esc(s[0])}<br>phút</div><div><b>${esc(s[1])}</b><p style="margin:4px 0">${esc(s[2])}</p><div class="say">${esc(s[3])}</div><div class="wow">Khách cần thấy: ${esc(s[4])}</div>${fb('demo:'+demoK+':'+i,'Demo '+d.n+' · Bước '+(i+1)+': '+s[1],s[3])}</div></div>`).join('')}</div>
-<div class="warn"><b>Không được và khi có sự cố</b><ul>${DEMO_NO.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><p>Sau buổi demo: gửi tin <a href="#tin-mau">M4 tóm tắt</a> trong 24 giờ, chuyển khách sang giai đoạn 3 hoặc 4.</p>`},
+'demo':()=>{if(!DEMO[demoK])demoK='msvt';const d=DEMO[demoK],k=demoK;const L=(t,arr)=>`<h3>${t}</h3><ul>${arr.map(x=>`<li>${md(x)}</li>`).join('')}</ul>`;const dvs=[...new Set(Object.values(DEMO).map(x=>x.dv))];
+const chips=dvs.map(v=>`<p class="mut" style="margin:8px 0 4px">${esc(v)}</p><div class="chips">${Object.entries(DEMO).filter(([,x])=>x.dv===v).map(([kk,x])=>`<button class="chip ${kk===k?'on':''}" data-dm="${kk}">${esc(x.n)}</button>`).join('')}</div>`).join('');
+return `<h2>Kịch bản demo</h2><p class="mut">Chọn dịch vụ đang chào. Mỗi kịch bản ghi rõ dùng tư liệu gì, làm khác nhau theo nhóm khách, và sau buổi gặp phải chốt được gì.</p>${chips}
+<div class="card"><h3>${esc(d.n)}</h3><p class="mut">${esc(d.dv)} · ${esc(d.t)}<br>Dùng cho: ${esc(d.ai)}</p><div class="wow"><b>Mục tiêu cuối cùng:</b> ${esc(d.muc)}</div>${fb('demo:'+k+':muc','Demo '+d.n+' · Mục tiêu',d.muc)}</div>
+<div class="card"><h3>Tư liệu dùng trong buổi demo</h3><table class="stack"><tr><th>Tư liệu</th><th>Dùng lúc nào, cho xem gì</th><th>Lấy ở đâu, lưu ý</th></tr>${d.tl.map(r=>`<tr><td data-l="Tư liệu"><b>${esc(r[0])}</b></td><td data-l="Dùng lúc">${esc(r[1])}</td><td data-l="Lưu ý">${esc(r[2]||'')}</td></tr>`).join('')}</table><p class="mut">Mã K01 đến K15 là số thứ tự trong bộ tài liệu bán hàng, xem tab Học.</p>${fb('demo:'+k+':tl','Demo '+d.n+' · Tư liệu')}</div>
+<div class="card"><h3>Theo nhóm khách</h3>${d.groups.map((g,i)=>`<div class="step"><div class="t">${i+1}</div><div><b>${esc(g.g)}</b><p style="margin:4px 0"><span class="mut">Demo thế nào:</span> ${esc(g.nh)}</p><p style="margin:4px 0"><span class="mut">Mục tiêu:</span> ${esc(g.muc)}</p><p style="margin:4px 0"><span class="mut">Cần chốt:</span> ${g.chot.map(esc).join('; ')}</p><div class="wow">Bước tiếp: ${esc(g.next)}</div>${fb('demo:'+k+':g'+i,'Demo '+d.n+' · Nhóm '+g.g)}</div></div>`).join('')}</div>
+<div class="card"><h3>Chuẩn bị trước</h3><ul class="check">${d.prep.map(p=>`<li><label style="color:var(--ink)"><input type="checkbox">${esc(p)}</label></li>`).join('')}</ul>${fb('demo:'+k+':prep','Demo '+d.n+' · Chuẩn bị')}</div>
+<div class="card"><h3>Từng bước</h3>${d.steps.map((s,i)=>`<div class="step"><div class="t">${esc(s[0])}<br>phút</div><div><b>${esc(s[1])}</b><p class="mut" style="margin:2px 0">Dùng: ${esc(s[5]||'')}</p><p style="margin:4px 0">${esc(s[2])}</p><div class="say">${esc(fill(s[3]))}</div><div class="wow">Khách cần thấy: ${esc(s[4])}</div>${fb('demo:'+k+':'+i,'Demo '+d.n+' · Bước '+(i+1)+': '+s[1],s[3])}</div></div>`).join('')}</div>
+<div class="card"><h3>Sau cuộc gặp phải có</h3><div class="wow"><b>Mục tiêu:</b> ${esc(d.muc)}</div>${L('Phải chốt được',d.chot)}${L('Thông tin phải lấy được',d.info)}<h3>Bước tiếp theo</h3><table class="stack"><tr><th>Việc</th><th>Hạn</th></tr>${d.next.map(r=>`<tr><td data-l="Việc">${esc(r[0])}</td><td data-l="Hạn">${esc(r[1])}</td></tr>`).join('')}</table><h3>Nếu chưa chốt được</h3><p>${esc(d.neu)}</p>${fb('demo:'+k+':sau','Demo '+d.n+' · Sau cuộc gặp')}</div>
+<div class="warn"><b>Không được và khi có sự cố</b><ul>${DEMO_NO.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div><p>Sau buổi demo: gửi tin <a href="#tin-mau">M4 tóm tắt</a> trong 24 giờ, chuyển khách sang giai đoạn 3 hoặc 4 và ghi lịch bước tiếp vào cổng bán hàng.</p>`},
 'gia':()=>{const p=SVC.find(x=>x.k===priceK)||SVC[0];const L=(t,arr)=>`<h3>${t}</h3><ul>${arr.map(x=>`<li>${md(x)}</li>`).join('')}</ul>`;return `<h2>Dịch vụ và giá</h2><p class="mut">Chọn dịch vụ để xem: bán cho ai, nỗi đau, điểm mạnh, giá, demo, thông tin cần gửi và cần chốt. Giá chưa VAT, áp dụng đến hết 12/2026.</p><div class="chips">${SVC.map(x=>`<button class="chip ${x.k===p.k?'on':''}" data-pr="${x.k}">${esc(x.n)}</button>`).join('')}</div>
 <div class="card"><h3 style="font-size:19px;color:var(--g2)">${esc(p.n)}</h3><p><b>Khách mục tiêu:</b> ${esc(p.ai)}</p>${L('Nỗi đau của khách',p.pain)}${L('Điểm mạnh nói với khách',p.usp)}${fb('svc:'+p.k+':usp',p.n+' · Khách, nỗi đau, điểm mạnh')}
 <h3>Giá</h3><table><tr><th>Hạng mục</th><th style="text-align:right">Giá</th></tr>${p.rows.map(r=>`<tr><td>${md(r[0])}</td><td class="n">${esc(r[1])}</td></tr>`).join('')}</table><ul class="mut">${p.note.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>${fb('svc:'+p.k+':gia',p.n+' · Giá')}
